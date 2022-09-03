@@ -13,7 +13,7 @@ public class Student
 
     public Student(GroupName groupName, string name)
     {
-        (GroupName, Name, Course) = (groupName, name, new CourseNumber(1));
+        (IsuId, GroupName, Name, Course) = (_studentCount++, groupName, name, new CourseNumber(1));
     }
 
     public CourseNumber Course { get; }
