@@ -51,7 +51,7 @@ public class IsuService : IIsuService
 
     public IReadOnlyCollection<Student> FindStudents(CourseNumber courseNumber)
     {
-        var studentList = _students.Values.Where(student => student.Course.Equals(courseNumber)).ToImmutableList();
+        var studentList = _students.Values.Where(student => student.CourseNumber.Equals(courseNumber)).ToImmutableList();
         return studentList;
     }
 

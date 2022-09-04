@@ -17,7 +17,7 @@ public class Group
     public Group(GroupName groupName, CourseNumber? courseNumber = null)
     {
         GroupName = groupName;
-        CourseNumber = courseNumber ?? new CourseNumber(1);
+        CourseNumber = courseNumber ?? new CourseNumber(Course.First);
     }
 
     public GroupName GroupName { get; }

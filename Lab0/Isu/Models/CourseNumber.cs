@@ -2,14 +2,14 @@ namespace Isu.Models;
 
 public class CourseNumber : IComparable<CourseNumber>
 {
-    public CourseNumber(int courseNumber)
+    public CourseNumber(Course courseNumber)
     {
-        if (courseNumber is < 0 or > 6)
+        if (courseNumber is < Course.First or > Course.Seventh)
         {
-            throw new ArgumentException("Course should be between 1 and 6");
+            throw new ArgumentException($"Course should be between {Course.First} and {Course.Seventh}");
         }
 
-        CourseId = courseNumber;
+        CourseId = (int)courseNumber;
     }
 
     private int CourseId { get; }

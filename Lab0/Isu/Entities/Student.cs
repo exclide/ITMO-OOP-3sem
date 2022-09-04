@@ -8,15 +8,15 @@ public class Student
 
     public Student(CourseNumber course, GroupName groupName, string department, string name)
     {
-        (IsuId, Course, GroupName, Department, Name) = (_studentCount++, course, groupName, department, name);
+        (IsuId, CourseNumber, GroupName, Department, Name) = (_studentCount++, course, groupName, department, name);
     }
 
     public Student(GroupName groupName, string name)
     {
-        (IsuId, GroupName, Name, Course) = (_studentCount++, groupName, name, new CourseNumber(1));
+        (IsuId, GroupName, Name, CourseNumber) = (_studentCount++, groupName, name, new CourseNumber(Course.First));
     }
 
-    public CourseNumber Course { get; }
+    public CourseNumber CourseNumber { get; }
     public GroupName GroupName { get; set; }
     public string? Department { get; }
     public int IsuId { get; }
@@ -32,12 +32,12 @@ public class Student
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Course, GroupName, Department, IsuId, Name);
+        return HashCode.Combine(CourseNumber, GroupName, Department, IsuId, Name);
     }
 
     protected bool Equals(Student other)
     {
-        return Course.Equals(other.Course) && GroupName.Equals(other.GroupName) && Department == other.Department &&
+        return CourseNumber.Equals(other.CourseNumber) && GroupName.Equals(other.GroupName) && Department == other.Department &&
                IsuId == other.IsuId && Name == other.Name;
     }
 }
