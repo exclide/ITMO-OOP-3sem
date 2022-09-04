@@ -4,7 +4,7 @@ namespace Isu.Models;
 
 public class GroupName : IComparable<GroupName>
 {
-    private const string GroupNameRegexPattern = "^[A-Z][1-4][1-7][0-9]{2}$";
+    private const string GroupNameRegexPattern = "^[A-Z][1-6][1-4]\\d{2}\\d?$";
     public GroupName(string groupName)
     {
         if (!CheckGroupNameFormat(groupName))
