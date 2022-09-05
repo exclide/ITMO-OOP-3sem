@@ -1,3 +1,4 @@
+using Isu.Exceptions;
 using Isu.Models;
 
 namespace Isu.Entities;
@@ -8,7 +9,7 @@ public class Student : IEquatable<Student>
     {
         if (string.IsNullOrWhiteSpace(studentName))
         {
-            throw new ArgumentNullException(studentName);
+            throw new BadStudentNameException($"{nameof(studentName)} was null or empty");
         }
 
         IsuId = isuId;
