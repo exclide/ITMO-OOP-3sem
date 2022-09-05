@@ -6,7 +6,4 @@ public enum CourseNumber
     Second,
     Third,
     Fourth,
-    Fifth,
-    Sixth,
-    Seventh,
 }
