@@ -9,6 +9,12 @@ namespace Isu.Test;
 
 public class IsuServiceTests
 {
+    private readonly IsuService _isuService;
+    public IsuServiceTests()
+    {
+        _isuService = new IsuService();
+    }
+
     [Theory]
     [InlineData("M3207", "Ophelia Pane")]
     [InlineData("M3204", "Hugh Jass")]
@@ -16,12 +22,11 @@ public class IsuServiceTests
     [InlineData("M3209", "Wayne Kerr")]
     public void AddStudentToGroup_StudentHasGroupAndGroupContainsStudent(string groupName, string studentName)
     {
-        var isuService = new IsuService();
-        var newGroup = isuService.AddGroup(new GroupName(groupName));
-        var newStudent = isuService.AddStudent(newGroup, studentName);
+        var newGroup = _isuService.AddGroup(new GroupName(groupName));
+        var newStudent = _isuService.AddStudent(newGroup, studentName);
 
-        var group = isuService.FindGroup(newGroup.GroupName);
-        var student = isuService.FindStudent(newStudent.IsuId);
+        var group = _isuService.FindGroup(newGroup.GroupName);
+        var student = _isuService.FindStudent(newStudent.IsuId);
 
         Assert.NotNull(group);
         Assert.NotNull(student);
@@ -34,15 +39,14 @@ public class IsuServiceTests
     [Fact]
     public void ReachMaxStudentPerGroup_ThrowException()
     {
-        var isuService = new IsuService();
-        var group = isuService.AddGroup(new GroupName("M3207"));
+        var group = _isuService.AddGroup(new GroupName("M3207"));
 
         for (int i = 0; i < group.MaxGroupCapacity; i++)
         {
-            isuService.AddStudent(group, $"Student {i}");
+            _isuService.AddStudent(group, $"Student {i}");
         }
 
-        Assert.Throws<GroupCapacityException>(() => isuService.AddStudent(group, $"Student {group.MaxGroupCapacity + 1}"));
+        Assert.Throws<GroupCapacityException>(() => _isuService.AddStudent(group, $"Student {group.MaxGroupCapacity + 1}"));
     }
 
     [Theory]
@@ -51,18 +55,17 @@ public class IsuServiceTests
     [InlineData("12345")]
     public void CreateGroupWithInvalidName_ThrowException(string groupName)
     {
-        Assert.Throws<GroupNameFormatException>(() => new IsuService().AddGroup(new GroupName(groupName)));
+        Assert.Throws<GroupNameFormatException>(() => _isuService.AddGroup(new GroupName(groupName)));
     }
 
     [Fact]
     public void TransferStudentToAnotherGroup_GroupChanged()
     {
-        var isuService = new IsuService();
-        var group1 = isuService.AddGroup(new GroupName("M3207"));
-        var group2 = isuService.AddGroup(new GroupName("M3214"));
-        var student = isuService.AddStudent(group1, "Jack Hoff");
+        var group1 = _isuService.AddGroup(new GroupName("M3207"));
+        var group2 = _isuService.AddGroup(new GroupName("M3214"));
+        var student = _isuService.AddStudent(group1, "Jack Hoff");
 
-        isuService.ChangeStudentGroup(student, group2);
+        _isuService.ChangeStudentGroup(student, group2);
 
         Assert.Equal(group2, student.Group);
         Assert.Contains(student, group2.Students);
