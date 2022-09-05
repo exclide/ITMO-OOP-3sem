@@ -4,16 +4,14 @@ namespace Isu.Entities;
 
 public class Student : IEquatable<Student>
 {
-    private static int _studentCount = 0;
-
-    public Student(Group group, string studentName, string? department = null)
+    public Student(int isuId, Group group, string studentName, string? department = null)
     {
         if (string.IsNullOrWhiteSpace(studentName))
         {
             throw new ArgumentNullException(studentName);
         }
 
-        IsuId = _studentCount++;
+        IsuId = isuId;
         Group = group;
         Name = studentName;
         CourseNumber = group.CourseNumber;

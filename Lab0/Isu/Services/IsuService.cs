@@ -19,7 +19,7 @@ public class IsuService : IIsuService
 
     public Student AddStudent(Group group, string name)
     {
-        var student = new Student(group, name);
+        var student = new Student(_students.Count, group, name);
         group.AddStudent(student);
         _students.Add(student);
         return student;
