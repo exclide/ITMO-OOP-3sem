@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Isu.Entities;
+using Isu.Exceptions;
 using Isu.Models;
 
 namespace Isu.Services;
@@ -26,7 +27,12 @@ public class IsuService : IIsuService
 
     public Student GetStudent(int id)
     {
-        var student = _students.First(student => student.IsuId == id);
+        var student = _students.FirstOrDefault(student => student.IsuId == id);
+        if (student == null)
+        {
+            throw new StudentNotFoundException($"Student with ID {id} not found.");
+        }
+
         return student;
     }
 
@@ -38,7 +44,12 @@ public class IsuService : IIsuService
 
     public IReadOnlyCollection<Student> FindStudents(GroupName groupName)
     {
-        var group = _groups.First(group => group.GroupName.Equals(groupName));
+        var group = _groups.FirstOrDefault(group => group.GroupName.Equals(groupName));
+        if (group == null)
+        {
+            throw new GroupNotFoundException($"Group with the given group name {groupName} not found.");
+        }
+
         return group.Students;
     }
 
@@ -62,8 +73,18 @@ public class IsuService : IIsuService
 
     public void ChangeStudentGroup(Student student, Group newGroup)
     {
-        var fromGroup = _groups.First(group => group.Equals(student.Group));
-        var toGroup = _groups.First(group => group.Equals(newGroup));
+        var fromGroup = _groups.FirstOrDefault(group => group.Equals(student.Group));
+        var toGroup = _groups.FirstOrDefault(group => group.Equals(newGroup));
+
+        if (fromGroup == null)
+        {
+            throw new GroupNotFoundException($"Group containing the given student ID {student.IsuId} not found.");
+        }
+
+        if (toGroup == null)
+        {
+            throw new GroupNotFoundException($"Group with the given name {newGroup.GroupName} not found.");
+        }
 
         student.Group = newGroup;
 

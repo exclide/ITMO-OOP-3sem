@@ -1,6 +1,5 @@
 ﻿namespace Isu.Exceptions;
 
-[Serializable]
 public class GroupNameFormatException : Exception
 {
     public GroupNameFormatException() { }

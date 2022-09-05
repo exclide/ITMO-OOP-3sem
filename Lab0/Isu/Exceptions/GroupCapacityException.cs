@@ -1,6 +1,5 @@
 ﻿namespace Isu.Exceptions;
 
-[Serializable]
 public class GroupCapacityException : Exception
 {
     public GroupCapacityException() { }
