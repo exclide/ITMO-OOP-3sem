@@ -17,8 +17,8 @@ public class Group : IEquatable<Group>
     {
         GroupName = groupName;
         CourseNumber = groupName.GetCourse();
-        MaxGroupCapacity = maxGroupCapacity;
         _students = students == null ? new List<Student>() : new List<Student>(students);
+        MaxGroupCapacity = maxGroupCapacity;
     }
 
     public GroupName GroupName { get; }
