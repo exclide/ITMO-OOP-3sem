@@ -8,6 +8,7 @@ public class Group : IEquatable<Group>
 {
     private const int DefaultGroupCapacity = 30;
     private readonly List<Student> _students;
+    private int _maxGroupCapacity;
 
     public Group(
         GroupName groupName,
@@ -22,7 +23,21 @@ public class Group : IEquatable<Group>
 
     public GroupName GroupName { get; }
     public CourseNumber CourseNumber { get; }
-    public int MaxGroupCapacity { get; set; }
+
+    public int MaxGroupCapacity
+    {
+        get => _maxGroupCapacity;
+        set
+        {
+            if (value < _students.Count)
+            {
+                throw new BadGroupCapacityException();
+            }
+
+            _maxGroupCapacity = value;
+        }
+    }
+
     public IReadOnlyCollection<Student> Students => _students;
 
     public void AddStudent(Student student)
