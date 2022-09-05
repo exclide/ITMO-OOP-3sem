@@ -1,34 +1,32 @@
 using System.Data;
+using Isu.Exceptions;
 using Isu.Models;
 
 namespace Isu.Entities;
 
-public class Group
+public class Group : IEquatable<Group>
 {
-    private const int MaxStudents = 30;
-    private readonly List<Student> _students = new ();
+    private readonly List<Student> _students;
 
-    public Group(GroupName groupName, CourseNumber courseNumber, IEnumerable<Student> students)
-        : this(groupName)
-    {
-        _students = new List<Student>(students);
-    }
-
-    public Group(GroupName groupName, CourseNumber? courseNumber = null)
+    public Group(GroupName groupName, CourseNumber courseNumber = CourseNumber.First, int maxGroupCapacity = 30, IEnumerable<Student>? students = null)
     {
         GroupName = groupName;
-        CourseNumber = courseNumber ?? new CourseNumber(Course.First);
+        CourseNumber = courseNumber;
+        MaxGroupCapacity = maxGroupCapacity;
+        _students = students == null ? new List<Student>() : new List<Student>(students);
     }
 
     public GroupName GroupName { get; }
     public CourseNumber CourseNumber { get; }
+    public int MaxGroupCapacity { get; set; }
+    public IReadOnlyCollection<Student> Students => _students;
 
     public void AddStudent(Student student)
     {
         if (_students.Contains(student)) return;
-        if (GetStudentCount() >= MaxStudents)
+        if (Students.Count >= MaxGroupCapacity)
         {
-            throw new ConstraintException("Can't have more than 30 students in a group.");
+            throw new GroupCapacityException($"Can't have more than {MaxGroupCapacity} students in a group.");
         }
 
         _students.Add(student);
@@ -39,31 +37,7 @@ public class Group
         _students.Remove(student);
     }
 
-    public IReadOnlyCollection<Student> GetStudents()
-    {
-        return _students;
-    }
-
-    public int GetStudentCount()
-    {
-        return _students.Count;
-    }
-
-    public override bool Equals(object? obj)
-    {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != this.GetType()) return false;
-        return Equals((Group)obj);
-    }
-
-    public override int GetHashCode()
-    {
-        return GroupName.GetHashCode();
-    }
-
-    protected bool Equals(Group other)
-    {
-        return GroupName.Equals(other.GroupName);
-    }
+    public override bool Equals(object? obj) => Equals(obj as Group);
+    public override int GetHashCode() => GroupName.GetHashCode();
+    public bool Equals(Group? other) => other?.GroupName.Equals(GroupName) ?? false;
 }

@@ -1,15 +1,16 @@
 using System.Text.RegularExpressions;
+using Isu.Exceptions;
 
 namespace Isu.Models;
 
-public class GroupName : IComparable<GroupName>
+public class GroupName : IEquatable<GroupName>
 {
-    private const string GroupNameRegexPattern = "^[A-Z][1-6][1-4]\\d{2}\\d?$";
+    private static readonly Regex GroupNameRegex = new Regex(@"^[A-Z][1-6][1-4]\d{2}\d?$", RegexOptions.Compiled);
     public GroupName(string groupName)
     {
         if (!CheckGroupNameFormat(groupName))
         {
-            throw new ArgumentException("Invalid group name format.");
+            throw new GroupNameFormatException("Invalid group name format.");
         }
 
         Name = groupName;
@@ -17,34 +18,11 @@ public class GroupName : IComparable<GroupName>
 
     public string Name { get; }
 
-    public int CompareTo(GroupName? other)
-    {
-        if (ReferenceEquals(this, other)) return 0;
-        if (ReferenceEquals(null, other)) return 1;
-        return string.Compare(Name, other.Name, StringComparison.Ordinal);
-    }
-
-    public override bool Equals(object? obj)
-    {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != this.GetType()) return false;
-        return Equals((GroupName)obj);
-    }
-
-    public override int GetHashCode()
-    {
-        return Name.GetHashCode();
-    }
-
-    protected bool Equals(GroupName other)
-    {
-        return Name == other.Name;
-    }
-
+    public override bool Equals(object? obj) => Equals(obj as GroupName);
+    public bool Equals(GroupName? other) => other?.Name.Equals(Name) ?? false;
+    public override int GetHashCode() => Name.GetHashCode();
     private bool CheckGroupNameFormat(string groupName)
     {
-        var groupNameFormat = new Regex(GroupNameRegexPattern);
-        return groupNameFormat.IsMatch(groupName);
+        return GroupNameRegex.IsMatch(groupName);
     }
 }

@@ -2,42 +2,31 @@ using Isu.Models;
 
 namespace Isu.Entities;
 
-public class Student
+public class Student : IEquatable<Student>
 {
     private static int _studentCount = 0;
 
-    public Student(CourseNumber course, GroupName groupName, string department, string name)
+    public Student(Group group, string studentName, CourseNumber courseNumber = CourseNumber.First, string? department = null)
     {
-        (IsuId, CourseNumber, GroupName, Department, Name) = (_studentCount++, course, groupName, department, name);
+        if (string.IsNullOrWhiteSpace(studentName))
+        {
+            throw new ArgumentNullException(studentName);
+        }
+
+        IsuId = _studentCount++;
+        Group = group;
+        Name = studentName;
+        CourseNumber = courseNumber;
+        Department = department;
     }
 
-    public Student(GroupName groupName, string name)
-    {
-        (IsuId, GroupName, Name, CourseNumber) = (_studentCount++, groupName, name, new CourseNumber(Course.First));
-    }
-
-    public CourseNumber CourseNumber { get; }
-    public GroupName GroupName { get; set; }
-    public string? Department { get; }
+    public CourseNumber CourseNumber { get; set; }
+    public Group Group { get; set; }
+    public string? Department { get; set; }
     public int IsuId { get; }
-    public string Name { get; }
+    public string Name { get; set; }
 
-    public override bool Equals(object? obj)
-    {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != this.GetType()) return false;
-        return Equals((Student)obj);
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(CourseNumber, GroupName, Department, IsuId, Name);
-    }
-
-    protected bool Equals(Student other)
-    {
-        return CourseNumber.Equals(other.CourseNumber) && GroupName.Equals(other.GroupName) && Department == other.Department &&
-               IsuId == other.IsuId && Name == other.Name;
-    }
+    public override bool Equals(object? obj) => Equals(obj as Student);
+    public override int GetHashCode() => HashCode.Combine(CourseNumber, Group, Department, IsuId, Name);
+    public bool Equals(Student? other) => other?.IsuId.Equals(IsuId) ?? false;
 }

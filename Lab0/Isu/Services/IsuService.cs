@@ -6,72 +6,66 @@ namespace Isu.Services;
 
 public class IsuService : IIsuService
 {
-    private readonly Dictionary<int, Student> _students = new ();
-    private readonly Dictionary<GroupName, Group> _groups = new ();
+    private readonly List<Student> _students = new ();
+    private readonly List<Group> _groups = new ();
 
     public Group AddGroup(GroupName name)
     {
         var group = new Group(name);
-        _groups.Add(group.GroupName, group);
+        _groups.Add(group);
         return group;
     }
 
     public Student AddStudent(Group group, string name)
     {
-        var student = new Student(group.GroupName, name);
+        var student = new Student(group, name);
         group.AddStudent(student);
+        _students.Add(student);
         return student;
     }
 
     public Student GetStudent(int id)
     {
-        if (!_students.TryGetValue(id, out Student? student))
-        {
-            throw new ArgumentException("Can't find student with the given id.");
-        }
-
+        var student = _students.First(student => student.IsuId == id);
         return student;
     }
 
     public Student? FindStudent(int id)
     {
-        _students.TryGetValue(id, out Student? student);
+        var student = _students.FirstOrDefault(student => student.IsuId == id);
         return student;
     }
 
     public IReadOnlyCollection<Student> FindStudents(GroupName groupName)
     {
-        if (!_groups.TryGetValue(groupName, out Group? group))
-        {
-            throw new ArgumentException("Can't find group with the given group name.");
-        }
-
-        return group.GetStudents();
+        var group = _groups.First(group => group.GroupName.Equals(groupName));
+        return group.Students;
     }
 
     public IReadOnlyCollection<Student> FindStudents(CourseNumber courseNumber)
     {
-        var studentList = _students.Values.Where(student => student.CourseNumber.Equals(courseNumber)).ToImmutableList();
-        return studentList;
+        var students = _students.Where(student => student.CourseNumber.Equals(courseNumber)).ToImmutableList();
+        return students;
     }
 
     public Group? FindGroup(GroupName groupName)
     {
-        _groups.TryGetValue(groupName, out Group? group);
+        var group = _groups.FirstOrDefault(group => group.GroupName.Equals(groupName));
         return group;
     }
 
     public IReadOnlyCollection<Group> FindGroups(CourseNumber courseNumber)
     {
-        var groupList = _groups.Values.Where(group => group.CourseNumber.Equals(courseNumber)).ToImmutableList();
-        return groupList;
+        var groups = _groups.Where(group => group.CourseNumber.Equals(courseNumber)).ToImmutableList();
+        return groups;
     }
 
     public void ChangeStudentGroup(Student student, Group newGroup)
     {
-        Group fromGroup = _groups.Values.First(group => group.GroupName.Equals(student.GroupName));
-        Group toGroup = _groups.Values.First(group => group.GroupName.Equals(newGroup.GroupName));
-        student.GroupName = newGroup.GroupName;
+        var fromGroup = _groups.First(group => group.Equals(student.Group));
+        var toGroup = _groups.First(group => group.Equals(newGroup));
+
+        student.Group = newGroup;
 
         fromGroup.RemoveStudent(student);
         toGroup.AddStudent(student);
