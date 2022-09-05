@@ -6,9 +6,14 @@ namespace Isu.Entities;
 
 public class Group : IEquatable<Group>
 {
+    private const int DefaultGroupCapacity = 30;
     private readonly List<Student> _students;
 
-    public Group(GroupName groupName, CourseNumber courseNumber = CourseNumber.First, int maxGroupCapacity = 30, IEnumerable<Student>? students = null)
+    public Group(
+        GroupName groupName,
+        CourseNumber courseNumber = CourseNumber.First,
+        int maxGroupCapacity = DefaultGroupCapacity,
+        IEnumerable<Student>? students = null)
     {
         GroupName = groupName;
         CourseNumber = courseNumber;
