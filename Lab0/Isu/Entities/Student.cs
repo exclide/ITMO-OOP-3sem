@@ -6,7 +6,7 @@ public class Student : IEquatable<Student>
 {
     private static int _studentCount = 0;
 
-    public Student(Group group, string studentName, CourseNumber courseNumber = CourseNumber.First, string? department = null)
+    public Student(Group group, string studentName, string? department = null)
     {
         if (string.IsNullOrWhiteSpace(studentName))
         {
@@ -16,7 +16,7 @@ public class Student : IEquatable<Student>
         IsuId = _studentCount++;
         Group = group;
         Name = studentName;
-        CourseNumber = courseNumber;
+        CourseNumber = group.CourseNumber;
     }
 
     public CourseNumber CourseNumber { get; set; }

@@ -11,12 +11,11 @@ public class Group : IEquatable<Group>
 
     public Group(
         GroupName groupName,
-        CourseNumber courseNumber = CourseNumber.First,
         int maxGroupCapacity = DefaultGroupCapacity,
         IEnumerable<Student>? students = null)
     {
         GroupName = groupName;
-        CourseNumber = courseNumber;
+        CourseNumber = groupName.GetCourse();
         MaxGroupCapacity = maxGroupCapacity;
         _students = students == null ? new List<Student>() : new List<Student>(students);
     }

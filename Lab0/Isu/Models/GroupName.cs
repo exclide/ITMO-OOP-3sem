@@ -18,6 +18,11 @@ public class GroupName : IEquatable<GroupName>
 
     public string Name { get; }
 
+    public CourseNumber GetCourse()
+    {
+        return (CourseNumber)int.Parse(Name[2].ToString());
+    }
+
     public override bool Equals(object? obj) => Equals(obj as GroupName);
     public bool Equals(GroupName? other) => other?.Name.Equals(Name) ?? false;
     public override int GetHashCode() => Name.GetHashCode();
