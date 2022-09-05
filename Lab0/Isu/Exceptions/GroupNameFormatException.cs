@@ -2,7 +2,8 @@
 
 public class GroupNameFormatException : Exception
 {
-    public GroupNameFormatException() { }
+    public GroupNameFormatException()
+        : this("Invalid group name format.") { }
 
     public GroupNameFormatException(string message)
         : base(message)

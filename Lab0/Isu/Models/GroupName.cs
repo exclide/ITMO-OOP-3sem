@@ -10,7 +10,7 @@ public class GroupName : IEquatable<GroupName>
     {
         if (!CheckGroupNameFormat(groupName))
         {
-            throw new GroupNameFormatException("Invalid group name format.");
+            throw new GroupNameFormatException();
         }
 
         Name = groupName;
