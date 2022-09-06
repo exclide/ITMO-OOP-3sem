@@ -20,7 +20,7 @@ public class GroupName : IEquatable<GroupName>
 
     public CourseNumber GetCourse()
     {
-        return (CourseNumber)int.Parse(Name[2].ToString());
+        return (CourseNumber)(Name[2] - '0');
     }
 
     public override bool Equals(object? obj) => Equals(obj as GroupName);
