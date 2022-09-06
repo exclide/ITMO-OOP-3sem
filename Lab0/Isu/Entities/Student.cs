@@ -5,7 +5,7 @@ namespace Isu.Entities;
 
 public class Student : IEquatable<Student>
 {
-    public Student(int isuId, Group group, string studentName, string? department = null)
+    public Student(int isuId, Group group, string studentName)
     {
         if (string.IsNullOrWhiteSpace(studentName))
         {

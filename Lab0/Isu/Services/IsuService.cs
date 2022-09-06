@@ -27,7 +27,7 @@ public class IsuService : IIsuService
 
     public Student GetStudent(int id)
     {
-        var student = _students.FirstOrDefault(student => student.IsuId == id);
+        var student = FindStudent(id);
         if (student == null)
         {
             throw new StudentNotFoundException($"Student with ID {id} not found.");
