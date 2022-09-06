@@ -5,6 +5,7 @@ namespace Isu.Models;
 
 public class GroupName : IEquatable<GroupName>
 {
+    private const int CourseNumberIndex = 2;
     private static readonly Regex GroupNameRegex = new Regex(@"^[A-Z][1-6][1-4]\d{2}\d?$", RegexOptions.Compiled);
     public GroupName(string groupName)
     {
@@ -20,7 +21,7 @@ public class GroupName : IEquatable<GroupName>
 
     public CourseNumber GetCourse()
     {
-        return (CourseNumber)(Name[2] - '0');
+        return (CourseNumber)(Name[CourseNumberIndex] - '0');
     }
 
     public override bool Equals(object? obj) => Equals(obj as GroupName);
