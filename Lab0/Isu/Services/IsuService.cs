@@ -12,6 +12,11 @@ public class IsuService : IIsuService
 
     public Group AddGroup(GroupName name)
     {
+        if (name == null)
+        {
+            throw new ArgumentNullException(nameof(name));
+        }
+
         var group = new Group(name);
         _groups.Add(group);
         return group;
@@ -19,6 +24,16 @@ public class IsuService : IIsuService
 
     public Student AddStudent(Group group, string name)
     {
+        if (group == null)
+        {
+            throw new ArgumentNullException(nameof(group));
+        }
+
+        if (name == null)
+        {
+            throw new ArgumentNullException(nameof(name));
+        }
+
         var student = new Student(_students.Count, group, name);
         group.AddStudent(student);
         _students.Add(student);
@@ -44,6 +59,11 @@ public class IsuService : IIsuService
 
     public IReadOnlyCollection<Student> FindStudents(GroupName groupName)
     {
+        if (groupName == null)
+        {
+            throw new ArgumentNullException(nameof(groupName));
+        }
+
         var group = _groups.FirstOrDefault(group => group.GroupName.Equals(groupName));
         if (group == null)
         {
@@ -61,6 +81,11 @@ public class IsuService : IIsuService
 
     public Group? FindGroup(GroupName groupName)
     {
+        if (groupName == null)
+        {
+            throw new ArgumentNullException(nameof(groupName));
+        }
+
         var group = _groups.FirstOrDefault(group => group.GroupName.Equals(groupName));
         return group;
     }
@@ -73,6 +98,16 @@ public class IsuService : IIsuService
 
     public void ChangeStudentGroup(Student student, Group newGroup)
     {
+        if (student == null)
+        {
+            throw new ArgumentNullException(nameof(student));
+        }
+
+        if (newGroup == null)
+        {
+            throw new ArgumentNullException(nameof(newGroup));
+        }
+
         var fromGroup = _groups.FirstOrDefault(group => group.Equals(student.Group));
         var toGroup = _groups.FirstOrDefault(group => group.Equals(newGroup));
 

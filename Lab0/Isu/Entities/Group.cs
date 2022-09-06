@@ -13,8 +13,13 @@ public class Group : IEquatable<Group>
     public Group(
         GroupName groupName,
         int maxGroupCapacity = DefaultGroupCapacity,
-        IEnumerable<Student>? students = null)
+        ICollection<Student>? students = null)
     {
+        if (maxGroupCapacity < students?.Count)
+        {
+            throw new BadGroupCapacityException();
+        }
+
         GroupName = groupName;
         CourseNumber = groupName.GetCourse();
         _students = students == null ? new List<Student>() : new List<Student>(students);
@@ -42,6 +47,11 @@ public class Group : IEquatable<Group>
 
     public void AddStudent(Student student)
     {
+        if (student == null)
+        {
+            throw new ArgumentNullException(nameof(student));
+        }
+
         if (_students.Contains(student)) return;
         if (Students.Count >= MaxGroupCapacity)
         {
@@ -53,6 +63,11 @@ public class Group : IEquatable<Group>
 
     public void RemoveStudent(Student student)
     {
+        if (student == null)
+        {
+            throw new ArgumentNullException(nameof(student));
+        }
+
         _students.Remove(student);
     }
 
