@@ -2,11 +2,10 @@
 
 public class GroupNameFormatException : Exception
 {
-    public GroupNameFormatException()
-        : this("Invalid group name format.") { }
+    public GroupNameFormatException() { }
 
-    public GroupNameFormatException(string message)
-        : base(message)
+    public GroupNameFormatException(string invalidGroupName)
+        : base($"Invalid group name: {invalidGroupName}")
     {
     }
 
