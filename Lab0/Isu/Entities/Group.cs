@@ -47,10 +47,7 @@ public class Group : IEquatable<Group>
 
     public void AddStudent(Student student)
     {
-        if (student == null)
-        {
-            throw new ArgumentNullException(nameof(student));
-        }
+        ArgumentNullException.ThrowIfNull(student);
 
         if (_students.Contains(student)) return;
         if (Students.Count >= MaxGroupCapacity)
@@ -63,10 +60,7 @@ public class Group : IEquatable<Group>
 
     public void RemoveStudent(Student student)
     {
-        if (student == null)
-        {
-            throw new ArgumentNullException(nameof(student));
-        }
+        ArgumentNullException.ThrowIfNull(student);
 
         _students.Remove(student);
     }
