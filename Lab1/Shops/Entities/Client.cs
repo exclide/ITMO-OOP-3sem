@@ -1,13 +1,23 @@
-﻿namespace Shops.Entities;
+﻿using Shops.Exceptions;
+
+namespace Shops.Entities;
 
 public class Client
 {
+    private readonly int _id;
     private string _name;
-    private int _cash;
 
-    public Client(string name, int cash)
+    public Client(int id, string name, decimal cash)
     {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            throw new StringNullOrWhiteSpaceException($"{nameof(name)} was null or whitespace.");
+        }
+
+        _id = id;
         _name = name;
-        _cash = cash;
+        Cash = cash;
     }
+
+    public decimal Cash { get; set; }
 }
