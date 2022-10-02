@@ -9,9 +9,9 @@ public class ShopManager
     private static int _productIdCounter = 0;
     private static int _clientIdCounter = 0;
 
-    private List<Product> _products;
-    private List<Shop> _shops;
-    private List<Client> _clients;
+    private readonly List<Product> _products;
+    private readonly List<Shop> _shops;
+    private readonly List<Client> _clients;
 
     public ShopManager()
     {
@@ -39,12 +39,6 @@ public class ShopManager
         var client = new Client(_clientIdCounter++, clientName, clientCash);
         _clients.Add(client);
         return client;
-    }
-
-    public IEnumerable<ProductInfo> GenerateProductList(params (Product product, int quantity, decimal price)[] products)
-    {
-        var list = products.Select(x => new ProductInfo(x.product, x.quantity, x.price)).ToImmutableList();
-        return list;
     }
 
     public Shop? FindShopWithBestOffer(params (Product product, int count)[] products)

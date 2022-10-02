@@ -5,7 +5,6 @@ namespace Shops.Entities;
 public class Product : IEquatable<Product>
 {
     private readonly int _id;
-    private string _name;
 
     public Product(int id, string name)
     {
@@ -15,8 +14,10 @@ public class Product : IEquatable<Product>
         }
 
         _id = id;
-        _name = name;
+        Name = name;
     }
+
+    public string Name { get; }
 
     public override int GetHashCode() => _id.GetHashCode();
     public override bool Equals(object? obj) => Equals(obj as Product);

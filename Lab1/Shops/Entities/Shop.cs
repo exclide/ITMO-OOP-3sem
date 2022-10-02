@@ -5,10 +5,10 @@ namespace Shops.Entities;
 public class Shop : IEquatable<Shop>
 {
     private readonly int _id;
+    private readonly List<ProductInfo> _products;
     private string _name;
     private string _address;
     private decimal _profit;
-    private List<ProductInfo> _products;
 
     public Shop(int id, string name, string address)
     {
@@ -24,11 +24,6 @@ public class Shop : IEquatable<Shop>
         _products = new List<ProductInfo>();
     }
 
-    public void AddProducts(IEnumerable<ProductInfo> products) // params with tuple (product, quantity, price)?
-    {
-        _products.AddRange(products.Except(_products));
-    }
-
     public void AddProducts(params (Product product, int quantity, decimal price)[] products)
     {
         _products.AddRange(products.Select(
@@ -38,10 +33,12 @@ public class Shop : IEquatable<Shop>
     public void ChangeProductPrice(Product product, decimal newPrice)
     {
         var foundProduct = _products.FirstOrDefault(x => x.Product.Equals(product));
-        if (foundProduct != null)
+        if (foundProduct == null)
         {
-            foundProduct.Price = newPrice;
+            throw new ProductNotFoundException("Can't change price. Product not found.");
         }
+
+        foundProduct.Price = newPrice;
     }
 
     public decimal CheckIfAllExistsAndEnoughQuantity(params (Product product, int quantity)[] buyList)
@@ -87,14 +84,28 @@ public class Shop : IEquatable<Shop>
         {
             var product = _products.First(t => t.Product.Equals(pair.product));
             product.Quantity -= pair.quantity;
+            /*
             if (product.Quantity == 0)
             {
                 _products.Remove(product);
             }
+            working as intended
+            */
         }
 
         _profit += fullProductPrice;
         client.Cash -= fullProductPrice;
+    }
+
+    public ProductInfo GetProductInfo(Product product)
+    {
+        var productFound = _products.FirstOrDefault(x => x.Product.Equals(product));
+        if (productFound == null)
+        {
+            throw new ProductNotFoundException("Product not found.");
+        }
+
+        return productFound;
     }
 
     public override int GetHashCode() => _id.GetHashCode();

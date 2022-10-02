@@ -6,40 +6,58 @@ namespace Shops.Test;
 
 public class ShopManagerTests
 {
-    private static ShopManager _shopManager = new ShopManager();
+    private readonly ShopManager _shopManager = new ShopManager();
 
-    [Fact]
-    public void DeliverProductsToShopCanBuyProducts()
+    [Theory]
+    [InlineData(100, 1, 50, 2, 25, 1, 2)]
+    [InlineData(10, 10, 1, 10, 2, 3, 3)]
+    [InlineData(1000, 10, 100, 10, 200, 5, 2)]
+    public void DeliverProductsToShopCanBuyProducts(
+        int clientCash,
+        int productCount1,
+        decimal productPrice1,
+        int productCount2,
+        decimal productPrice2,
+        int productBuyCount1,
+        int productBuyCount2)
     {
-        var client = _shopManager.AddClient("TestClient", 500);
+        var client = _shopManager.AddClient("TestClient", clientCash);
         var shop = _shopManager.AddShop("TestShop", "Ulica Pushkina");
         var product1 = _shopManager.AddProduct("TestProd1");
         var product2 = _shopManager.AddProduct("TestProd2");
-        var product3 = _shopManager.AddProduct("TestProd3");
-        var productList = _shopManager.GenerateProductList(
-            (product1, 1, 200),
-            (product2, 2, 100),
-            (product3, 5, 20));
 
-        shop.AddProducts(productList);
-        shop.SellProductToClient(client, (product1, 2), (product2, 3), (product3, 5));
+        shop.AddProducts((product1, productCount1, productPrice1), (product2, productCount2, productPrice2));
+        shop.SellProductToClient(client, (product1, productBuyCount1), (product2, productBuyCount2));
+
+        Assert.Equal(clientCash - (productPrice1 * productBuyCount1) - (productPrice2 * productBuyCount2), client.Cash);
+
+        Assert.Equal(productCount1 - productBuyCount1, shop.GetProductInfo(product1).Quantity);
+        Assert.Equal(productCount2 - productBuyCount2, shop.GetProductInfo(product2).Quantity);
     }
 
-    [Fact]
-    public void SetChangePriceOfProductInShop()
+    [Theory]
+    [InlineData(500, 200, 50, 20)]
+    [InlineData(1, 2, 100, 20)]
+    [InlineData(10, 10, 10, 10)]
+    public void SetChangePriceOfProductInShop(
+        decimal productPrice1,
+        decimal productPrice2,
+        decimal newProductPrice1,
+        decimal newProductPrice2)
     {
         var shop = _shopManager.AddShop("TestShop", "Adr");
         var product1 = _shopManager.AddProduct("Product1");
         var product2 = _shopManager.AddProduct("Product2");
-        shop.AddProducts((product1, 5, 2000));
-        shop.AddProducts((product2, 1, 1000));
+        shop.AddProducts((product1, 1, productPrice1));
+        shop.AddProducts((product2, 1, productPrice2));
 
-        shop.ChangeProductPrice(product1, 1);
-        shop.ChangeProductPrice(product2, 4);
+        shop.ChangeProductPrice(product1, newProductPrice1);
+        shop.ChangeProductPrice(product2, newProductPrice2);
 
-        var client = _shopManager.AddClient("TestClient", 500);
+        var client = _shopManager.AddClient("TestClient", 1000000);
 
-        // assert doesnt throw not enough money exc
+        Assert.Equal(newProductPrice1, shop.GetProductInfo(product1).Price);
+        Assert.Equal(newProductPrice2, shop.GetProductInfo(product2).Price);
     }
 
     [Fact]
@@ -51,16 +69,20 @@ public class ShopManagerTests
         var product1 = _shopManager.AddProduct("Product1");
         var product2 = _shopManager.AddProduct("Product2");
 
-        shop1.AddProducts((product1, 10, 500), (product2, 10, 400));
-        shop2.AddProducts((product1, 10, 50), (product2, 10, 40));
-        shop3.AddProducts((product1, 10, 5), (product2, 10, 4));
-        var bestShop = _shopManager.FindShopWithBestOffer((product1, 5), (product2, 5)); // null - doesn't exist
+        shop1.AddProducts((product1, 100, 500), (product2, 100, 400));
+        shop2.AddProducts((product1, 100, 50), (product2, 100, 40));
+        shop3.AddProducts((product1, 100, 5), (product2, 100, 4));
+        var bestShop = _shopManager.FindShopWithBestOffer((product1, 5), (product2, 5)); // null - not enough q
 
         Assert.Equal(shop3, bestShop);
-    }
 
-    [Fact]
-    public void BuyListOfProductsInShop()
-    {
+        shop1.ChangeProductPrice(product1, 3);
+        shop1.ChangeProductPrice(product2, 2);
+        bestShop = _shopManager.FindShopWithBestOffer((product1, 5), (product2, 5));
+
+        Assert.Equal(shop1, bestShop);
+
+        bestShop = _shopManager.FindShopWithBestOffer((product1, 500), (product2, 50));
+        Assert.Null(bestShop);
     }
 }
