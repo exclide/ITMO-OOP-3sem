@@ -1,4 +1,5 @@
 ﻿using Shops.Entities;
+using Shops.Exceptions;
 using Shops.Services;
 using Xunit;
 
@@ -26,8 +27,14 @@ public class ShopManagerTests
         var product1 = _shopManager.AddProduct("TestProd1");
         var product2 = _shopManager.AddProduct("TestProd2");
 
-        shop.AddProducts((product1, productCount1, productPrice1), (product2, productCount2, productPrice2));
-        shop.SellProductToClient(client, (product1, productBuyCount1), (product2, productBuyCount2));
+        shop.AddProducts(
+            new ProductInfo(product1, productCount1, productPrice1),
+            new ProductInfo(product2, productCount2, productPrice2));
+
+        shop.SellProductToClient(
+            client,
+            new BuyInfo(product1, productBuyCount1),
+            new BuyInfo(product2, productBuyCount2));
 
         Assert.Equal(clientCash - (productPrice1 * productBuyCount1) - (productPrice2 * productBuyCount2), client.Cash);
 
@@ -48,8 +55,8 @@ public class ShopManagerTests
         var shop = _shopManager.AddShop("TestShop", "Adr");
         var product1 = _shopManager.AddProduct("Product1");
         var product2 = _shopManager.AddProduct("Product2");
-        shop.AddProducts((product1, 1, productPrice1));
-        shop.AddProducts((product2, 1, productPrice2));
+        shop.AddProducts(new ProductInfo(product1, 1, productPrice1));
+        shop.AddProducts(new ProductInfo(product2, 1, productPrice2));
 
         shop.ChangeProductPrice(product1, newProductPrice1);
         shop.ChangeProductPrice(product2, newProductPrice2);
@@ -69,20 +76,36 @@ public class ShopManagerTests
         var product1 = _shopManager.AddProduct("Product1");
         var product2 = _shopManager.AddProduct("Product2");
 
-        shop1.AddProducts((product1, 100, 500), (product2, 100, 400));
-        shop2.AddProducts((product1, 100, 50), (product2, 100, 40));
-        shop3.AddProducts((product1, 100, 5), (product2, 100, 4));
-        var bestShop = _shopManager.FindShopWithBestOffer((product1, 5), (product2, 5)); // null - not enough q
+        shop1.AddProducts(new ProductInfo(product1, 100, 500), new ProductInfo(product2, 100, 400));
+        shop2.AddProducts(new ProductInfo(product1, 100, 50), new ProductInfo(product2, 100, 40));
+        shop3.AddProducts(new ProductInfo(product1, 100, 5), new ProductInfo(product2, 100, 4));
+        var bestShop = _shopManager.FindShopWithBestOffer(new BuyInfo(product1, 5), new BuyInfo(product2, 5));
 
         Assert.Equal(shop3, bestShop);
 
         shop1.ChangeProductPrice(product1, 3);
         shop1.ChangeProductPrice(product2, 2);
-        bestShop = _shopManager.FindShopWithBestOffer((product1, 5), (product2, 5));
+        bestShop = _shopManager.FindShopWithBestOffer(new BuyInfo(product1, 5), new BuyInfo(product2, 5));
 
         Assert.Equal(shop1, bestShop);
 
-        bestShop = _shopManager.FindShopWithBestOffer((product1, 500), (product2, 50));
+        bestShop = _shopManager.FindShopWithBestOffer(new BuyInfo(product1, 500), new BuyInfo(product2, 50));
         Assert.Null(bestShop);
+    }
+
+    [Theory]
+    [InlineData(500, 400, 200)]
+    [InlineData(50, 1, 50)]
+    [InlineData(1, 1, 1)]
+    public void ClientDoesNotHaveMoneyz_ThrowsException(decimal clientCash, decimal productPrice1, decimal productPrice2)
+    {
+        var client = _shopManager.AddClient("Gaylord", clientCash);
+        var product1 = _shopManager.AddProduct("Product1");
+        var product2 = _shopManager.AddProduct("Product2");
+        var shop = _shopManager.AddShop("Shop1", "Adr");
+
+        shop.AddProducts(new ProductInfo(product1, 10, productPrice1), new ProductInfo(product2, 10, productPrice2));
+        Assert.Throws<ClientNotEnoughMoneyException>(
+            () => shop.SellProductToClient(client, new BuyInfo(product1, 1), new BuyInfo(product2, 1)));
     }
 }

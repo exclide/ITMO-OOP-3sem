@@ -1,10 +1,22 @@
-﻿namespace Shops.Entities;
+﻿using Shops.Exceptions;
+
+namespace Shops.Entities;
 
 public class ProductInfo : IEquatable<ProductInfo>
 {
     public ProductInfo(Product product, int quantity, decimal price)
     {
         ArgumentNullException.ThrowIfNull(product);
+        if (quantity < 0)
+        {
+            throw new ProductInvalidQuantity($"Product quantity was negative: {quantity}");
+        }
+
+        if (price < 0)
+        {
+            throw new ProductInvalidPrice($"Product price was negative: {price}");
+        }
+
         Product = product;
         Quantity = quantity;
         Price = price;

@@ -12,9 +12,14 @@ public class Shop : IEquatable<Shop>
 
     public Shop(int id, string name, string address)
     {
-        if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(address))
+        if (string.IsNullOrWhiteSpace(name))
         {
-            throw new StringNullOrWhiteSpaceException($"{nameof(name)} or {nameof(address)} was null or whitespace.");
+            throw new StringNullOrWhiteSpaceException($"{nameof(name)} was null or whitespace.");
+        }
+
+        if (string.IsNullOrWhiteSpace(address))
+        {
+            throw new StringNullOrWhiteSpaceException($"{nameof(address)} was null or whitespace.");
         }
 
         _id = id;
@@ -24,15 +29,15 @@ public class Shop : IEquatable<Shop>
         _products = new List<ProductInfo>();
     }
 
-    public void AddProducts(params (Product product, int quantity, decimal price)[] products)
+    public void AddProducts(params ProductInfo[] products)
     {
-        _products.AddRange(products.Select(
-            x => new ProductInfo(x.product, x.quantity, x.price)).Except(_products));
+        _products.AddRange(products.Except(_products));
     }
 
     public void ChangeProductPrice(Product product, decimal newPrice)
     {
         var foundProduct = _products.FirstOrDefault(x => x.Product.Equals(product));
+
         if (foundProduct == null)
         {
             throw new ProductNotFoundException("Can't change price. Product not found.");
@@ -41,31 +46,34 @@ public class Shop : IEquatable<Shop>
         foundProduct.Price = newPrice;
     }
 
-    public decimal CheckIfAllExistsAndEnoughQuantity(params (Product product, int quantity)[] buyList)
+    public decimal CheckIfAllExistsAndEnoughQuantity(params BuyInfo[] buyList)
     {
         decimal fullPrice = 0;
-        foreach (var pair in buyList)
+
+        foreach (var buyInfo in buyList)
         {
-            var product = _products.FirstOrDefault(t => t.Product.Equals(pair.product));
+            var product = _products.FirstOrDefault(t => t.Product.Equals(buyInfo.product));
+
             if (product == null)
             {
                 return -1;
             }
 
-            if (product.Quantity < pair.quantity)
+            if (product.Quantity < buyInfo.quantity)
             {
                 return 0;
             }
 
-            fullPrice += product.Price * pair.quantity;
+            fullPrice += product.Price * buyInfo.quantity;
         }
 
         return fullPrice;
     }
 
-    public void SellProductToClient(Client client, params (Product product, int quantity)[] buyList)
+    public void SellProductToClient(Client client, params BuyInfo[] buyList)
     {
         decimal fullProductPrice = CheckIfAllExistsAndEnoughQuantity(buyList);
+
         switch (fullProductPrice)
         {
             case -1:
@@ -100,6 +108,7 @@ public class Shop : IEquatable<Shop>
     public ProductInfo GetProductInfo(Product product)
     {
         var productFound = _products.FirstOrDefault(x => x.Product.Equals(product));
+
         if (productFound == null)
         {
             throw new ProductNotFoundException("Product not found.");

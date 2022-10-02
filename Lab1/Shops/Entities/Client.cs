@@ -13,6 +13,11 @@ public class Client
             throw new StringNullOrWhiteSpaceException($"{nameof(name)} was null or whitespace.");
         }
 
+        if (cash < 0)
+        {
+            throw new ClientInvalidCashException($"Client cash was negative: {cash}");
+        }
+
         _id = id;
         Name = name;
         Cash = cash;

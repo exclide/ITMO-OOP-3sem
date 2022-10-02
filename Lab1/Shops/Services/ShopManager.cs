@@ -41,7 +41,7 @@ public class ShopManager
         return client;
     }
 
-    public Shop? FindShopWithBestOffer(params (Product product, int count)[] products)
+    public Shop? FindShopWithBestOffer(params BuyInfo[] products)
     {
         var bestShop = _shops.OrderBy(shop => shop.CheckIfAllExistsAndEnoughQuantity(products))
             .FirstOrDefault(shop => shop.CheckIfAllExistsAndEnoughQuantity(products) > 0);
