@@ -31,11 +31,20 @@ public class Shop : IEquatable<Shop>
 
     public void AddProducts(params ProductInfo[] products)
     {
+        ArgumentNullException.ThrowIfNull(products);
+
         _products.AddRange(products.Except(_products));
     }
 
     public void ChangeProductPrice(Product product, decimal newPrice)
     {
+        ArgumentNullException.ThrowIfNull(product);
+
+        if (newPrice < 0)
+        {
+            throw new ProductInvalidPriceException($"{nameof(newPrice)} was negative :{newPrice}");
+        }
+
         var foundProduct = _products.FirstOrDefault(x => x.Product.Equals(product));
 
         if (foundProduct is null)
@@ -48,23 +57,25 @@ public class Shop : IEquatable<Shop>
 
     public decimal CheckIfAllExistsAndEnoughQuantity(params BuyInfo[] buyList)
     {
+        ArgumentNullException.ThrowIfNull(buyList);
+
         decimal fullPrice = 0;
 
         foreach (var buyInfo in buyList)
         {
-            var product = _products.FirstOrDefault(t => t.Product.Equals(buyInfo.product));
+            var product = _products.FirstOrDefault(t => t.Product.Equals(buyInfo.Product));
 
             if (product is null)
             {
                 return -1;
             }
 
-            if (product.Quantity < buyInfo.quantity)
+            if (product.Quantity < buyInfo.Quantity)
             {
                 return 0;
             }
 
-            fullPrice += product.Price * buyInfo.quantity;
+            fullPrice += product.Price * buyInfo.Quantity;
         }
 
         return fullPrice;
@@ -72,6 +83,9 @@ public class Shop : IEquatable<Shop>
 
     public void SellProductToClient(Client client, params BuyInfo[] buyList)
     {
+        ArgumentNullException.ThrowIfNull(client);
+        ArgumentNullException.ThrowIfNull(buyList);
+
         decimal fullProductPrice = CheckIfAllExistsAndEnoughQuantity(buyList);
 
         switch (fullProductPrice)
@@ -90,8 +104,8 @@ public class Shop : IEquatable<Shop>
 
         foreach (var pair in buyList)
         {
-            var product = _products.First(t => t.Product.Equals(pair.product));
-            product.Quantity -= pair.quantity;
+            var product = _products.First(t => t.Product.Equals(pair.Product));
+            product.Quantity -= pair.Quantity;
             /*
             if (product.Quantity == 0)
             {
@@ -107,6 +121,8 @@ public class Shop : IEquatable<Shop>
 
     public ProductInfo GetProductInfo(Product product)
     {
+        ArgumentNullException.ThrowIfNull(product);
+
         var productFound = _products.FirstOrDefault(x => x.Product.Equals(product));
 
         if (productFound is null)

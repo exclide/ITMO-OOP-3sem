@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Shops.Entities;
+using Shops.Exceptions;
 
 namespace Shops.Services;
 
@@ -22,6 +23,16 @@ public class ShopManager
 
     public Shop AddShop(string shopName, string shopAddress)
     {
+        if (string.IsNullOrWhiteSpace(shopName))
+        {
+            throw new StringNullOrWhiteSpaceException($"{nameof(shopName)} was null or whitespace.");
+        }
+
+        if (string.IsNullOrWhiteSpace(shopAddress))
+        {
+            throw new StringNullOrWhiteSpaceException($"{nameof(shopAddress)} was null or whitespace.");
+        }
+
         var shop = new Shop(_shopIdCounter++, shopName, shopAddress);
         _shops.Add(shop);
         return shop;
@@ -29,6 +40,11 @@ public class ShopManager
 
     public Product AddProduct(string productName)
     {
+        if (string.IsNullOrWhiteSpace(productName))
+        {
+            throw new StringNullOrWhiteSpaceException($"{nameof(productName)} was null or whitespace.");
+        }
+
         var product = new Product(_productIdCounter++, productName);
         _products.Add(product);
         return product;
@@ -36,6 +52,16 @@ public class ShopManager
 
     public Client AddClient(string clientName, decimal clientCash)
     {
+        if (string.IsNullOrWhiteSpace(clientName))
+        {
+            throw new StringNullOrWhiteSpaceException($"{nameof(clientName)} was null or whitespace.");
+        }
+
+        if (clientCash < 0)
+        {
+            throw new ClientInvalidCashException($"{nameof(clientCash)} was negative: {clientCash}");
+        }
+
         var client = new Client(_clientIdCounter++, clientName, clientCash);
         _clients.Add(client);
         return client;
@@ -43,6 +69,8 @@ public class ShopManager
 
     public Shop FindShopWithBestOffer(params BuyInfo[] products)
     {
+        ArgumentNullException.ThrowIfNull(products);
+
         var bestShop = _shops.OrderBy(shop => shop.CheckIfAllExistsAndEnoughQuantity(products))
             .FirstOrDefault(shop => shop.CheckIfAllExistsAndEnoughQuantity(products) > 0);
 

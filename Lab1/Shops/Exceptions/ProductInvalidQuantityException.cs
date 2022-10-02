@@ -1,8 +1,8 @@
 ﻿namespace Shops.Exceptions;
 
-public class ProductInvalidQuantity : Exception
+public class ProductInvalidQuantityException : Exception
 {
-    public ProductInvalidQuantity(string message)
+    public ProductInvalidQuantityException(string message)
         : base(message)
     {
     }

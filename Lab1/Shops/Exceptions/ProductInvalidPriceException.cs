@@ -1,8 +1,8 @@
 ﻿namespace Shops.Exceptions;
 
-public class ProductInvalidPrice : Exception
+public class ProductInvalidPriceException : Exception
 {
-    public ProductInvalidPrice(string message)
+    public ProductInvalidPriceException(string message)
         : base(message)
     {
     }
