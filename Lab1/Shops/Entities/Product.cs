@@ -20,6 +20,6 @@ public class Product : IEquatable<Product>
     public string Name { get; }
 
     public override int GetHashCode() => _id.GetHashCode();
-    public override bool Equals(object? obj) => Equals(obj as Product);
-    public bool Equals(Product? other) => other?._id.Equals(_id) ?? false;
+    public override bool Equals(object obj) => Equals(obj as Product);
+    public bool Equals(Product other) => other?._id.Equals(_id) ?? false;
 }

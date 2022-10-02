@@ -38,7 +38,7 @@ public class Shop : IEquatable<Shop>
     {
         var foundProduct = _products.FirstOrDefault(x => x.Product.Equals(product));
 
-        if (foundProduct == null)
+        if (foundProduct is null)
         {
             throw new ProductNotFoundException("Can't change price. Product not found.");
         }
@@ -54,7 +54,7 @@ public class Shop : IEquatable<Shop>
         {
             var product = _products.FirstOrDefault(t => t.Product.Equals(buyInfo.product));
 
-            if (product == null)
+            if (product is null)
             {
                 return -1;
             }
@@ -109,7 +109,7 @@ public class Shop : IEquatable<Shop>
     {
         var productFound = _products.FirstOrDefault(x => x.Product.Equals(product));
 
-        if (productFound == null)
+        if (productFound is null)
         {
             throw new ProductNotFoundException("Product not found.");
         }
@@ -118,6 +118,6 @@ public class Shop : IEquatable<Shop>
     }
 
     public override int GetHashCode() => _id.GetHashCode();
-    public override bool Equals(object? obj) => Equals(obj as Shop);
-    public bool Equals(Shop? other) => other?._id.Equals(_id) ?? false;
+    public override bool Equals(object obj) => Equals(obj as Shop);
+    public bool Equals(Shop other) => other?._id.Equals(_id) ?? false;
 }

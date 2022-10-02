@@ -27,6 +27,6 @@ public class ProductInfo : IEquatable<ProductInfo>
     public Product Product { get; }
 
     public override int GetHashCode() => Product.GetHashCode();
-    public override bool Equals(object? obj) => Equals(obj as ProductInfo);
-    public bool Equals(ProductInfo? other) => other?.Product.Equals(Product) ?? false;
+    public override bool Equals(object obj) => Equals(obj as ProductInfo);
+    public bool Equals(ProductInfo other) => other?.Product.Equals(Product) ?? false;
 }

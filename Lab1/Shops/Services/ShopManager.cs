@@ -5,13 +5,13 @@ namespace Shops.Services;
 
 public class ShopManager
 {
-    private static int _shopIdCounter = 0;
-    private static int _productIdCounter = 0;
-    private static int _clientIdCounter = 0;
-
     private readonly List<Product> _products;
     private readonly List<Shop> _shops;
     private readonly List<Client> _clients;
+
+    private int _shopIdCounter = 0;
+    private int _productIdCounter = 0;
+    private int _clientIdCounter = 0;
 
     public ShopManager()
     {
@@ -41,7 +41,7 @@ public class ShopManager
         return client;
     }
 
-    public Shop? FindShopWithBestOffer(params BuyInfo[] products)
+    public Shop FindShopWithBestOffer(params BuyInfo[] products)
     {
         var bestShop = _shops.OrderBy(shop => shop.CheckIfAllExistsAndEnoughQuantity(products))
             .FirstOrDefault(shop => shop.CheckIfAllExistsAndEnoughQuantity(products) > 0);
