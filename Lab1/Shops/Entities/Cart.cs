@@ -21,4 +21,9 @@ public class Cart
             foundItem.Quantity += item.Quantity;
         }
     }
+
+    public IEnumerable<BuyInfo> GetItems()
+    {
+        return _items;
+    }
 }

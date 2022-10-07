@@ -67,7 +67,7 @@ public class ShopManager
         return client;
     }
 
-    public Shop FindShopWithBestOffer(params BuyInfo[] products)
+    public Shop FindShopWithBestOffer(Cart products)
     {
         ArgumentNullException.ThrowIfNull(products);
 

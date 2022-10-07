@@ -55,13 +55,13 @@ public class Shop : IEquatable<Shop>
         foundProduct.Price = newPrice;
     }
 
-    public decimal CheckIfAllExistsAndEnoughQuantity(params BuyInfo[] buyList)
+    public decimal CheckIfAllExistsAndEnoughQuantity(Cart buyList)
     {
         ArgumentNullException.ThrowIfNull(buyList);
 
         decimal fullPrice = 0;
 
-        foreach (var buyInfo in buyList)
+        foreach (var buyInfo in buyList.GetItems())
         {
             var product = _products.FirstOrDefault(t => t.Product.Equals(buyInfo.Product));
 
@@ -81,7 +81,7 @@ public class Shop : IEquatable<Shop>
         return fullPrice;
     }
 
-    public void SellProductToClient(Client client, params BuyInfo[] buyList)
+    public void SellProductToClient(Client client, Cart buyList)
     {
         ArgumentNullException.ThrowIfNull(client);
         ArgumentNullException.ThrowIfNull(buyList);
@@ -102,7 +102,7 @@ public class Shop : IEquatable<Shop>
                                                     $"Needed amount: {fullProductPrice}.");
         }
 
-        foreach (var pair in buyList)
+        foreach (var pair in buyList.GetItems())
         {
             var product = _products.First(t => t.Product.Equals(pair.Product));
             product.Quantity -= pair.Quantity;

@@ -26,6 +26,11 @@ public class CartBuilder
         items.ToList().ForEach(AddItem);
     }
 
+    public void AddItems(params BuyInfo[] items)
+    {
+        items.ToList().ForEach(AddItem);
+    }
+
     public Cart GetCart()
     {
         return _cart;

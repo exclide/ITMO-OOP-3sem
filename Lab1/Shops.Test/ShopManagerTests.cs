@@ -1,6 +1,7 @@
 ﻿using Shops.Entities;
 using Shops.Exceptions;
 using Shops.Services;
+using Shops.Util;
 using Xunit;
 
 namespace Shops.Test;
@@ -8,6 +9,7 @@ namespace Shops.Test;
 public class ShopManagerTests
 {
     private readonly ShopManager _shopManager = new ShopManager();
+    private readonly CartBuilder _cartBuilder = new CartBuilder();
 
     [Theory]
     [InlineData(100, 1, 50, 2, 25, 1, 2)]
@@ -31,10 +33,12 @@ public class ShopManagerTests
             new ProductInfo(product1, productCount1, productPrice1),
             new ProductInfo(product2, productCount2, productPrice2));
 
-        shop.SellProductToClient(
-            client,
-            new BuyInfo(product1, productBuyCount1),
-            new BuyInfo(product2, productBuyCount2));
+        _cartBuilder.Reset();
+        _cartBuilder.AddItem(new BuyInfo(product1, productBuyCount1));
+        _cartBuilder.AddItem(new BuyInfo(product2, productBuyCount2));
+        var cart = _cartBuilder.GetCart();
+
+        shop.SellProductToClient(client, cart);
 
         Assert.Equal(clientCash - (productPrice1 * productBuyCount1) - (productPrice2 * productBuyCount2), client.Cash);
 
@@ -79,17 +83,27 @@ public class ShopManagerTests
         shop1.AddProducts(new ProductInfo(product1, 100, 500), new ProductInfo(product2, 100, 400));
         shop2.AddProducts(new ProductInfo(product1, 100, 50), new ProductInfo(product2, 100, 40));
         shop3.AddProducts(new ProductInfo(product1, 100, 5), new ProductInfo(product2, 100, 4));
-        var bestShop = _shopManager.FindShopWithBestOffer(new BuyInfo(product1, 5), new BuyInfo(product2, 5));
+
+        _cartBuilder.Reset();
+        _cartBuilder.AddItem(new BuyInfo(product1, 5));
+        _cartBuilder.AddItem(new BuyInfo(product2, 5));
+        var cart = _cartBuilder.GetCart();
+
+        var bestShop = _shopManager.FindShopWithBestOffer(cart);
 
         Assert.Equal(shop3, bestShop);
 
         shop1.ChangeProductPrice(product1, 3);
         shop1.ChangeProductPrice(product2, 2);
-        bestShop = _shopManager.FindShopWithBestOffer(new BuyInfo(product1, 5), new BuyInfo(product2, 5));
+        bestShop = _shopManager.FindShopWithBestOffer(cart);
 
         Assert.Equal(shop1, bestShop);
 
-        bestShop = _shopManager.FindShopWithBestOffer(new BuyInfo(product1, 500), new BuyInfo(product2, 50));
+        _cartBuilder.Reset();
+        _cartBuilder.AddItems(new BuyInfo(product1, 500), new BuyInfo(product2, 50));
+        cart = _cartBuilder.GetCart();
+
+        bestShop = _shopManager.FindShopWithBestOffer(cart);
         Assert.Null(bestShop);
     }
 
@@ -105,7 +119,11 @@ public class ShopManagerTests
         var shop = _shopManager.AddShop("Shop1", "Adr");
 
         shop.AddProducts(new ProductInfo(product1, 10, productPrice1), new ProductInfo(product2, 10, productPrice2));
+
+        _cartBuilder.Reset();
+        _cartBuilder.AddItems(new BuyInfo(product1, 1), new BuyInfo(product2, 1));
+        var cart = _cartBuilder.GetCart();
         Assert.Throws<ClientNotEnoughMoneyException>(
-            () => shop.SellProductToClient(client, new BuyInfo(product1, 1), new BuyInfo(product2, 1)));
+            () => shop.SellProductToClient(client, cart));
     }
 }
