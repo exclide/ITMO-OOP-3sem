@@ -18,5 +18,5 @@ public class BuyInfo
     }
 
     public Product Product { get; }
-    public int Quantity { get; }
+    public int Quantity { get; set; }
 }
