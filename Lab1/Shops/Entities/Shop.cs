@@ -42,20 +42,20 @@ public class Shop : IEquatable<Shop>
 
         if (newPrice < 0)
         {
-            throw new ProductInvalidPriceException($"{nameof(newPrice)} was negative :{newPrice}");
+            throw ProductException.InvalidPrice(newPrice);
         }
 
         var foundProduct = _products.FirstOrDefault(x => x.Product.Equals(product));
 
         if (foundProduct is null)
         {
-            throw new ProductNotFoundException("Can't change price. Product not found.");
+            throw ProductException.NotFound(product.Id);
         }
 
         foundProduct.Price = newPrice;
     }
 
-    public decimal CheckIfAllExistsAndEnoughQuantity(Cart buyList)
+    public decimal CheckIfAllExistsAndEnoughQuantity(Cart buyList, bool dontThrow = false) // dontThrow if using to find best price shop
     {
         ArgumentNullException.ThrowIfNull(buyList);
 
@@ -67,12 +67,22 @@ public class Shop : IEquatable<Shop>
 
             if (product is null)
             {
-                return -1;
+                if (dontThrow)
+                {
+                    return -1;
+                }
+
+                throw ProductException.NotFound(buyInfo.Product.Id);
             }
 
             if (product.Quantity < buyInfo.Quantity)
             {
-                return 0;
+                if (dontThrow)
+                {
+                    return 0;
+                }
+
+                throw ProductException.NotEnoughQuantity(product.Quantity, buyInfo.Quantity);
             }
 
             fullPrice += product.Price * buyInfo.Quantity;
@@ -88,24 +98,15 @@ public class Shop : IEquatable<Shop>
 
         decimal fullProductPrice = CheckIfAllExistsAndEnoughQuantity(buyList);
 
-        switch (fullProductPrice)
-        {
-            case -1:
-                throw new ProductNotFoundException($"Product not found in shop.");
-            case 0:
-                throw new ProductNotEnoughQuantityException($"Not enough quantity of product.");
-        }
-
         if (client.Cash < fullProductPrice)
         {
-            throw new ClientNotEnoughMoneyException($"Client doesn't have enough money. Client: {client.Cash}" +
-                                                    $"Needed amount: {fullProductPrice}.");
+            throw ClientException.NotEnoughMoney(client.Cash, fullProductPrice);
         }
 
-        foreach (var pair in buyList.GetItems())
+        foreach (var buyInfo in buyList.GetItems())
         {
-            var product = _products.First(t => t.Product.Equals(pair.Product));
-            product.Quantity -= pair.Quantity;
+            var product = _products.First(t => t.Product.Equals(buyInfo.Product));
+            product.Quantity -= buyInfo.Quantity;
             /*
             if (product.Quantity == 0)
             {
@@ -127,7 +128,7 @@ public class Shop : IEquatable<Shop>
 
         if (productFound is null)
         {
-            throw new ProductNotFoundException("Product not found.");
+            throw ProductException.NotFound(product.Id);
         }
 
         return productFound;

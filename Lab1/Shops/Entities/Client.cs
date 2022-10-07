@@ -15,7 +15,7 @@ public class Client
 
         if (cash < 0)
         {
-            throw new ClientInvalidCashException($"Client cash was negative: {cash}");
+            throw ClientException.InvalidCash(cash);
         }
 
         _id = id;

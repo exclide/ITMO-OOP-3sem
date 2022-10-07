@@ -18,6 +18,7 @@ public class Product : IEquatable<Product>
     }
 
     public string Name { get; }
+    public int Id => _id;
 
     public override int GetHashCode() => _id.GetHashCode();
     public override bool Equals(object obj) => Equals(obj as Product);

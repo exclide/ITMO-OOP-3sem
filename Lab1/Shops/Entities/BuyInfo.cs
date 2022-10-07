@@ -10,7 +10,7 @@ public class BuyInfo : IEquatable<BuyInfo>
 
         if (quantity < 0)
         {
-            throw new ProductInvalidQuantityException($"Product quantity was negative: {quantity}");
+            throw ProductException.InvalidQuantity(quantity);
         }
 
         Product = product;

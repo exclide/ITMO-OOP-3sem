@@ -9,12 +9,12 @@ public class ProductInfo : IEquatable<ProductInfo>
         ArgumentNullException.ThrowIfNull(product);
         if (quantity < 0)
         {
-            throw new ProductInvalidQuantityException($"Product quantity was negative: {quantity}");
+            throw ProductException.InvalidQuantity(quantity);
         }
 
         if (price < 0)
         {
-            throw new ProductInvalidPriceException($"Product price was negative: {price}");
+            throw ProductException.InvalidPrice(price);
         }
 
         Product = product;

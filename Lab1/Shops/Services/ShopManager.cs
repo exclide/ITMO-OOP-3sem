@@ -59,7 +59,7 @@ public class ShopManager
 
         if (clientCash < 0)
         {
-            throw new ClientInvalidCashException($"{nameof(clientCash)} was negative: {clientCash}");
+            throw ClientException.InvalidCash(clientCash);
         }
 
         var client = new Client(_clientIdCounter++, clientName, clientCash);
@@ -71,8 +71,8 @@ public class ShopManager
     {
         ArgumentNullException.ThrowIfNull(products);
 
-        var bestShop = _shops.OrderBy(shop => shop.CheckIfAllExistsAndEnoughQuantity(products))
-            .FirstOrDefault(shop => shop.CheckIfAllExistsAndEnoughQuantity(products) > 0);
+        var bestShop = _shops.OrderBy(shop => shop.CheckIfAllExistsAndEnoughQuantity(products, true))
+            .FirstOrDefault(shop => shop.CheckIfAllExistsAndEnoughQuantity(products, true) > 0);
 
         return bestShop;
     }
