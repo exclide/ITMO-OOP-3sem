@@ -107,13 +107,6 @@ public class Shop : IEquatable<Shop>
         {
             var product = _products.First(t => t.Product.Equals(buyInfo.Product));
             product.Quantity -= buyInfo.Quantity;
-            /*
-            if (product.Quantity == 0)
-            {
-                _products.Remove(product);
-            }
-            working as intended
-            */
         }
 
         _profit += fullProductPrice;
