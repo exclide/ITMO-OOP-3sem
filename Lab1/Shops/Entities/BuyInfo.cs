@@ -4,6 +4,7 @@ namespace Shops.Entities;
 
 public class BuyInfo : IEquatable<BuyInfo>
 {
+    private int _quantity;
     public BuyInfo(Product product, int quantity)
     {
         ArgumentNullException.ThrowIfNull(product);
@@ -18,7 +19,19 @@ public class BuyInfo : IEquatable<BuyInfo>
     }
 
     public Product Product { get; }
-    public int Quantity { get; set; }
+    public int Quantity
+    {
+        get => _quantity;
+        set
+        {
+            if (value < 0)
+            {
+                throw ProductException.InvalidQuantity(value);
+            }
+
+            _quantity = value;
+        }
+    }
 
     public override int GetHashCode() => Product.GetHashCode();
     public override bool Equals(object obj) => Equals(obj as Product);

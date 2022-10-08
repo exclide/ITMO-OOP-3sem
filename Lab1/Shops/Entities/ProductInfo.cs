@@ -4,6 +4,8 @@ namespace Shops.Entities;
 
 public class ProductInfo : IEquatable<ProductInfo>
 {
+    private int _quantity;
+    private decimal _price;
     public ProductInfo(Product product, int quantity, decimal price)
     {
         ArgumentNullException.ThrowIfNull(product);
@@ -22,8 +24,34 @@ public class ProductInfo : IEquatable<ProductInfo>
         Price = price;
     }
 
-    public int Quantity { get; set; }
-    public decimal Price { get; set; }
+    public int Quantity
+    {
+        get => _quantity;
+        set
+        {
+            if (value < 0)
+            {
+                throw ProductException.InvalidQuantity(value);
+            }
+
+            _quantity = value;
+        }
+    }
+
+    public decimal Price
+    {
+        get => _price;
+        set
+        {
+            if (value < 0)
+            {
+                throw ProductException.InvalidPrice(value);
+            }
+
+            _price = value;
+        }
+    }
+
     public Product Product { get; }
 
     public override int GetHashCode() => Product.GetHashCode();
