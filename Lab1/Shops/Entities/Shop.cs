@@ -66,40 +66,25 @@ public class Shop : IEquatable<Shop>
         foundProduct.Price = newPrice;
     }
 
-    public decimal CheckIfAllExistsAndEnoughQuantity(Cart buyList, bool dontThrow = false) // dontThrow if using to find best price shop
+    public bool CheckIfAllExistsAndEnoughQuantity(Cart buyList)
     {
         ArgumentNullException.ThrowIfNull(buyList);
 
-        decimal fullPrice = 0;
+        return buyList.GetItems().All(buyProd =>
+            _products.Any(sellProd => sellProd.Product.Equals(buyProd.Product) && sellProd.Quantity >= buyProd.Quantity));
+    }
 
-        foreach (var buyInfo in buyList.GetItems())
-        {
-            var product = _products.FirstOrDefault(t => t.Product.Equals(buyInfo.Product));
+    public decimal GetFullPriceForCart(Cart buyList)
+    {
+        ArgumentNullException.ThrowIfNull(buyList);
 
-            if (product is null)
+        return buyList.GetItems().Select(buyItem =>
+            new
             {
-                if (dontThrow)
-                {
-                    return -1;
-                }
-
-                throw ProductException.NotFound(buyInfo.Product.Id);
-            }
-
-            if (product.Quantity < buyInfo.Quantity)
-            {
-                if (dontThrow)
-                {
-                    return 0;
-                }
-
-                throw ProductException.NotEnoughQuantity(product.Quantity, buyInfo.Quantity);
-            }
-
-            fullPrice += product.Price * buyInfo.Quantity;
-        }
-
-        return fullPrice;
+                quantity = buyItem.Quantity,
+                product = _products.First(t => t.Product.Equals(buyItem.Product)),
+            }).
+            Select(k => k.product.Price * k.quantity).Sum();
     }
 
     public void SellProductToClient(Client client, Cart buyList)
@@ -107,7 +92,12 @@ public class Shop : IEquatable<Shop>
         ArgumentNullException.ThrowIfNull(client);
         ArgumentNullException.ThrowIfNull(buyList);
 
-        decimal fullProductPrice = CheckIfAllExistsAndEnoughQuantity(buyList);
+        if (!CheckIfAllExistsAndEnoughQuantity(buyList))
+        {
+            throw ProductException.NotFoundOrNotEnoughQuantity();
+        }
+
+        decimal fullProductPrice = GetFullPriceForCart(buyList);
 
         client.ProcessTransaction(fullProductPrice);
 

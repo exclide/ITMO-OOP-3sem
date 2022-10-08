@@ -71,9 +71,7 @@ public class ShopManager
     {
         ArgumentNullException.ThrowIfNull(products);
 
-        var bestShop = _shops.OrderBy(shop => shop.CheckIfAllExistsAndEnoughQuantity(products, true))
-            .FirstOrDefault(shop => shop.CheckIfAllExistsAndEnoughQuantity(products, true) > 0);
-
-        return bestShop;
+        return _shops.Where(shop =>
+            shop.CheckIfAllExistsAndEnoughQuantity(products)).MinBy(s => s.GetFullPriceForCart(products));
     }
 }

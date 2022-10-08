@@ -26,4 +26,9 @@ public class ProductException : Exception
     {
         return new ProductException($"Product with given ID: {productId} was not found");
     }
+
+    public static ProductException NotFoundOrNotEnoughQuantity()
+    {
+        return new ProductException($"Some products in card not found or not enough quantity.");
+    }
 }
