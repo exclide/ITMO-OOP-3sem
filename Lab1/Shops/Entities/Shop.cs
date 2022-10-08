@@ -98,10 +98,7 @@ public class Shop : IEquatable<Shop>
 
         decimal fullProductPrice = CheckIfAllExistsAndEnoughQuantity(buyList);
 
-        if (client.Cash < fullProductPrice)
-        {
-            throw ClientException.NotEnoughMoney(client.Cash, fullProductPrice);
-        }
+        client.ProcessTransaction(fullProductPrice);
 
         foreach (var buyInfo in buyList.GetItems())
         {
@@ -110,7 +107,6 @@ public class Shop : IEquatable<Shop>
         }
 
         _profit += fullProductPrice;
-        client.Cash -= fullProductPrice;
     }
 
     public ProductInfo GetProductInfo(Product product)

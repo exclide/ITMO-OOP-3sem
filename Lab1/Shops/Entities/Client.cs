@@ -23,6 +23,16 @@ public class Client
         Cash = cash;
     }
 
-    public decimal Cash { get; set; }
+    public decimal Cash { get; private set; }
     public string Name { get; }
+
+    public void ProcessTransaction(decimal requestedCash)
+    {
+        if (Cash < requestedCash)
+        {
+            throw ClientException.NotEnoughMoney(Cash, requestedCash);
+        }
+
+        Cash -= requestedCash;
+    }
 }
