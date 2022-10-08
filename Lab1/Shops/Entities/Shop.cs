@@ -33,18 +33,18 @@ public class Shop : IEquatable<Shop>
     {
         ArgumentNullException.ThrowIfNull(products);
 
-        products.ToList().ForEach(product =>
+        foreach (ProductInfo productInfo in products)
         {
-            var foundProduct = _products.FirstOrDefault(x => x.Equals(product));
+            var foundProduct = _products.FirstOrDefault(x => x.Equals(productInfo));
             if (foundProduct is null)
             {
-                _products.Add(product);
+                _products.Add(productInfo);
             }
             else
             {
-                foundProduct.Quantity += product.Quantity;
+                foundProduct.Quantity += productInfo.Quantity;
             }
-        });
+        }
     }
 
     public void ChangeProductPrice(Product product, decimal newPrice)
