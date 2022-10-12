@@ -2,24 +2,11 @@
 
 public class Cart
 {
-    private List<BuyInfo> _items;
+    private readonly List<BuyInfo> _items;
 
-    public Cart()
+    public Cart(IEnumerable<BuyInfo> buyList)
     {
-        _items = new List<BuyInfo>();
-    }
-
-    public void AddItem(BuyInfo item)
-    {
-        var foundItem = _items.FirstOrDefault(x => x.Equals(item));
-        if (foundItem is null)
-        {
-            _items.Add(item);
-        }
-        else
-        {
-            foundItem.Quantity += item.Quantity;
-        }
+        _items = new List<BuyInfo>(buyList);
     }
 
     public IEnumerable<BuyInfo> GetItems()

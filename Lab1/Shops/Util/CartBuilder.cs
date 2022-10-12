@@ -4,28 +4,23 @@ namespace Shops.Util;
 
 public class CartBuilder
 {
-    private Cart _cart;
-
-    public CartBuilder()
-    {
-        _cart = new Cart();
-    }
+    private List<BuyInfo> _buyList = new List<BuyInfo>();
 
     public void Reset()
     {
-        _cart = new Cart();
+        _buyList = new List<BuyInfo>();
     }
 
     public void AddItem(BuyInfo item)
     {
-        _cart.AddItem(item);
+        _buyList.Add(item);
     }
 
     public void AddItems(IEnumerable<BuyInfo> items)
     {
         foreach (BuyInfo buyInfo in items)
         {
-            _cart.AddItem(buyInfo);
+            _buyList.Add(buyInfo);
         }
     }
 
@@ -33,12 +28,12 @@ public class CartBuilder
     {
         foreach (BuyInfo buyInfo in items)
         {
-            _cart.AddItem(buyInfo);
+            _buyList.Add(buyInfo);
         }
     }
 
     public Cart GetCart()
     {
-        return _cart;
+        return new Cart(_buyList);
     }
 }
