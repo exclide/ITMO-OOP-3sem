@@ -70,21 +70,24 @@ public class Shop : IEquatable<Shop>
     {
         ArgumentNullException.ThrowIfNull(buyList);
 
-        return buyList.GetItems().All(buyProd =>
-            _products.Any(sellProd => sellProd.Product.Equals(buyProd.Product) && sellProd.Quantity >= buyProd.Quantity));
+        return buyList.GetItems()
+            .All(buyProd => _products
+            .Any(sellProd => sellProd.Product.Equals(buyProd.Product) && sellProd.Quantity >= buyProd.Quantity));
     }
 
     public decimal GetFullPriceForCart(Cart buyList)
     {
         ArgumentNullException.ThrowIfNull(buyList);
 
-        return buyList.GetItems().Select(buyItem =>
+        return buyList.GetItems()
+            .Select(buyItem =>
             new
             {
                 quantity = buyItem.Quantity,
                 product = _products.First(t => t.Product.Equals(buyItem.Product)),
-            }).
-            Select(k => k.product.Price * k.quantity).Sum();
+            })
+            .Select(k => k.product.Price * k.quantity)
+            .Sum();
     }
 
     public void SellProductToClient(Client client, Cart buyList)

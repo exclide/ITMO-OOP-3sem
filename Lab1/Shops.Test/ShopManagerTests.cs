@@ -123,7 +123,10 @@ public class ShopManagerTests
         _cartBuilder.Reset();
         _cartBuilder.AddItems(new BuyInfo(product1, 1), new BuyInfo(product2, 1));
         var cart = _cartBuilder.GetCart();
-        Assert.Throws<ClientException>( // ??? ne konkretnoe iskluchenie (NotEnoughMoney)
-            () => shop.SellProductToClient(client, cart));
+        var exception = Assert.Throws<ClientException>(() =>
+        {
+            shop.SellProductToClient(client, cart);
+        });
+        Assert.Contains("Client has:", exception.Message);
     }
 }

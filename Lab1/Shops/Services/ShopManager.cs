@@ -71,7 +71,8 @@ public class ShopManager
     {
         ArgumentNullException.ThrowIfNull(products);
 
-        return _shops.Where(shop =>
-            shop.CheckIfAllExistsAndEnoughQuantity(products)).MinBy(s => s.GetFullPriceForCart(products));
+        return _shops
+            .Where(shop => shop.CheckIfAllExistsAndEnoughQuantity(products))
+            .MinBy(s => s.GetFullPriceForCart(products));
     }
 }

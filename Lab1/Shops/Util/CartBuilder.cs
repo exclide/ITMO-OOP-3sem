@@ -23,12 +23,18 @@ public class CartBuilder
 
     public void AddItems(IEnumerable<BuyInfo> items)
     {
-        items.ToList().ForEach(AddItem);
+        foreach (BuyInfo buyInfo in items)
+        {
+            _cart.AddItem(buyInfo);
+        }
     }
 
     public void AddItems(params BuyInfo[] items)
     {
-        items.ToList().ForEach(AddItem);
+        foreach (BuyInfo buyInfo in items)
+        {
+            _cart.AddItem(buyInfo);
+        }
     }
 
     public Cart GetCart()
