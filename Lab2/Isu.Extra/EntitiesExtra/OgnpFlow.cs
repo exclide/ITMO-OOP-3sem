@@ -9,7 +9,7 @@ public class OgnpFlow : IEquatable<OgnpFlow>
     private readonly int _id;
     private int _flowCapacity;
 
-    public OgnpFlow(int flowCapacity, int id, Schedule<OgnpFlow> schedule = null)
+    public OgnpFlow(int flowCapacity, int id, Schedule schedule = null)
     {
         if (flowCapacity < 0)
         {
@@ -18,13 +18,13 @@ public class OgnpFlow : IEquatable<OgnpFlow>
 
         _students = new List<StudentExtra>();
         _flowCapacity = flowCapacity;
-        Schedule = schedule ?? new Schedule<OgnpFlow>();
+        Schedule = schedule ?? new Schedule();
         _id = id;
     }
 
-    public Schedule<OgnpFlow> Schedule { get; }
+    public Schedule Schedule { get; }
 
-    public IEnumerable<StudentExtra> Students => _students;
+    public IReadOnlyCollection<StudentExtra> Students => _students;
 
     public override bool Equals(object obj) => Equals(obj as OgnpFlow);
     public override int GetHashCode() => _id.GetHashCode();
@@ -82,14 +82,14 @@ public class OgnpFlow : IEquatable<OgnpFlow>
         _flowCapacity = newFlowCapacity;
     }
 
-    internal void AddLesson(Lesson<OgnpFlow> lesson)
+    internal void AddLesson(Lesson lesson)
     {
         ArgumentNullException.ThrowIfNull(lesson);
 
         Schedule.AddLesson(lesson);
     }
 
-    internal void RemoveLesson(Lesson<OgnpFlow> lesson)
+    internal void RemoveLesson(Lesson lesson)
     {
         ArgumentNullException.ThrowIfNull(lesson);
 

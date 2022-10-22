@@ -15,7 +15,7 @@ public class StudentExtra : Student
     }
 
     public GroupExtra GroupExtra { get; }
-    public IEnumerable<OgnpFlow> OgnpFlows => _ognpFlows;
+    public IReadOnlyCollection<OgnpFlow> OgnpFlows => _ognpFlows;
 
     internal void EnrollInOgnp(OgnpFlow ognpFlow)
     {

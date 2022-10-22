@@ -12,7 +12,7 @@ public class IsuServiceExtraTests
     private readonly IsuServiceExtra _isuService = new IsuServiceExtra();
 
     [Fact]
-    public void CanAddOgnpCoursesAndOgnpCourseHasAddedFlows()
+    public void AddOgnpCourses_IsuHasOgnpAndOgnpCourseHasAddedFlows()
     {
         var ognpCourse1 = _isuService.AddOgnpCourse("Kb", new Faculty("Kiberbez", 'K'));
         var ognpCourse2 = _isuService.AddOgnpCourse("Test", new Faculty("Test", 'T'));
@@ -20,16 +20,16 @@ public class IsuServiceExtraTests
         var flow1 = _isuService.AddOgnpFlowToCourse(ognpCourse1);
         var flow2 = _isuService.AddOgnpFlowToCourse(ognpCourse2);
 
-        Assert.NotNull(_isuService.FindOgnpCourse(ognpCourse1));
-        Assert.NotNull(_isuService.FindOgnpCourse(ognpCourse2));
-        Assert.NotNull(_isuService.FindOgnpFlow(flow1));
-        Assert.NotNull(_isuService.FindOgnpFlow(flow2));
+        Assert.Equal(ognpCourse1, _isuService.FindOgnpCourse(ognpCourse1));
+        Assert.Equal(ognpCourse2, _isuService.FindOgnpCourse(ognpCourse2));
+        Assert.Equal(flow1, _isuService.FindOgnpFlow(flow1));
+        Assert.Equal(flow2, _isuService.FindOgnpFlow(flow2));
 
         var flowInCourse1 = ognpCourse1.OgnpFlows.FirstOrDefault(flow1);
         var flowInCourse2 = ognpCourse2.OgnpFlows.FirstOrDefault(flow2);
 
-        Assert.NotNull(flowInCourse1);
-        Assert.NotNull(flowInCourse2);
+        Assert.Equal(flow1, flowInCourse1);
+        Assert.Equal(flow2, flowInCourse2);
     }
 
     [Fact]
@@ -96,9 +96,9 @@ public class IsuServiceExtraTests
         StudentExtra student1 = _isuService.AddStudent(group1, "Ivan Ivanov");
 
         var groupLesson =
-            new Lesson<GroupExtra>(new LessonDate(LessonDay.Monday, LessonTime.First), "Zubok", 1, group1);
+            new Lesson(new LessonDate(LessonDay.Monday, LessonTime.First), new Teacher("Zubok", "L"), new Auditory(1));
         var ognpLesson =
-            new Lesson<OgnpFlow>(new LessonDate(LessonDay.Monday, LessonTime.First), "Mayatin", 2, flow1);
+            new Lesson(new LessonDate(LessonDay.Monday, LessonTime.First), new Teacher("Mayatin", "A"), new Auditory(2));
 
         _isuService.AddLessonToGroup(group1, groupLesson);
         _isuService.AddLessonToOgnpFlow(flow1, ognpLesson);
@@ -108,7 +108,7 @@ public class IsuServiceExtraTests
 
         _isuService.RemoveLessonFromOgnpFlow(flow1, ognpLesson);
         var ognpLesson2 =
-            new Lesson<OgnpFlow>(new LessonDate(LessonDay.Friday, LessonTime.First), "Stankevich", 100, flow1);
+            new Lesson(new LessonDate(LessonDay.Friday, LessonTime.First), new Teacher("Snankevich", "Stanok"), new Auditory(100));
 
         _isuService.AddLessonToOgnpFlow(flow1, ognpLesson2);
         _isuService.AddStudentToOgnp(ognpCourse1, flow1, student1);

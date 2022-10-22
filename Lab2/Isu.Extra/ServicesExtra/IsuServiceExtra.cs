@@ -1,4 +1,5 @@
-﻿using Isu.Entities;
+﻿using System.Collections.Immutable;
+using Isu.Entities;
 using Isu.Exceptions;
 using Isu.Extra.EntitiesExtra;
 using Isu.Extra.Exceptions;
@@ -51,16 +52,12 @@ public class IsuServiceExtra : IsuService, IIsuServiceExtra
 
     public OgnpCourse FindOgnpCourse(OgnpCourse course)
     {
-        var ognpCourse = _courses.FirstOrDefault(course);
-
-        return ognpCourse;
+        return _courses.FirstOrDefault(ognpCourse => ognpCourse.Equals(course));
     }
 
     public OgnpFlow FindOgnpFlow(OgnpFlow flow)
     {
-        var ognpFlow = _flows.FirstOrDefault(flow);
-
-        return ognpFlow;
+        return _flows.FirstOrDefault(ognpFlow => ognpFlow.Equals(flow));
     }
 
     public OgnpFlow AddOgnpFlowToCourse(OgnpCourse ognpCourse)
@@ -97,7 +94,7 @@ public class IsuServiceExtra : IsuService, IIsuServiceExtra
         flow.RemoveStudent(student);
     }
 
-    public void AddLessonToGroup(GroupExtra group, Lesson<GroupExtra> lesson)
+    public void AddLessonToGroup(GroupExtra group, Lesson lesson)
     {
         ArgumentNullException.ThrowIfNull(group);
         ArgumentNullException.ThrowIfNull(lesson);
@@ -105,7 +102,7 @@ public class IsuServiceExtra : IsuService, IIsuServiceExtra
         group.AddLesson(lesson);
     }
 
-    public void AddLessonToOgnpFlow(OgnpFlow flow, Lesson<OgnpFlow> lesson)
+    public void AddLessonToOgnpFlow(OgnpFlow flow, Lesson lesson)
     {
         ArgumentNullException.ThrowIfNull(flow);
         ArgumentNullException.ThrowIfNull(lesson);
@@ -113,7 +110,7 @@ public class IsuServiceExtra : IsuService, IIsuServiceExtra
         flow.AddLesson(lesson);
     }
 
-    public void RemoveLessonFromGroup(GroupExtra group, Lesson<GroupExtra> lesson)
+    public void RemoveLessonFromGroup(GroupExtra group, Lesson lesson)
     {
         ArgumentNullException.ThrowIfNull(group);
         ArgumentNullException.ThrowIfNull(lesson);
@@ -121,7 +118,7 @@ public class IsuServiceExtra : IsuService, IIsuServiceExtra
         group.RemoveLesson(lesson);
     }
 
-    public void RemoveLessonFromOgnpFlow(OgnpFlow flow, Lesson<OgnpFlow> lesson)
+    public void RemoveLessonFromOgnpFlow(OgnpFlow flow, Lesson lesson)
     {
         ArgumentNullException.ThrowIfNull(flow);
         ArgumentNullException.ThrowIfNull(lesson);
@@ -129,29 +126,26 @@ public class IsuServiceExtra : IsuService, IIsuServiceExtra
         flow.RemoveLesson(lesson);
     }
 
-    public IEnumerable<OgnpFlow> GetFlowsFromOgnp(OgnpCourse course)
+    public IReadOnlyCollection<OgnpFlow> GetFlowsFromOgnp(OgnpCourse course)
     {
         ArgumentNullException.ThrowIfNull(course);
 
-        return course.OgnpFlows;
+        return course.OgnpFlows.ToImmutableList();
     }
 
-    public IEnumerable<Student> GetStudentsFromOgnpFlow(OgnpFlow flow)
+    public IReadOnlyCollection<Student> GetStudentsFromOgnpFlow(OgnpFlow flow)
     {
         ArgumentNullException.ThrowIfNull(flow);
 
-        return flow.Students;
+        return flow.Students.ToImmutableList();
     }
 
-    public IEnumerable<Student> GetStudentsNotEnrolledInOgnp(GroupExtra group)
+    public IReadOnlyCollection<Student> GetStudentsNotEnrolledInOgnp(GroupExtra group)
     {
         ArgumentNullException.ThrowIfNull(group);
 
-        var studentsEnrolledInOgnp = new List<StudentExtra>();
-        _flows.ForEach(flow => studentsEnrolledInOgnp.AddRange(flow.Students));
+        var studentsEnrolledInOgnp = _flows.SelectMany(flow => flow.Students);
 
-        var studentsNotEnrolledInGroup = group.Students.Except(studentsEnrolledInOgnp);
-
-        return studentsNotEnrolledInGroup;
+        return group.Students.Except(studentsEnrolledInOgnp).ToImmutableList();
     }
 }

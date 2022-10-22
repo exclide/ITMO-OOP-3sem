@@ -9,7 +9,7 @@ public interface IIsuServiceExtra
     OgnpCourse AddOgnpCourse(string ognpName, Faculty faculty);
     void AddStudentToOgnp(OgnpCourse course, OgnpFlow flow, StudentExtra student);
     void RemoveStudentFromOgnp(OgnpFlow flow, StudentExtra student);
-    IEnumerable<OgnpFlow> GetFlowsFromOgnp(OgnpCourse course);
-    IEnumerable<Student> GetStudentsFromOgnpFlow(OgnpFlow flow);
-    IEnumerable<Student> GetStudentsNotEnrolledInOgnp(GroupExtra group);
+    IReadOnlyCollection<OgnpFlow> GetFlowsFromOgnp(OgnpCourse course);
+    IReadOnlyCollection<Student> GetStudentsFromOgnpFlow(OgnpFlow flow);
+    IReadOnlyCollection<Student> GetStudentsNotEnrolledInOgnp(GroupExtra group);
 }

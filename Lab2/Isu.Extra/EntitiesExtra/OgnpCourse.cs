@@ -25,7 +25,7 @@ public class OgnpCourse : IEquatable<OgnpCourse>
 
     public string OgnpName { get; }
     public Faculty Faculty { get; }
-    public IEnumerable<OgnpFlow> OgnpFlows => _ognpFlows;
+    public IReadOnlyCollection<OgnpFlow> OgnpFlows => _ognpFlows;
 
     public override bool Equals(object obj) => Equals(obj as OgnpCourse);
     public override int GetHashCode() => _id.GetHashCode();

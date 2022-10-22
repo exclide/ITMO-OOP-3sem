@@ -5,24 +5,24 @@ namespace Isu.Extra.EntitiesExtra;
 
 public class GroupExtra : Group
 {
-    public GroupExtra(GroupName groupName, Schedule<GroupExtra> schedule = null)
+    public GroupExtra(GroupName groupName, Schedule schedule = null)
         : base(groupName)
     {
-        GroupSchedule = schedule ?? new Schedule<GroupExtra>();
-        FacultyPrefix = GroupName.Name[0].ToString();
+        GroupSchedule = schedule ?? new Schedule();
+        FacultyPrefix = GroupName.Name[0];
     }
 
-    public Schedule<GroupExtra> GroupSchedule { get; }
-    public string FacultyPrefix { get; }
+    public Schedule GroupSchedule { get; }
+    public char FacultyPrefix { get; }
 
-    internal void AddLesson(Lesson<GroupExtra> lesson)
+    internal void AddLesson(Lesson lesson)
     {
         ArgumentNullException.ThrowIfNull(lesson);
 
         GroupSchedule.AddLesson(lesson);
     }
 
-    internal void RemoveLesson(Lesson<GroupExtra> lesson)
+    internal void RemoveLesson(Lesson lesson)
     {
         ArgumentNullException.ThrowIfNull(lesson);
 
