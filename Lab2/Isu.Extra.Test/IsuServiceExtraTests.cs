@@ -14,8 +14,8 @@ public class IsuServiceExtraTests
     [Fact]
     public void CanAddOgnpCoursesAndOgnpCourseHasAddedFlows()
     {
-        var ognpCourse1 = _isuService.AddOgnpCourse("Kb", new Faculty("Kiberbez", "K"));
-        var ognpCourse2 = _isuService.AddOgnpCourse("Test", new Faculty("Test", "T"));
+        var ognpCourse1 = _isuService.AddOgnpCourse("Kb", new Faculty("Kiberbez", 'K'));
+        var ognpCourse2 = _isuService.AddOgnpCourse("Test", new Faculty("Test", 'T'));
 
         var flow1 = _isuService.AddOgnpFlowToCourse(ognpCourse1);
         var flow2 = _isuService.AddOgnpFlowToCourse(ognpCourse2);
@@ -35,7 +35,7 @@ public class IsuServiceExtraTests
     [Fact]
     public void StudentAbleToEnrollInOgnp()
     {
-        var ognpCourse1 = _isuService.AddOgnpCourse("Kb", new Faculty("Kiberbez", "K"));
+        var ognpCourse1 = _isuService.AddOgnpCourse("Kb", new Faculty("Kiberbez", 'K'));
         var flow1 = _isuService.AddOgnpFlowToCourse(ognpCourse1);
 
         GroupExtra group1 = _isuService.AddGroup(new GroupName("M3207"));
@@ -50,7 +50,7 @@ public class IsuServiceExtraTests
     [Fact]
     public void StudentAbleToUnenrollFromOgnp()
     {
-        var ognpCourse1 = _isuService.AddOgnpCourse("Kb", new Faculty("Kiberbez", "K"));
+        var ognpCourse1 = _isuService.AddOgnpCourse("Kb", new Faculty("Kiberbez", 'K'));
         var flow1 = _isuService.AddOgnpFlowToCourse(ognpCourse1);
 
         GroupExtra group1 = _isuService.AddGroup(new GroupName("M3207"));
@@ -66,7 +66,7 @@ public class IsuServiceExtraTests
     [Fact]
     public void ListOfStudentsNotEnrolledInOgnpCorrect()
     {
-        var ognpCourse1 = _isuService.AddOgnpCourse("Kb", new Faculty("Kiberbez", "K"));
+        var ognpCourse1 = _isuService.AddOgnpCourse("Kb", new Faculty("Kiberbez", 'K'));
         var flow1 = _isuService.AddOgnpFlowToCourse(ognpCourse1);
 
         GroupExtra group1 = _isuService.AddGroup(new GroupName("M3207"));
@@ -89,7 +89,7 @@ public class IsuServiceExtraTests
     [Fact]
     public void GroupScheduleIntersectsWithOgnpSchedule_ThrowException()
     {
-        var ognpCourse1 = _isuService.AddOgnpCourse("Kb", new Faculty("Kiberbez", "K"));
+        var ognpCourse1 = _isuService.AddOgnpCourse("Kb", new Faculty("Kiberbez", 'K'));
         var flow1 = _isuService.AddOgnpFlowToCourse(ognpCourse1);
 
         GroupExtra group1 = _isuService.AddGroup(new GroupName("M3207"));
@@ -117,7 +117,7 @@ public class IsuServiceExtraTests
     [Fact]
     public void OgnpFlowCapacityReached_ThrowsException()
     {
-        var ognpCourse1 = _isuService.AddOgnpCourse("Kb", new Faculty("Kiberbez", "K"));
+        var ognpCourse1 = _isuService.AddOgnpCourse("Kb", new Faculty("Kiberbez", 'K'));
         var flow1 = _isuService.AddOgnpFlowToCourse(ognpCourse1);
 
         GroupExtra group1 = _isuService.AddGroup(new GroupName("M3207"));
@@ -137,16 +137,16 @@ public class IsuServiceExtraTests
     [Fact]
     public void StudentEnrollsInMoreOgnpThanPossible_ThrowsException()
     {
-        var ognpCourse1 = _isuService.AddOgnpCourse("Kb", new Faculty("Kiberbez", "K"));
+        var ognpCourse1 = _isuService.AddOgnpCourse("Kb", new Faculty("Kiberbez", 'K'));
         var flow1 = _isuService.AddOgnpFlowToCourse(ognpCourse1);
 
         GroupExtra group1 = _isuService.AddGroup(new GroupName("M3207"));
         StudentExtra student1 = _isuService.AddStudent(group1, "Ivan Ivanov");
 
-        var ognpCourse2 = _isuService.AddOgnpCourse("TestOgnp", new Faculty("Test", "T"));
+        var ognpCourse2 = _isuService.AddOgnpCourse("TestOgnp", new Faculty("Test", 'T'));
         var flow2 = _isuService.AddOgnpFlowToCourse(ognpCourse1);
 
-        var ognpCourse3 = _isuService.AddOgnpCourse("TestOgnp2", new Faculty("Test2", "R"));
+        var ognpCourse3 = _isuService.AddOgnpCourse("TestOgnp2", new Faculty("Test2", 'R'));
         var flow3 = _isuService.AddOgnpFlowToCourse(ognpCourse1);
 
         _isuService.AddStudentToOgnp(ognpCourse1, flow1, student1);
@@ -159,7 +159,7 @@ public class IsuServiceExtraTests
     [Fact]
     public void StudentFacultyEqualsOgnpFaculty_ThrowsException()
     {
-        var ognpCourse1 = _isuService.AddOgnpCourse("ISIT_Course", new Faculty("ISIT", "M"));
+        var ognpCourse1 = _isuService.AddOgnpCourse("ISIT_Course", new Faculty("ISIT", 'M'));
         var flow1 = _isuService.AddOgnpFlowToCourse(ognpCourse1);
 
         GroupExtra group1 = _isuService.AddGroup(new GroupName("M3207"));

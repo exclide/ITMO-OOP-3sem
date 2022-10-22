@@ -5,15 +5,14 @@ namespace Isu.Extra.ModelsExtra;
 
 public class Faculty
 {
-    private static readonly Regex GroupNameRegex = new Regex(@"^[A-Z]", RegexOptions.Compiled);
-    public Faculty(string name, string facultyPrefix)
+    public Faculty(string name, char facultyPrefix)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
             throw new FacultyException($"{nameof(name)} was null or whitespace");
         }
 
-        if (!GroupNameRegex.IsMatch(facultyPrefix))
+        if (!(char.IsLetter(facultyPrefix) && char.IsUpper(facultyPrefix)))
         {
             throw FacultyException.InvalidPrefix(facultyPrefix);
         }
@@ -23,5 +22,5 @@ public class Faculty
     }
 
     public string Name { get; }
-    public string FacultyPrefix { get; }
+    public char FacultyPrefix { get; }
 }

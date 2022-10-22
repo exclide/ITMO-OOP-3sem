@@ -7,5 +7,5 @@ public class FacultyException : Exception
     {
     }
 
-    public static FacultyException InvalidPrefix(string prefix) => new FacultyException($"Prefix {prefix} is invalid");
+    public static FacultyException InvalidPrefix(char prefix) => new FacultyException($"Prefix {prefix} is invalid");
 }
