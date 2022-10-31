@@ -1,5 +1,7 @@
-﻿namespace Backups.StorageAlgorithms;
+﻿using Backups.Interfaces;
 
-public class SingleStorage
+namespace Backups.StorageAlgorithms;
+
+public class SingleStorage : IStorageAlgorithm
 {
 }

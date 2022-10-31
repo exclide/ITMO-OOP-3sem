@@ -1,5 +1,7 @@
-﻿namespace Backups.StorageAlgorithms;
+﻿using Backups.Interfaces;
 
-public class SplitStorage
+namespace Backups.StorageAlgorithms;
+
+public class SplitStorage : IStorageAlgorithm
 {
 }
