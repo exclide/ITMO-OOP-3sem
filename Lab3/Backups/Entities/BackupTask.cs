@@ -5,7 +5,7 @@ using Backups.StorageAlgorithms;
 
 namespace Backups.Entities;
 
-public class BackupTask : IBackupTask
+public class BackupTask : IBackupTask, IEquatable<BackupTask>
 {
     private readonly string _taskName;
     private readonly ICollection<BackupObject> _trackedObjects;
@@ -13,7 +13,7 @@ public class BackupTask : IBackupTask
     private Repository _repository;
     private Backup _backup;
 
-    public BackupTask(IStorageAlgorithm algorithm, Repository repository, string taskName)
+    public BackupTask(IStorageAlgorithm algorithm, Repository repository, string taskName, int id)
     {
         ArgumentNullException.ThrowIfNull(algorithm);
         ArgumentNullException.ThrowIfNull(repository);
@@ -27,9 +27,11 @@ public class BackupTask : IBackupTask
         _taskName = taskName;
         _backup = new Backup();
         _trackedObjects = new List<BackupObject>();
+        Id = id;
     }
 
     public Backup Backup => _backup;
+    public int Id { get; }
 
     public override string ToString()
     {
@@ -70,4 +72,9 @@ public class BackupTask : IBackupTask
 
         _trackedObjects.Remove(backupObject);
     }
+
+    public override int GetHashCode() => Id.GetHashCode();
+
+    public override bool Equals(object obj) => this.Equals(obj as BackupTask);
+    public bool Equals(BackupTask other) => other?.Id.Equals(Id) ?? false;
 }

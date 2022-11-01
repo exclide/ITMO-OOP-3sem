@@ -33,11 +33,14 @@ public class Repository
     }
 
     public void CreateDirectory(string path) => _fileSystem.CreateDirectory(path);
-
-    public void CreateFile(string path) => _fileSystem.CreateFile(path);
-
+    public Stream CreateFile(string path) => _fileSystem.CreateFile(path);
     public bool DirectoryExists(string path) => _fileSystem.DirectoryExists(path);
-
+    public bool FileExists(string path) => _fileSystem.FileExists(path);
+    public byte[] ReadAllBytes(string path) => _fileSystem.ReadAllBytes(path);
+    public void DeleteFile(string path) => _fileSystem.DeleteFile(path);
+    public Stream OpenFile(string path, FileMode fileMode, FileAccess fileAccess) =>
+        _fileSystem.OpenFile(path, fileMode, fileAccess);
+    public void WriteAllBytes(string path, byte[] bytes) => _fileSystem.WriteAllBytes(path, bytes);
     public string PathCombine(string path1, string path2) => UPath.Combine(path1, path2).FullName;
 
     public void CreateEntryInZip(ZipArchive zip, string path, string zipRoot = "")
@@ -81,7 +84,8 @@ public class Repository
                 {
                     if (entry.FullName.EndsWith("/"))
                     {
-                        CreateDirectory($"{targetRootPath}/{entry.FullName}");
+                        string folderName = $"{targetRootPath}/{entry.FullName}";
+                        CreateDirectory(folderName);
                     }
                     else
                     {
@@ -96,7 +100,4 @@ public class Repository
             }
         }
     }
-
-    public byte[] ReadAllBytes(string path) => _fileSystem.ReadAllBytes(path);
-    public void WriteAllBytes(string path, byte[] bytes) => _fileSystem.WriteAllBytes(path, bytes);
 }

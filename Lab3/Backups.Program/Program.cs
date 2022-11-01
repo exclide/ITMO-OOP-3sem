@@ -15,13 +15,9 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        IFileSystem ffs = new PhysicalFileSystem();
-        Repository repo = new Repository(ffs, "/mnt/c/test");
-        repo.UnzipZipFile("/mnt/c/test/Backuptask2/0/Backuptask2.zip", "/mnt/c/test/unzip");
-
         IFileSystem fs = new PhysicalFileSystem();
         Repository res = new Repository(fs, "/mnt/c/test");
-        IBackupTask taskSplit = new BackupTask(new SplitStorage(), res, "Backuptask");
+        IBackupTask taskSplit = new BackupTask(new SplitStorage(), res, "Backuptask", 0);
         taskSplit.TrackObject(new BackupObject("/mnt/c/test/dz"));
         taskSplit.TrackObject(new BackupObject("/mnt/c/test/test.png"));
         taskSplit.TrackObject(new BackupObject("/mnt/c/test/Unti2424tled.jpg"));
@@ -31,7 +27,7 @@ public class Program
         taskSplit.UntrackObject(new BackupObject("/mnt/c/test/dz"));
         taskSplit.CreateRestorePoint();
 
-        IBackupTask taskSingle = new BackupTask(new SingleStorage(), res, "Backuptask2");
+        IBackupTask taskSingle = new BackupTask(new SingleStorage(), res, "Backuptask2", 1);
         taskSingle.TrackObject(new BackupObject("/mnt/c/test/dz"));
         taskSingle.TrackObject(new BackupObject("/mnt/c/test/test.png"));
         taskSingle.TrackObject(new BackupObject("/mnt/c/test/Unti2424tled.jpg"));
@@ -62,7 +58,7 @@ public class Program
 
         mfs.ReadAllBytes(UPath.Combine(rootPath, "kek1.f"));
 
-        IBackupTask taskMemSplit = new BackupTask(new SplitStorage(), memRep, "Backup");
+        IBackupTask taskMemSplit = new BackupTask(new SplitStorage(), memRep, "Backup", 2);
         taskMemSplit.TrackObject(new BackupObject(UPath.Combine(rootPath, "kek1.f").FullName));
         taskMemSplit.TrackObject(new BackupObject(UPath.Combine(rootPath, "kek2.f").FullName));
         taskMemSplit.TrackObject(new BackupObject(UPath.Combine(rootPath, "kek3.f").FullName));
@@ -72,5 +68,9 @@ public class Program
         {
             Console.WriteLine(path.FullName);
         }
+
+        IFileSystem ffs = new PhysicalFileSystem();
+        Repository repo = new Repository(ffs, "/mnt/c/test");
+        repo.UnzipZipFile("/mnt/c/test/Backuptask2/0/Backuptask2.zip", "/mnt/c/test/unzip");
     }
 }
