@@ -20,6 +20,11 @@ public class Repository
 
     public string RootPath { get; }
 
+    public override string ToString()
+    {
+        return $"{nameof(_fileSystem)}: {_fileSystem}, {nameof(RootPath)}: {RootPath}";
+    }
+
     public void CreateDirectory(string path) => _fileSystem.CreateDirectory(path);
 
     public void CreateFile(string path) => _fileSystem.CreateFile(path);

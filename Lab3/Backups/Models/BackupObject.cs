@@ -16,6 +16,11 @@ public class BackupObject : IEquatable<BackupObject>
 
     public string Path { get; }
 
+    public override string ToString()
+    {
+        return $"{nameof(Path)}: {Path}";
+    }
+
     public override int GetHashCode() => Path.GetHashCode();
 
     public override bool Equals(object obj) => this.Equals(obj as BackupObject);

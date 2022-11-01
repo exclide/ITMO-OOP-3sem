@@ -11,6 +11,11 @@ public class Backup
 
     public IEnumerable<RestorePoint> RestorePoints => _restorePoints;
 
+    public override string ToString()
+    {
+        return $"{nameof(_restorePoints)}: {_restorePoints}, {nameof(RestorePoints)}: {RestorePoints}";
+    }
+
     public void AddRestorePoint(RestorePoint restorePoint)
     {
         _restorePoints.Add(restorePoint);

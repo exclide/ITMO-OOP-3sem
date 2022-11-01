@@ -24,6 +24,13 @@ public class BackupTask : IBackupTask
 
     public Backup Backup => _backup;
 
+    public override string ToString()
+    {
+        return $"{nameof(_taskName)}: {_taskName}, {nameof(_trackedObjects)}: {_trackedObjects}, " +
+               $"{nameof(_algorithm)}: {_algorithm}, {nameof(_repository)}: {_repository}, " +
+               $"{nameof(_backup)}: {_backup}, {nameof(Backup)}: {Backup}";
+    }
+
     public RestorePoint CreateRestorePoint()
     {
         int restorePointNumber = _backup.RestorePoints.Count();
