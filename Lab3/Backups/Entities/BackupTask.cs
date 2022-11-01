@@ -15,6 +15,13 @@ public class BackupTask : IBackupTask
 
     public BackupTask(IStorageAlgorithm algorithm, Repository repository, string taskName)
     {
+        ArgumentNullException.ThrowIfNull(algorithm);
+        ArgumentNullException.ThrowIfNull(repository);
+        if (string.IsNullOrEmpty(taskName))
+        {
+            throw new BackupException($"{nameof(taskName)} was null or empty");
+        }
+
         _algorithm = algorithm;
         _repository = repository;
         _taskName = taskName;
@@ -44,6 +51,8 @@ public class BackupTask : IBackupTask
 
     public void TrackObject(BackupObject backupObject)
     {
+        ArgumentNullException.ThrowIfNull(backupObject);
+
         if (!_trackedObjects.Contains(backupObject))
         {
             _trackedObjects.Add(backupObject);
@@ -52,9 +61,11 @@ public class BackupTask : IBackupTask
 
     public void UntrackObject(BackupObject backupObject)
     {
+        ArgumentNullException.ThrowIfNull(backupObject);
+
         if (!_trackedObjects.Contains(backupObject))
         {
-            throw new BackupException("k");
+            throw new BackupException($"Tracked objects don't contain {backupObject}");
         }
 
         _trackedObjects.Remove(backupObject);

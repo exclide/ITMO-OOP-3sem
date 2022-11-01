@@ -13,6 +13,10 @@ public class RestorePoint : IEquatable<RestorePoint>
         DateTime timeCreated,
         int restorePointNumber)
     {
+        ArgumentNullException.ThrowIfNull(backupObjects);
+        ArgumentNullException.ThrowIfNull(storages);
+        ArgumentNullException.ThrowIfNull(timeCreated);
+
         _backupObjects = new List<BackupObject>(backupObjects);
         _storages = new List<Storage>(storages);
         TimeCreated = timeCreated;

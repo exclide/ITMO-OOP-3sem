@@ -18,6 +18,7 @@ public class Backup
 
     public void AddRestorePoint(RestorePoint restorePoint)
     {
+        ArgumentNullException.ThrowIfNull(restorePoint);
         _restorePoints.Add(restorePoint);
     }
 }

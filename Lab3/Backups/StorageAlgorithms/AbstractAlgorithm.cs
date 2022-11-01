@@ -1,4 +1,5 @@
 ﻿using Backups.Entities;
+using Backups.Exceptions;
 using Backups.Interfaces;
 using Backups.Models;
 
@@ -12,6 +13,13 @@ public abstract class AbstractAlgorithm : IStorageAlgorithm
         int restorePointNumber,
         string backupTaskName)
     {
+        ArgumentNullException.ThrowIfNull(repository);
+        ArgumentNullException.ThrowIfNull(backupObjects);
+        if (string.IsNullOrEmpty(backupTaskName))
+        {
+            throw new BackupException($"{nameof(backupTaskName)} was null or empty");
+        }
+
         string backupTaskDirectory = repository.PathCombine(repository.RootPath, backupTaskName);
 
         if (!repository.DirectoryExists(backupTaskDirectory))

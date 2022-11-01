@@ -1,4 +1,5 @@
 ﻿using System.IO.Compression;
+using Backups.Exceptions;
 using Zio;
 
 namespace Backups.Entities;
@@ -9,6 +10,12 @@ public class Repository
 
     public Repository(IFileSystem fileSystem, string rootPath)
     {
+        ArgumentNullException.ThrowIfNull(fileSystem);
+        if (string.IsNullOrEmpty(rootPath))
+        {
+            throw new BackupException($"{nameof(rootPath)} was null or empty");
+        }
+
         _fileSystem = fileSystem;
         RootPath = rootPath;
 
@@ -35,6 +42,10 @@ public class Repository
 
     public void CreateEntryInZip(ZipArchive zip, string path, string zipRoot = "")
     {
+        ArgumentNullException.ThrowIfNull(zip);
+        ArgumentNullException.ThrowIfNull(path);
+        ArgumentNullException.ThrowIfNull(zipRoot);
+
         if (DirectoryExists(path))
         {
             string folderPath = $"{zipRoot}{Path.GetFileName(path)}/";
@@ -56,6 +67,9 @@ public class Repository
 
     public void UnzipZipFile(string zipPath, string targetRootPath)
     {
+        ArgumentNullException.ThrowIfNull(zipPath);
+        ArgumentNullException.ThrowIfNull(targetRootPath);
+
         using (var memStream = new MemoryStream())
         {
             memStream.Write(ReadAllBytes(zipPath));
