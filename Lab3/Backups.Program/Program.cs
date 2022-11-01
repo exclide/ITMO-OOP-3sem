@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
 using System.IO.Compression;
+using System.Text;
 using System.Threading.Channels;
 using Backups.Entities;
+using Backups.Interfaces;
 using Backups.Models;
 using Backups.StorageAlgorithms;
 using Zio;
@@ -13,9 +15,13 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        IFileSystem ffs = new PhysicalFileSystem();
+        Repository repo = new Repository(ffs, "/mnt/c/test");
+        repo.UnzipZipFile("/mnt/c/test/Backuptask2/0/Backuptask2.zip", "/mnt/c/test/unzip");
+
         IFileSystem fs = new PhysicalFileSystem();
         Repository res = new Repository(fs, "/mnt/c/test");
-        BackupTask taskSplit = new BackupTask(new SplitStorage(), res, "Backuptask");
+        IBackupTask taskSplit = new BackupTask(new SplitStorage(), res, "Backuptask");
         taskSplit.TrackObject(new BackupObject("/mnt/c/test/dz"));
         taskSplit.TrackObject(new BackupObject("/mnt/c/test/test.png"));
         taskSplit.TrackObject(new BackupObject("/mnt/c/test/Unti2424tled.jpg"));
@@ -25,7 +31,7 @@ public class Program
         taskSplit.UntrackObject(new BackupObject("/mnt/c/test/dz"));
         taskSplit.CreateRestorePoint();
 
-        BackupTask taskSingle = new BackupTask(new SingleStorage(), res, "Backuptask2");
+        IBackupTask taskSingle = new BackupTask(new SingleStorage(), res, "Backuptask2");
         taskSingle.TrackObject(new BackupObject("/mnt/c/test/dz"));
         taskSingle.TrackObject(new BackupObject("/mnt/c/test/test.png"));
         taskSingle.TrackObject(new BackupObject("/mnt/c/test/Unti2424tled.jpg"));
@@ -34,5 +40,37 @@ public class Program
 
         taskSingle.UntrackObject(new BackupObject("/mnt/c/test/dz"));
         taskSingle.CreateRestorePoint();
+
+        IFileSystem mfs = new MemoryFileSystem();
+        string rootPath = "/mnt/test";
+        Repository memRep = new Repository(mfs, rootPath);
+        mfs.CreateDirectory(rootPath);
+        using (var test = mfs.CreateFile(UPath.Combine(rootPath, "kek1.f")))
+        {
+            test.Write(Encoding.ASCII.GetBytes("KEK1"));
+        }
+
+        using (var test1 = mfs.CreateFile(UPath.Combine(rootPath, "kek2.f")))
+        {
+            test1.Write(Encoding.ASCII.GetBytes("KEK2"));
+        }
+
+        using (var test2 = mfs.CreateFile(UPath.Combine(rootPath, "kek3.f")))
+        {
+            test2.Write(Encoding.ASCII.GetBytes("KEK3"));
+        }
+
+        mfs.ReadAllBytes(UPath.Combine(rootPath, "kek1.f"));
+
+        IBackupTask taskMemSplit = new BackupTask(new SplitStorage(), memRep, "Backup");
+        taskMemSplit.TrackObject(new BackupObject(UPath.Combine(rootPath, "kek1.f").FullName));
+        taskMemSplit.TrackObject(new BackupObject(UPath.Combine(rootPath, "kek2.f").FullName));
+        taskMemSplit.TrackObject(new BackupObject(UPath.Combine(rootPath, "kek3.f").FullName));
+        taskMemSplit.CreateRestorePoint();
+
+        foreach (var path in mfs.EnumeratePaths(UPath.Combine(rootPath, "Backup/0")))
+        {
+            Console.WriteLine(path.FullName);
+        }
     }
 }

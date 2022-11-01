@@ -5,24 +5,14 @@ using Backups.Models;
 
 namespace Backups.StorageAlgorithms;
 
-public class SplitStorage : IStorageAlgorithm
+public class SplitStorage : AbstractAlgorithm
 {
-    public IEnumerable<Storage> Run(
+    protected override IEnumerable<Storage> RunInternal(
         Repository repository,
         IEnumerable<BackupObject> backupObjects,
-        int restorePointNumber,
+        string restorePointDir,
         string backupTaskName)
     {
-        string backupTaskDirectory = repository.PathCombine(repository.RootPath, backupTaskName);
-
-        if (!repository.DirectoryExists(backupTaskDirectory))
-        {
-            repository.CreateDirectory(backupTaskDirectory);
-        }
-
-        string restorePointDir = repository.PathCombine(backupTaskDirectory, $"{restorePointNumber}");
-        repository.CreateDirectory(restorePointDir);
-
         var storages = new List<Storage>();
 
         foreach (var backupObject in backupObjects)

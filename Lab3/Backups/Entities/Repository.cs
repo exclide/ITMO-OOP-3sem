@@ -44,7 +44,37 @@ public class Repository
             string filePath = $"{zipRoot}{Path.GetFileName(path)}";
             var file = zip.CreateEntry(filePath);
             using var entryStream = file.Open();
+            Console.WriteLine(file.FullName);
             entryStream.Write(ReadAllBytes(path));
+        }
+    }
+
+    public void UnzipZipFile(string zipPath, string targetRootPath)
+    {
+        using (var memStream = new MemoryStream())
+        {
+            memStream.Write(ReadAllBytes(zipPath));
+            memStream.Seek(0, SeekOrigin.Begin);
+
+            using (var zip = new ZipArchive(memStream, ZipArchiveMode.Read, true))
+            {
+                foreach (ZipArchiveEntry entry in zip.Entries)
+                {
+                    if (entry.FullName.EndsWith("/"))
+                    {
+                        CreateDirectory($"{targetRootPath}/{entry.FullName}");
+                    }
+                    else
+                    {
+                        using var stream = entry.Open();
+                        using var ms = new MemoryStream();
+                        stream.CopyTo(ms);
+                        byte[] bytes = ms.ToArray();
+                        string fileName = $"{targetRootPath}/{entry.FullName}";
+                        WriteAllBytes(fileName, bytes);
+                    }
+                }
+            }
         }
     }
 

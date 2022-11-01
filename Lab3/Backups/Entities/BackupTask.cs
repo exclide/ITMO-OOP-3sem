@@ -1,6 +1,7 @@
 ﻿using Backups.Exceptions;
 using Backups.Interfaces;
 using Backups.Models;
+using Backups.StorageAlgorithms;
 
 namespace Backups.Entities;
 
@@ -21,11 +22,14 @@ public class BackupTask : IBackupTask
         _trackedObjects = new List<BackupObject>();
     }
 
+    public Backup Backup => _backup;
+
     public RestorePoint CreateRestorePoint()
     {
-        IEnumerable<Storage> storages = _algorithm.Run(
-            _repository, _trackedObjects, _backup.RestorePoints.Count(), _taskName);
-        var restorePoint = new RestorePoint(_trackedObjects, storages, DateTime.Now);
+        int restorePointNumber = _backup.RestorePoints.Count();
+        IEnumerable<Storage> storages = _algorithm.RunAlgo(
+            _repository, _trackedObjects, restorePointNumber, _taskName);
+        var restorePoint = new RestorePoint(_trackedObjects, storages, DateTime.Now, restorePointNumber);
         _backup.AddRestorePoint(restorePoint);
 
         return restorePoint;
