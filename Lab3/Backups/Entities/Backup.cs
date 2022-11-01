@@ -2,7 +2,7 @@
 
 public class Backup
 {
-    private readonly List<RestorePoint> _restorePoints;
+    private readonly ICollection<RestorePoint> _restorePoints;
 
     public Backup()
     {

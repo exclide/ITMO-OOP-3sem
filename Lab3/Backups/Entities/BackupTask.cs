@@ -7,7 +7,7 @@ namespace Backups.Entities;
 public class BackupTask : IBackupTask
 {
     private readonly string _taskName;
-    private readonly List<BackupObject> _trackedObjects;
+    private readonly ICollection<BackupObject> _trackedObjects;
     private IStorageAlgorithm _algorithm;
     private Repository _repository;
     private Backup _backup;
@@ -21,9 +21,14 @@ public class BackupTask : IBackupTask
         _trackedObjects = new List<BackupObject>();
     }
 
-    public RestorePoint AddRestorePoint()
+    public RestorePoint CreateRestorePoint()
     {
-        return new RestorePoint(_trackedObjects, new List<Storage>(), DateTime.Now);
+        IEnumerable<Storage> storages = _algorithm.Run(
+            _repository, _trackedObjects, _backup.RestorePoints.Count(), _taskName);
+        var restorePoint = new RestorePoint(_trackedObjects, storages, DateTime.Now);
+        _backup.AddRestorePoint(restorePoint);
+
+        return restorePoint;
     }
 
     public void TrackObject(BackupObject backupObject)
@@ -41,6 +46,6 @@ public class BackupTask : IBackupTask
             throw new BackupException("k");
         }
 
-        _trackedObjects.Add(backupObject);
+        _trackedObjects.Remove(backupObject);
     }
 }

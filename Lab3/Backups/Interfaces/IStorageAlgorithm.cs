@@ -1,6 +1,13 @@
-﻿namespace Backups.Interfaces;
+﻿using Backups.Entities;
+using Backups.Models;
+
+namespace Backups.Interfaces;
 
 public interface IStorageAlgorithm
 {
-    // IReadOnlyList<Storage> Run(...)
+    public IEnumerable<Storage> Run(
+        Repository repository,
+        IEnumerable<BackupObject> backupObjects,
+        int restorePointNumber,
+        string backupTaskName);
 }

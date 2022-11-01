@@ -1,9 +1,16 @@
-﻿namespace Backups.Models;
+﻿using Backups.Exceptions;
+
+namespace Backups.Models;
 
 public class BackupObject : IEquatable<BackupObject>
 {
     public BackupObject(string path)
     {
+        if (string.IsNullOrEmpty(path))
+        {
+            throw new BackupException($"{path} was null or empty");
+        }
+
         Path = path;
     }
 
