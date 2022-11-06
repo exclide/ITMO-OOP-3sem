@@ -7,48 +7,35 @@ namespace Backups.Entities;
 
 public class BackupTask : IBackupTask, IEquatable<BackupTask>
 {
-    private readonly string _taskName;
     private readonly ICollection<BackupObject> _trackedObjects;
-    private IStorageAlgorithm _algorithm;
-    private Repository _repository;
-    private Backup _backup;
 
-    public BackupTask(IStorageAlgorithm algorithm, Repository repository, string taskName, int id)
+    public BackupTask(Config config, string taskName, int id)
     {
-        ArgumentNullException.ThrowIfNull(algorithm);
-        ArgumentNullException.ThrowIfNull(repository);
+        ArgumentNullException.ThrowIfNull(config);
         if (string.IsNullOrEmpty(taskName))
         {
             throw new BackupException($"{nameof(taskName)} was null or empty");
         }
 
-        _algorithm = algorithm;
-        _repository = repository;
-        _taskName = taskName;
-        _backup = new Backup();
+        Config = config;
+        TaskName = taskName;
+        Backup = new Backup(config);
         _trackedObjects = new List<BackupObject>();
         Id = id;
     }
 
-    public Backup Backup => _backup;
+    public Backup Backup { get; }
+    public Config Config { get; }
+    public string TaskName { get; }
     public int Id { get; }
 
-    public override string ToString()
+    public void CreateRestorePoint()
     {
-        return $"{nameof(_taskName)}: {_taskName}, {nameof(_trackedObjects)}: {_trackedObjects}, " +
-               $"{nameof(_algorithm)}: {_algorithm}, {nameof(_repository)}: {_repository}, " +
-               $"{nameof(_backup)}: {_backup}, {nameof(Backup)}: {Backup}";
-    }
-
-    public RestorePoint CreateRestorePoint()
-    {
-        int restorePointNumber = _backup.RestorePoints.Count();
-        IEnumerable<Storage> storages = _algorithm.RunAlgo(
-            _repository, _trackedObjects, restorePointNumber, _taskName);
+        int restorePointNumber = Backup.RestorePoints.Count();
+        IEnumerable<Storage> storages = Config.Algorithm.RunAlgo(
+            Config.Repository, _trackedObjects, restorePointNumber, TaskName);
         var restorePoint = new RestorePoint(_trackedObjects, storages, DateTime.Now, restorePointNumber);
-        _backup.AddRestorePoint(restorePoint);
-
-        return restorePoint;
+        Backup.AddRestorePoint(restorePoint);
     }
 
     public void TrackObject(BackupObject backupObject)

@@ -42,6 +42,7 @@ public class Repository
         _fileSystem.OpenFile(path, fileMode, fileAccess);
     public void WriteAllBytes(string path, byte[] bytes) => _fileSystem.WriteAllBytes(path, bytes);
     public string PathCombine(string path1, string path2) => UPath.Combine(path1, path2).FullName;
+    public IEnumerable<UPath> EnumeratePaths(string path) => _fileSystem.EnumeratePaths(path);
 
     public void CreateEntryInZip(ZipArchive zip, string path, string zipRoot = "")
     {

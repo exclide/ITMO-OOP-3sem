@@ -1,5 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Diagnostics;
 using System.IO.Compression;
+using System.Reflection;
 using System.Text;
 using System.Threading.Channels;
 using Backups.Entities;
@@ -15,9 +17,13 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        IFileSystem fs = new PhysicalFileSystem();
-        Repository res = new Repository(fs, "/mnt/c/test");
-        IBackupTask taskSplit = new BackupTask(new SplitStorage(), res, "Backuptask", 0);
+        Config cfg1 = new ConfigBuilder()
+            .SetRepositoryPath("/mnt/c/test")
+            .SetSplitStorage()
+            .SetPhysicalFileSystem()
+            .GetConfig();
+
+        IBackupTask taskSplit = new BackupTask(cfg1, "Backuptask", 0);
         taskSplit.TrackObject(new BackupObject("/mnt/c/test/dz"));
         taskSplit.TrackObject(new BackupObject("/mnt/c/test/test.png"));
         taskSplit.TrackObject(new BackupObject("/mnt/c/test/Unti2424tled.jpg"));
@@ -27,7 +33,13 @@ public class Program
         taskSplit.UntrackObject(new BackupObject("/mnt/c/test/dz"));
         taskSplit.CreateRestorePoint();
 
-        IBackupTask taskSingle = new BackupTask(new SingleStorage(), res, "Backuptask2", 1);
+        Config cfg2 = new ConfigBuilder()
+            .SetRepositoryPath("/mnt/c/test")
+            .SetSingleStorage()
+            .SetPhysicalFileSystem()
+            .GetConfig();
+
+        IBackupTask taskSingle = new BackupTask(cfg2, "Backuptask2", 1);
         taskSingle.TrackObject(new BackupObject("/mnt/c/test/dz"));
         taskSingle.TrackObject(new BackupObject("/mnt/c/test/test.png"));
         taskSingle.TrackObject(new BackupObject("/mnt/c/test/Unti2424tled.jpg"));
@@ -37,34 +49,38 @@ public class Program
         taskSingle.UntrackObject(new BackupObject("/mnt/c/test/dz"));
         taskSingle.CreateRestorePoint();
 
-        IFileSystem mfs = new MemoryFileSystem();
         string rootPath = "/mnt/test";
-        Repository memRep = new Repository(mfs, rootPath);
-        mfs.CreateDirectory(rootPath);
-        using (var test = mfs.CreateFile(UPath.Combine(rootPath, "kek1.f")))
+        Config cfg3 = new ConfigBuilder()
+            .SetRepositoryPath(rootPath)
+            .SetSplitStorage()
+            .SetMemoryFileSystem()
+            .GetConfig();
+
+        cfg3.Repository.CreateDirectory(rootPath);
+        using (var test = cfg3.Repository.CreateFile(UPath.Combine(rootPath, "kek1.f").FullName))
         {
             test.Write(Encoding.ASCII.GetBytes("KEK1"));
         }
 
-        using (var test1 = mfs.CreateFile(UPath.Combine(rootPath, "kek2.f")))
+        using (var test1 = cfg3.Repository.CreateFile(UPath.Combine(rootPath, "kek2.f").FullName))
         {
             test1.Write(Encoding.ASCII.GetBytes("KEK2"));
         }
 
-        using (var test2 = mfs.CreateFile(UPath.Combine(rootPath, "kek3.f")))
+        using (var test2 = cfg3.Repository.CreateFile(UPath.Combine(rootPath, "kek3.f").FullName))
         {
             test2.Write(Encoding.ASCII.GetBytes("KEK3"));
         }
 
-        mfs.ReadAllBytes(UPath.Combine(rootPath, "kek1.f"));
+        cfg3.Repository.ReadAllBytes(UPath.Combine(rootPath, "kek1.f").FullName);
 
-        IBackupTask taskMemSplit = new BackupTask(new SplitStorage(), memRep, "Backup", 2);
+        IBackupTask taskMemSplit = new BackupTask(cfg3, "Backup", 2);
         taskMemSplit.TrackObject(new BackupObject(UPath.Combine(rootPath, "kek1.f").FullName));
         taskMemSplit.TrackObject(new BackupObject(UPath.Combine(rootPath, "kek2.f").FullName));
         taskMemSplit.TrackObject(new BackupObject(UPath.Combine(rootPath, "kek3.f").FullName));
         taskMemSplit.CreateRestorePoint();
 
-        foreach (var path in mfs.EnumeratePaths(UPath.Combine(rootPath, "Backup/0")))
+        foreach (var path in cfg3.Repository.EnumeratePaths(UPath.Combine(rootPath, "Backup/0").FullName))
         {
             Console.WriteLine(path.FullName);
         }

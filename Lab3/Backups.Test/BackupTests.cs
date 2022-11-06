@@ -9,24 +9,29 @@ namespace Backups.Test;
 
 public class BackupTests
 {
-    private BackupController _backupController = new BackupController();
+    private readonly BackupTasksController _backupController = new BackupTasksController();
 
     [Fact]
     public void AddBackupTaskCreateRestorePoints_RestorePointsExistStorageExist()
     {
         string rootPath = "/mnt/test";
-        var memRepo = _backupController.CreateRepository(new MemoryFileSystem(), rootPath);
-        var backupTask = _backupController.AddBackupTask(new SplitStorage(), memRepo, "BackupTest");
+        Config cfg1 = new ConfigBuilder()
+            .SetRepositoryPath(rootPath)
+            .SetSplitStorage()
+            .SetMemoryFileSystem()
+            .GetConfig();
+        var backupTask = _backupController.AddBackupTask(cfg1, "BackupTest");
+        var backupController = new BackupObjectController(backupTask);
 
         string filePath1 = "/mnt/test/file1";
         string filePath2 = "/mnt/test/file2";
 
-        using (var testFile1 = memRepo.CreateFile(filePath1))
+        using (var testFile1 = cfg1.Repository.CreateFile(filePath1))
         {
             testFile1.Write(Encoding.ASCII.GetBytes("KEK1"));
         }
 
-        using (var testFile2 = memRepo.CreateFile(filePath2))
+        using (var testFile2 = cfg1.Repository.CreateFile(filePath2))
         {
             testFile2.Write(Encoding.ASCII.GetBytes("KEK2"));
         }
@@ -34,56 +39,57 @@ public class BackupTests
         var backupObject1 = new BackupObject(filePath1);
         var backupObject2 = new BackupObject(filePath2);
 
-        _backupController.AddBackupObjectForBackupTask(backupTask, backupObject1);
-        _backupController.AddBackupObjectForBackupTask(backupTask, backupObject2);
+        backupController.TrackBackupObject(backupObject1);
+        backupController.TrackBackupObject(backupObject2);
 
-        var restorePoint1 = _backupController.AddRestorePointForBackupTask(backupTask);
-        Assert.Equal(2, restorePoint1.BackupObjects.Count());
-        Assert.Equal(2, restorePoint1.Storages.Count());
-        Assert.Equal(0, restorePoint1.RestorePointNumber);
+        backupController.CreateRestorePoint();
+        Assert.Equal(1, backupController.GetRestorePointCount());
+        Assert.Equal(2, backupController.GetStorageCount());
 
-        _backupController.RemoveBackupObjectForBackupTask(backupTask, backupObject2);
+        backupController.UntrackBackupObject(backupObject2);
 
-        var restorePoint2 = _backupController.AddRestorePointForBackupTask(backupTask);
-        Assert.Single(restorePoint2.BackupObjects);
-        Assert.Single(restorePoint2.Storages);
-        Assert.Equal(1, restorePoint2.RestorePointNumber);
+        backupController.CreateRestorePoint();
+        Assert.Equal(2, backupController.GetRestorePointCount());
+        Assert.Equal(3, backupController.GetStorageCount());
 
-        Assert.True(memRepo.DirectoryExists("/mnt/test/BackupTest/0"));
-        Assert.True(memRepo.DirectoryExists("/mnt/test/BackupTest/1"));
+        Assert.True(cfg1.Repository.DirectoryExists("/mnt/test/BackupTest/0"));
+        Assert.True(cfg1.Repository.DirectoryExists("/mnt/test/BackupTest/1"));
 
-        foreach (var storageFile in restorePoint1.Storages)
+        var restorePoint1Storages = backupController.GetStoragesForRestorePointNumber(0).ToList();
+        var restorePoint2Storages = backupController.GetStoragesForRestorePointNumber(1).ToList();
+
+        foreach (var storageFile in restorePoint1Storages)
         {
-            Assert.True(memRepo.FileExists(storageFile.Path));
+            Assert.True(cfg1.Repository.FileExists(storageFile.Path));
         }
 
-        foreach (var storageFile in restorePoint2.Storages)
+        foreach (var storageFile in restorePoint2Storages)
         {
-            Assert.True(memRepo.FileExists(storageFile.Path));
+            Assert.True(cfg1.Repository.FileExists(storageFile.Path));
         }
 
-        memRepo.DeleteFile(filePath1);
-        memRepo.DeleteFile(filePath2);
+        cfg1.Repository.DeleteFile(filePath1);
+        cfg1.Repository.DeleteFile(filePath2);
 
-        Assert.False(memRepo.FileExists(filePath1));
-        Assert.False(memRepo.FileExists(filePath2));
+        Assert.False(cfg1.Repository.FileExists(filePath1));
+        Assert.False(cfg1.Repository.FileExists(filePath2));
 
-        foreach (var storageFile in restorePoint1.Storages)
+        foreach (var storageFile in restorePoint1Storages)
         {
-            memRepo.UnzipZipFile(storageFile.Path, rootPath);
+            cfg1.Repository.UnzipZipFile(storageFile.Path, rootPath);
         }
 
-        Assert.True(memRepo.FileExists(filePath1));
-        Assert.True(memRepo.FileExists(filePath2));
+        Assert.True(cfg1.Repository.FileExists(filePath1));
+        Assert.True(cfg1.Repository.FileExists(filePath2));
 
-        using (var file1 = memRepo.OpenFile(filePath1, FileMode.Open, FileAccess.Read))
+        using (var file1 = cfg1.Repository.OpenFile(filePath1, FileMode.Open, FileAccess.Read))
         {
             using var streamReader = new StreamReader(file1);
             string text = streamReader.ReadLine();
             Assert.Equal("KEK1", text);
         }
 
-        using (var file2 = memRepo.OpenFile(filePath2, FileMode.Open, FileAccess.Read))
+        using (var file2 = cfg1.Repository.OpenFile(filePath2, FileMode.Open, FileAccess.Read))
         {
             using var streamReader = new StreamReader(file2);
             string text = streamReader.ReadLine();
