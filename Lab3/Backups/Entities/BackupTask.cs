@@ -38,6 +38,8 @@ public class BackupTask : IBackupTask, IEquatable<BackupTask>
         Backup.AddRestorePoint(restorePoint);
     }
 
+    public void DeleteRestorePoint(RestorePoint restorePoint) => Backup.DeleteRestorePoint(restorePoint);
+
     public void TrackObject(BackupObject backupObject)
     {
         ArgumentNullException.ThrowIfNull(backupObject);

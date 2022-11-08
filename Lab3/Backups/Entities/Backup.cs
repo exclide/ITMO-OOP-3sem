@@ -1,4 +1,5 @@
-﻿using Backups.Models;
+﻿using Backups.Exceptions;
+using Backups.Models;
 
 namespace Backups.Entities;
 
@@ -25,5 +26,18 @@ public class Backup
     {
         ArgumentNullException.ThrowIfNull(restorePoint);
         _restorePoints.Add(restorePoint);
+    }
+
+    public void DeleteRestorePoint(RestorePoint restorePoint)
+    {
+        ArgumentNullException.ThrowIfNull(restorePoint);
+        var point = _restorePoints.FirstOrDefault(x => x.Equals(restorePoint));
+
+        if (point is null)
+        {
+            throw new BackupException("Restore point not found");
+        }
+
+        _restorePoints.Remove(restorePoint);
     }
 }
