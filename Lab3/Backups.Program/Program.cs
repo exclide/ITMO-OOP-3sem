@@ -21,6 +21,7 @@ public class Program
             .SetSplitStorage()
             .SetPhysicalFileSystem()
             .GetConfig();
+        Console.WriteLine(cfg1);
 
         IBackupTask taskSplit = new BackupTask(cfg1, "Backuptask", 0);
         taskSplit.TrackObject(new BackupObject("/mnt/c/test/dz"));

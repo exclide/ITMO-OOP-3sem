@@ -35,6 +35,11 @@ public abstract class AbstractAlgorithm : IStorageAlgorithm
 
     public abstract StorageAlgorithmType GetAlgorithmType();
 
+    public override string ToString()
+    {
+        return $"AlgorithmType: {GetAlgorithmType()}";
+    }
+
     protected abstract IEnumerable<Storage> RunInternal(
         IRepository repository,
         IEnumerable<BackupObject> backupObjects,

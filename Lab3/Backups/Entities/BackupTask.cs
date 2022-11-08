@@ -29,6 +29,12 @@ public class BackupTask : IBackupTask, IEquatable<BackupTask>
     public string TaskName { get; }
     public int Id { get; }
 
+    public override string ToString()
+    {
+        return $"{nameof(_trackedObjects)}: {_trackedObjects}, {nameof(Backup)}: {Backup}, " +
+               $"{nameof(Config)}: {Config}, {nameof(TaskName)}: {TaskName}, {nameof(Id)}: {Id}";
+    }
+
     public void CreateRestorePoint()
     {
         int restorePointNumber = Backup.RestorePoints.Count();

@@ -29,11 +29,6 @@ public abstract class BaseRepository : IRepository
 
     public string RootPath { get; }
 
-    public override string ToString()
-    {
-        return $"{nameof(_fileSystem)}: {_fileSystem}, {nameof(RootPath)}: {RootPath}";
-    }
-
     public void CreateDirectory(string path) => _fileSystem.CreateDirectory(path);
     public Stream CreateFile(string path) => _fileSystem.CreateFile(path);
     public bool DirectoryExists(string path) => _fileSystem.DirectoryExists(path);
@@ -102,6 +97,11 @@ public abstract class BaseRepository : IRepository
                 }
             }
         }
+    }
+
+    public override string ToString()
+    {
+        return $"RepositoryType: {GetRepositoryType()}, {nameof(RootPath)}: {RootPath}";
     }
 
     public abstract RepositoryType GetRepositoryType();

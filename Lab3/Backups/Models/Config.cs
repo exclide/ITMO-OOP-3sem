@@ -20,4 +20,9 @@ public class Config
     public RepositoryType RepositoryType { get; }
     public IStorageAlgorithm Algorithm { get; }
     public IRepository Repository { get; }
+
+    public override string ToString()
+    {
+        return $"{nameof(StorageAlgorithmType)}: {StorageAlgorithmType}, {nameof(RepositoryType)}: {RepositoryType}";
+    }
 }

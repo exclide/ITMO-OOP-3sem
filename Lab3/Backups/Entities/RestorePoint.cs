@@ -31,8 +31,7 @@ public class RestorePoint : IEquatable<RestorePoint>
     public override string ToString()
     {
         return $"{nameof(_backupObjects)}: {_backupObjects}, {nameof(_storages)}: {_storages}, " +
-               $"{nameof(TimeCreated)}: {TimeCreated}, {nameof(RestorePointNumber)}: {RestorePointNumber}, " +
-               $"{nameof(BackupObjects)}: {BackupObjects}, {nameof(Storages)}: {Storages}";
+               $"{nameof(TimeCreated)}: {TimeCreated}, {nameof(RestorePointNumber)}: {RestorePointNumber}";
     }
 
     public override int GetHashCode() => RestorePointNumber.GetHashCode();
