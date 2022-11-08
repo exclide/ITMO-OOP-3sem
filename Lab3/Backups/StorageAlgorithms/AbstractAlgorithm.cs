@@ -8,7 +8,7 @@ namespace Backups.StorageAlgorithms;
 public abstract class AbstractAlgorithm : IStorageAlgorithm
 {
     public IEnumerable<Storage> RunAlgo(
-        Repository repository,
+        IRepository repository,
         IEnumerable<BackupObject> backupObjects,
         int restorePointNumber,
         string backupTaskName)
@@ -33,8 +33,10 @@ public abstract class AbstractAlgorithm : IStorageAlgorithm
         return RunInternal(repository, backupObjects, restorePointDir, backupTaskName);
     }
 
+    public abstract StorageAlgorithmType GetAlgorithmType();
+
     protected abstract IEnumerable<Storage> RunInternal(
-        Repository repository,
+        IRepository repository,
         IEnumerable<BackupObject> backupObjects,
         string restorePointDir,
         string backupTaskName);

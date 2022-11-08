@@ -15,8 +15,7 @@ public class BackupTests
     public void AddBackupTaskCreateRestorePoints_RestorePointsExistStorageExist()
     {
         string rootPath = "/mnt/test";
-        Config cfg1 = new ConfigBuilder()
-            .SetRepositoryPath(rootPath)
+        Config cfg1 = new ConfigBuilder(rootPath)
             .SetSplitStorage()
             .SetMemoryFileSystem()
             .GetConfig();

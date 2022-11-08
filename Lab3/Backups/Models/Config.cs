@@ -5,16 +5,19 @@ namespace Backups.Models;
 
 public class Config
 {
-    public Config(StorageAlgorithm storageAlgorithm, FileSystemType repositoryType, Repository repository, IStorageAlgorithm algorithm)
+    public Config(IRepository repository, IStorageAlgorithm algorithm)
     {
-        StorageAlgorithm = storageAlgorithm;
-        RepositoryType = repositoryType;
+        ArgumentNullException.ThrowIfNull(repository);
+        ArgumentNullException.ThrowIfNull(algorithm);
+
+        StorageAlgorithmType = algorithm.GetAlgorithmType();
+        RepositoryType = repository.GetRepositoryType();
         Repository = repository;
         Algorithm = algorithm;
     }
 
-    public StorageAlgorithm StorageAlgorithm { get; }
-    public FileSystemType RepositoryType { get; }
+    public StorageAlgorithmType StorageAlgorithmType { get; }
+    public RepositoryType RepositoryType { get; }
     public IStorageAlgorithm Algorithm { get; }
-    public Repository Repository { get; }
+    public IRepository Repository { get; }
 }

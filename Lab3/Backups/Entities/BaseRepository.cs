@@ -1,14 +1,16 @@
 ﻿using System.IO.Compression;
 using Backups.Exceptions;
+using Backups.Interfaces;
+using Backups.Models;
 using Zio;
 
 namespace Backups.Entities;
 
-public class Repository
+public abstract class BaseRepository : IRepository
 {
     private readonly IFileSystem _fileSystem;
 
-    public Repository(IFileSystem fileSystem, string rootPath)
+    protected BaseRepository(IFileSystem fileSystem, string rootPath)
     {
         ArgumentNullException.ThrowIfNull(fileSystem);
         if (string.IsNullOrEmpty(rootPath))
@@ -101,4 +103,6 @@ public class Repository
             }
         }
     }
+
+    public abstract RepositoryType GetRepositoryType();
 }

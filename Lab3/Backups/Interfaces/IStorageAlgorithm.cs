@@ -5,9 +5,11 @@ namespace Backups.Interfaces;
 
 public interface IStorageAlgorithm
 {
-    public IEnumerable<Storage> RunAlgo(
-        Repository repository,
+    IEnumerable<Storage> RunAlgo(
+        IRepository repository,
         IEnumerable<BackupObject> backupObjects,
         int restorePointNumber,
         string backupTaskName);
+
+    StorageAlgorithmType GetAlgorithmType();
 }

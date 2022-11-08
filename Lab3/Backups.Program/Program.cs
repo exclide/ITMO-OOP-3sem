@@ -17,8 +17,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        Config cfg1 = new ConfigBuilder()
-            .SetRepositoryPath("/mnt/c/test")
+        Config cfg1 = new ConfigBuilder("/mnt/c/test")
             .SetSplitStorage()
             .SetPhysicalFileSystem()
             .GetConfig();
@@ -33,8 +32,7 @@ public class Program
         taskSplit.UntrackObject(new BackupObject("/mnt/c/test/dz"));
         taskSplit.CreateRestorePoint();
 
-        Config cfg2 = new ConfigBuilder()
-            .SetRepositoryPath("/mnt/c/test")
+        Config cfg2 = new ConfigBuilder("/mnt/c/test")
             .SetSingleStorage()
             .SetPhysicalFileSystem()
             .GetConfig();
@@ -50,8 +48,7 @@ public class Program
         taskSingle.CreateRestorePoint();
 
         string rootPath = "/mnt/test";
-        Config cfg3 = new ConfigBuilder()
-            .SetRepositoryPath(rootPath)
+        Config cfg3 = new ConfigBuilder(rootPath)
             .SetSplitStorage()
             .SetMemoryFileSystem()
             .GetConfig();
@@ -85,8 +82,7 @@ public class Program
             Console.WriteLine(path.FullName);
         }
 
-        IFileSystem ffs = new PhysicalFileSystem();
-        Repository repo = new Repository(ffs, "/mnt/c/test");
+        IRepository repo = new PhysicalRepository("/mnt/c/test");
         repo.UnzipZipFile("/mnt/c/test/Backuptask2/0/Backuptask2.zip", "/mnt/c/test/unzip");
     }
 }

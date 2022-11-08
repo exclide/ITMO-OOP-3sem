@@ -1,6 +1,6 @@
 ﻿namespace Backups.Models;
 
-public enum StorageAlgorithm
+public enum StorageAlgorithmType
 {
     SingleStorage,
     SplitStorage,

@@ -7,8 +7,10 @@ namespace Backups.StorageAlgorithms;
 
 public class SplitStorage : AbstractAlgorithm
 {
+    public override StorageAlgorithmType GetAlgorithmType() => StorageAlgorithmType.SingleStorage;
+
     protected override IEnumerable<Storage> RunInternal(
-        Repository repository,
+        IRepository repository,
         IEnumerable<BackupObject> backupObjects,
         string restorePointDir,
         string backupTaskName)
