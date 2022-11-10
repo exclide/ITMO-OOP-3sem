@@ -7,7 +7,7 @@ namespace Backups.StorageAlgorithms;
 
 public class SplitStorage : AbstractAlgorithm
 {
-    public override StorageAlgorithmType GetAlgorithmType() => StorageAlgorithmType.SingleStorage;
+    public override StorageAlgorithmType GetAlgorithmType() => StorageAlgorithmType.SplitStorage;
 
     protected override IEnumerable<Storage> RunInternal(
         IRepository repository,
