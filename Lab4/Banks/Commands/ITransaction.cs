@@ -1,6 +1,6 @@
 ﻿namespace Banks.Commands;
 
-public interface ICommand
+public interface ITransaction
 {
     void Run();
     void Revert();
