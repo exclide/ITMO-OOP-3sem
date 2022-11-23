@@ -7,7 +7,6 @@ namespace Banks.Accounts;
 public abstract class BaseAccount : IAccount
 {
     private readonly ICollection<ITransaction> _transactionHistory;
-    private AccountLimits _accountLimits;
     private decimal _balance;
     protected BaseAccount(Client client, Bank bank, int accountId)
     {
@@ -26,7 +25,7 @@ public abstract class BaseAccount : IAccount
         get => _balance;
         set
         {
-            if (!_accountLimits.CanGoNegative && value < 0)
+            if (!AccountLimits.CanGoNegative && value < 0)
             {
                 throw new BankException("Can't set negative balance on this account");
             }
@@ -37,6 +36,8 @@ public abstract class BaseAccount : IAccount
 
     public int AccountId { get; }
     public IEnumerable<ITransaction> TransactionHistory => _transactionHistory;
+    public abstract AccountType AccountType { get; }
+    public AccountLimits AccountLimits { get; set; }
 
     public void MakeTransaction(ITransaction transaction)
     {
@@ -53,13 +54,4 @@ public abstract class BaseAccount : IAccount
 
         transaction.Revert();
     }
-
-    public AccountLimits GetAccountLimits() => _accountLimits;
-
-    public void SetAccountLimits(AccountLimits accountLimits)
-    {
-        _accountLimits = accountLimits;
-    }
-
-    public abstract AccountType GetAccountType();
 }

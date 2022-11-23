@@ -1,4 +1,5 @@
 ﻿using Banks.Accounts;
+using Banks.Commands;
 using Banks.Entities;
 using Banks.Exceptions;
 using Banks.Models;
@@ -76,5 +77,33 @@ public class CentralBankService
     {
         var accountFrom = _accounts.FirstOrDefault(x => x.AccountId.Equals(accountIdFrom));
         var accountTo = _accounts.FirstOrDefault(x => x.AccountId.Equals(accountIdTo));
+
+        if (accountFrom is null || accountTo is null)
+        {
+            throw new BankException("Can't find the required accounts");
+        }
+
+        var transferTransaction = new TransferTransaction(accountFrom, accountTo, transferAmount);
+        accountFrom.MakeTransaction(transferTransaction);
+    }
+
+    public void SubscribeClientToBankLimitChanges(Bank bank, Client client)
+    {
+        if (!(_banks.Contains(bank) || _clients.Contains(client)))
+        {
+            throw new BankException("Bank or client isn't registered");
+        }
+
+        client.Subscribe(bank);
+    }
+
+    public void UnsubscribeClientFromBankLimitChanges(Client client)
+    {
+        if (!_clients.Contains(client))
+        {
+            throw new BankException("Client isn't registered");
+        }
+
+        client.Unsubscribe();
     }
 }

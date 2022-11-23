@@ -21,10 +21,13 @@ public class DepositTranscation : ITransaction
 
         _account = account;
         _depositAmount = depositAmount;
-        _accountLimits = account.GetAccountLimits();
+        _accountLimits = account.AccountLimits;
         _beforeBalance = account.Balance;
         _hasRun = false;
+        TransactionId = ITransaction.transactionCounter++;
     }
+
+    public int TransactionId { get; }
 
     public void Run()
     {

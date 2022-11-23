@@ -26,12 +26,15 @@ public class TransferTransaction : ITransaction
         _accountFrom = accountFrom;
         _accountTo = accountTo;
         _transferAmount = transferAmount;
-        _accountLimitsFrom = accountFrom.GetAccountLimits();
-        _accountLimitsTo = accountTo.GetAccountLimits();
+        _accountLimitsFrom = accountFrom.AccountLimits;
+        _accountLimitsTo = accountTo.AccountLimits;
         _beforeBalanceFrom = accountFrom.Balance;
         _beforeBalanceTo = accountTo.Balance;
         _hasRun = false;
+        TransactionId = ITransaction.transactionCounter++;
     }
+
+    public int TransactionId { get; }
 
     public void Run()
     {

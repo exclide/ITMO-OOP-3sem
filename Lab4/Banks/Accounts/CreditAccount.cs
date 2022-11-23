@@ -19,9 +19,9 @@ public class CreditAccount : BaseAccount
             0,
             client.IsVerified ? 0 : bank.BankConfig.UnverifiedClientTransactionLimit);
 
-        SetAccountLimits(accountLimits);
+        AccountLimits = accountLimits;
         Balance = depositAmount;
     }
 
-    public override AccountType GetAccountType() => AccountType.Credit;
+    public override AccountType AccountType => AccountType.Credit;
 }

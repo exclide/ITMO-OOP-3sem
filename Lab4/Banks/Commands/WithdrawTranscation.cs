@@ -21,10 +21,13 @@ public class WithdrawTranscation : ITransaction
 
         _account = account;
         _withdrawAmount = withdrawAmount;
-        _accountLimits = account.GetAccountLimits();
+        _accountLimits = account.AccountLimits;
         _beforeBalance = account.Balance;
         _hasRun = false;
+        TransactionId = ITransaction.transactionCounter++;
     }
+
+    public int TransactionId { get; }
 
     public void Run()
     {

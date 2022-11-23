@@ -27,4 +27,12 @@ public class BankConfig
     public decimal CreditAccountCommissionFixed { get; set; }
     public decimal DebitAccountInterestRate { get; }
     public DepositAccountInterestRates DepositAccountInterestRates { get; set; }
+
+    public override string ToString()
+    {
+        return $"{nameof(UnverifiedClientTransactionLimit)}: {UnverifiedClientTransactionLimit}, " +
+               $"{nameof(CreditAccountCommissionFixed)}: {CreditAccountCommissionFixed}, " +
+               $"{nameof(DebitAccountInterestRate)}: {DebitAccountInterestRate}, " +
+               $"{nameof(DepositAccountInterestRates)}: {DepositAccountInterestRates}";
+    }
 }

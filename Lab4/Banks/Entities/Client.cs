@@ -3,10 +3,11 @@ using Banks.Models;
 
 namespace Banks.Entities;
 
-public class Client : IEquatable<Client>
+public class Client : IEquatable<Client>, IObserver<BankConfig>
 {
     private readonly int _id;
     private readonly ICollection<IAccount> _accounts;
+    private IDisposable _unsubscriber;
     public Client(ClientName clientName, ClientAddress clientAddress, ClientPassportId clientPassportId, int id)
     {
         ArgumentNullException.ThrowIfNull(clientName);
@@ -35,5 +36,30 @@ public class Client : IEquatable<Client>
     {
         ArgumentNullException.ThrowIfNull(account);
         _accounts.Add(account);
+    }
+
+    public void Subscribe(IObservable<BankConfig> provider)
+    {
+        _unsubscriber = provider.Subscribe(this);
+    }
+
+    public void Unsubscribe()
+    {
+        _unsubscriber.Dispose();
+    }
+
+    public void OnCompleted()
+    {
+        Console.WriteLine("Bank no longer offers limit subscription");
+        Unsubscribe();
+    }
+
+    public void OnError(Exception error)
+    {
+    }
+
+    public void OnNext(BankConfig value)
+    {
+        Console.WriteLine($"Bank has changed its limits: {value}");
     }
 }

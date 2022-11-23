@@ -3,11 +3,13 @@ using Banks.Exceptions;
 
 namespace Banks.Entities;
 
-public class Bank : IEquatable<Bank>
+public class Bank : IEquatable<Bank>, IObservable<BankConfig>
 {
     private readonly int _id;
     private readonly ICollection<Client> _clients;
     private readonly ICollection<IAccount> _accounts;
+    private readonly ICollection<IObserver<BankConfig>> _observers;
+    private BankConfig _bankConfig;
     public Bank(string bankName, BankConfig bankConfig, int id)
     {
         ArgumentNullException.ThrowIfNull(bankConfig);
@@ -21,10 +23,24 @@ public class Bank : IEquatable<Bank>
         _id = id;
         _clients = new List<Client>();
         _accounts = new List<IAccount>();
+        _observers = new List<IObserver<BankConfig>>();
     }
 
     public string BankName { get; }
-    public BankConfig BankConfig { get; }
+
+    public BankConfig BankConfig
+    {
+        get => _bankConfig;
+        set
+        {
+            _bankConfig = value;
+            foreach (var observer in _observers)
+            {
+                observer.OnNext(_bankConfig);
+            }
+        }
+    }
+
     public IEnumerable<Client> Clients => _clients;
     public IEnumerable<IAccount> Accounts => _accounts;
 
@@ -49,5 +65,37 @@ public class Bank : IEquatable<Bank>
 
         _accounts.Add(account);
         client.AddAccount(account);
+    }
+
+    public IDisposable Subscribe(IObserver<BankConfig> observer)
+    {
+        if (_observers.Contains(observer))
+        {
+            throw new BankException("Client already subscribed");
+        }
+
+        _observers.Add(observer);
+
+        return new Unsubscriber(_observers, observer);
+    }
+
+    private class Unsubscriber : IDisposable
+    {
+        private ICollection<IObserver<BankConfig>> _observers;
+        private IObserver<BankConfig> _observer;
+
+        public Unsubscriber(ICollection<IObserver<BankConfig>> observers, IObserver<BankConfig> observer)
+        {
+            _observers = observers;
+            _observer = observer;
+        }
+
+        public void Dispose()
+        {
+            if (_observer is not null)
+            {
+                _observers.Remove(_observer);
+            }
+        }
     }
 }

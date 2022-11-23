@@ -34,9 +34,9 @@ public class DepositAccount : BaseAccount
             depositInterestRate,
             0);
 
-        SetAccountLimits(accountLimits);
+        AccountLimits = accountLimits;
         Balance = depositAmount;
     }
 
-    public override AccountType GetAccountType() => AccountType.Deposit;
+    public override AccountType AccountType => AccountType.Deposit;
 }

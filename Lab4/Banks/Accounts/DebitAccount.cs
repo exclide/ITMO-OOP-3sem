@@ -17,9 +17,9 @@ public class DebitAccount : BaseAccount
             bank.BankConfig.DebitAccountInterestRate,
             client.IsVerified ? 0 : bank.BankConfig.UnverifiedClientTransactionLimit);
 
-        SetAccountLimits(accountLimits);
+        AccountLimits = accountLimits;
         Balance = depositAmount;
     }
 
-    public override AccountType GetAccountType() => AccountType.Debit;
+    public override AccountType AccountType => AccountType.Debit;
 }
