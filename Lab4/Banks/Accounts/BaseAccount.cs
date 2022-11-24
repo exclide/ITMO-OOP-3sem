@@ -6,16 +6,16 @@ namespace Banks.Accounts;
 
 public abstract class BaseAccount : IAccount
 {
-    private const int YearsTillValid = 5;
+    private const int YearsTillValid = 2;
     private readonly ICollection<ITransaction> _transactionHistory;
     private decimal _balance;
-    protected BaseAccount(Client client, Bank bank, int accountId)
+    protected BaseAccount(Client client, Bank bank, int accountId, DateOnly date)
     {
         Balance = 0;
         Client = client;
         Bank = bank;
         AccountId = accountId;
-        CreatedOn = DateOnly.FromDateTime(DateTime.Now);
+        CreatedOn = date;
         LastInterest = CreatedOn;
         _transactionHistory = new List<ITransaction>();
     }
@@ -38,7 +38,7 @@ public abstract class BaseAccount : IAccount
     public DateOnly LastInterest { get; set; }
 
     public bool IsExpired =>
-        (DateOnly.FromDateTime(DateTime.Now).DayNumber - CreatedOn.DayNumber) > 365 * YearsTillValid;
+        (LastInterest.DayNumber - CreatedOn.DayNumber) > 365 * YearsTillValid;
 
     public void MakeTransaction(ITransaction transaction)
     {
@@ -58,13 +58,14 @@ public abstract class BaseAccount : IAccount
 
     public void AddMonthlyInterestToBalance()
     {
-        Balance += InterestAmount;
+        var depositTranscation = new DepositTranscation(this, InterestAmount);
+        MakeTransaction(depositTranscation);
         InterestAmount = 0;
     }
 
     public void AddDailyInterest()
     {
-        decimal dailyInterestRate = AccountLimits.AnnualInterestRate / 365;
+        decimal dailyInterestRate = AccountLimits.AnnualInterestRate / 365 / 100;
         InterestAmount += Balance * dailyInterestRate;
     }
 

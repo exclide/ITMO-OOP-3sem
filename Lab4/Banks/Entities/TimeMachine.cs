@@ -1,13 +1,15 @@
-﻿namespace Banks.Entities;
+﻿using Banks.Exceptions;
+
+namespace Banks.Entities;
 
 public class TimeMachine : IObservable<DateOnly>
 {
     private readonly ICollection<IObserver<DateOnly>> _observers;
     private DateOnly _date;
 
-    public TimeMachine()
+    public TimeMachine(DateOnly date)
     {
-        _date = DateOnly.FromDateTime(DateTime.Now);
+        _date = date;
         _observers = new List<IObserver<DateOnly>>();
     }
 
@@ -16,6 +18,11 @@ public class TimeMachine : IObservable<DateOnly>
         get => _date;
         private set
         {
+            if (value < _date)
+            {
+                throw new BankException("Can't time travel to past");
+            }
+
             _date = value;
             foreach (var sub in _observers)
             {

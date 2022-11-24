@@ -12,14 +12,17 @@ public class CentralBankService
     private readonly ICollection<Client> _clients;
     private readonly ICollection<IAccount> _accounts;
     private readonly TimeMachine _timeMachine;
+    private readonly DateOnly _startDate = new DateOnly(2023, 1, 1);
 
     public CentralBankService()
     {
         _banks = new List<Bank>();
         _clients = new List<Client>();
         _accounts = new List<IAccount>();
-        _timeMachine = new TimeMachine();
+        _timeMachine = new TimeMachine(_startDate);
     }
+
+    public TimeMachine TimeMachine => _timeMachine;
 
     public Bank RegisterNewBank(string bankName, BankConfig bankConfig)
     {
@@ -73,9 +76,9 @@ public class CentralBankService
 
         IAccount account = accountType switch
         {
-            AccountType.Credit => new CreditAccount(client, bank, _accounts.Count, depositAmount),
-            AccountType.Debit => new DebitAccount(client, bank, _accounts.Count, depositAmount),
-            AccountType.Deposit => new DepositAccount(client, bank, _accounts.Count, depositAmount),
+            AccountType.Credit => new CreditAccount(client, bank, _accounts.Count, _timeMachine.Date, depositAmount),
+            AccountType.Debit => new DebitAccount(client, bank, _accounts.Count, _timeMachine.Date, depositAmount),
+            AccountType.Deposit => new DepositAccount(client, bank, _accounts.Count, _timeMachine.Date, depositAmount),
             _ => throw new BankException("Account type not implemented"),
         };
 

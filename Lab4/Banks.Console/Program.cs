@@ -8,6 +8,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        /*
         var centralBank = new CentralBankService();
 
         BankConfig sberConfig = new BankConfigBuilder()
@@ -26,7 +27,7 @@ public class Program
             .SetDepositAccountRanges(5000, 10000)
             .SetDepositAccountRates(6, 8, 10)
             .GetBankConfig();
-        var tinkBank = centralBank.RegisterNewBank("Tink", sberConfig);
+        var tinkBank = centralBank.RegisterNewBank("Tink", tinkConfig);
 
         BankConfig alphaConfig = new BankConfigBuilder()
             .SetCreditAccountComission(1000)
@@ -35,6 +36,8 @@ public class Program
             .SetDepositAccountRanges(500, 1000)
             .SetDepositAccountRates(30, 40, 50)
             .GetBankConfig();
-        var alphaBank = centralBank.RegisterNewBank("Alpha", sberConfig);
+        var alphaBank = centralBank.RegisterNewBank("Alpha", alphaConfig);
+
+        Client client1 = centralBank.RegisterNewClient(alphaBank, new ClientName("Ivan", "Govnov"));*/
     }
 }

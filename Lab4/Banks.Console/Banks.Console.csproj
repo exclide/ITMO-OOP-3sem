@@ -24,4 +24,8 @@
       <ProjectReference Include="..\Banks\Banks.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="ConsoleInterface" />
+    </ItemGroup>
+
 </Project>
