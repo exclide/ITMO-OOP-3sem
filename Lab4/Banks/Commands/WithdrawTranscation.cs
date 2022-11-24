@@ -65,6 +65,10 @@ public class WithdrawTranscation : ITransaction
 
         decimal currentBalance = _account.Balance;
         decimal newBalance = currentBalance + _withdrawAmount;
+        if (_accountLimits.TransactionComission > 0 && _beforeBalance < 0)
+        {
+            newBalance += _accountLimits.TransactionComission;
+        }
 
         _account.Balance = newBalance;
         _hasRun = false;

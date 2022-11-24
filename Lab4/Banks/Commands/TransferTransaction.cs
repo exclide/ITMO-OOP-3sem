@@ -77,6 +77,10 @@ public class TransferTransaction : ITransaction
         decimal currentBalanceTo = _accountTo.Balance;
         decimal newBalanceFrom = currentBalanceFrom + _transferAmount;
         decimal newBalanceTo = currentBalanceTo - _transferAmount;
+        if (_accountLimitsFrom.TransactionComission > 0 && _beforeBalanceFrom < 0)
+        {
+            newBalanceFrom += _accountLimitsFrom.TransactionComission;
+        }
 
         _accountFrom.Balance = newBalanceFrom;
         _accountTo.Balance = newBalanceTo;

@@ -14,25 +14,7 @@ public class DepositAccount : BaseAccount
     public DepositAccount(Client client, Bank bank, int accountId, decimal depositAmount)
         : base(client, bank, accountId)
     {
-        decimal depositInterestRate = 0;
-        if (depositAmount > bank.BankConfig.DepositAccountInterestRates.SecondRange)
-        {
-            depositInterestRate = bank.BankConfig.DepositAccountInterestRates.ThirdPercent;
-        }
-        else if (depositAmount > bank.BankConfig.DepositAccountInterestRates.FirstRange)
-        {
-            depositInterestRate = bank.BankConfig.DepositAccountInterestRates.SecondPercent;
-        }
-        else
-        {
-            depositInterestRate = bank.BankConfig.DepositAccountInterestRates.FirstPercent;
-        }
-
-        var accountLimits = new AccountLimits(
-            false,
-            0,
-            depositInterestRate,
-            0);
+        var accountLimits = new AccountLimits(this, depositAmount);
 
         AccountLimits = accountLimits;
         Balance = depositAmount;

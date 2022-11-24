@@ -11,8 +11,6 @@ public class Client : IEquatable<Client>, IObserver<BankConfig>
     public Client(ClientName clientName, ClientAddress clientAddress, ClientPassportId clientPassportId, int id)
     {
         ArgumentNullException.ThrowIfNull(clientName);
-        ArgumentNullException.ThrowIfNull(clientAddress);
-        ArgumentNullException.ThrowIfNull(clientPassportId);
 
         ClientName = clientName;
         ClientAddress = clientAddress;

@@ -19,7 +19,7 @@ public class Bank : IEquatable<Bank>, IObservable<BankConfig>
         }
 
         BankName = bankName;
-        BankConfig = bankConfig;
+        _bankConfig = bankConfig;
         _id = id;
         _clients = new List<Client>();
         _accounts = new List<IAccount>();
@@ -77,6 +77,14 @@ public class Bank : IEquatable<Bank>, IObservable<BankConfig>
         _observers.Add(observer);
 
         return new Unsubscriber(_observers, observer);
+    }
+
+    public void AddInterestToBalance()
+    {
+        foreach (var account in _accounts)
+        {
+            account.AddInterestToBalance();
+        }
     }
 
     private class Unsubscriber : IDisposable

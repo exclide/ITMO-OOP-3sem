@@ -23,10 +23,10 @@ public class BankConfig
         DebitAccountInterestRate = debitAccountRate;
     }
 
-    public decimal UnverifiedClientTransactionLimit { get; set; }
-    public decimal CreditAccountCommissionFixed { get; set; }
+    public decimal UnverifiedClientTransactionLimit { get; }
+    public decimal CreditAccountCommissionFixed { get; }
     public decimal DebitAccountInterestRate { get; }
-    public DepositAccountInterestRates DepositAccountInterestRates { get; set; }
+    public DepositAccountInterestRates DepositAccountInterestRates { get; }
 
     public override string ToString()
     {

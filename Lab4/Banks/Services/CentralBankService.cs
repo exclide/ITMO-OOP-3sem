@@ -34,12 +34,21 @@ public class CentralBankService
             throw new BankException("Bank isn't registered in the central bank");
         }
 
-        Client client = new ClientBuilder()
+        ClientBuilder clientBuilder = new ClientBuilder()
             .SetClientName(clientName)
-            .SetClientAddress(clientAddress)
-            .SetClientPassportId(clientPassportId)
-            .SetClientId(_clients.Count)
-            .GetClient();
+            .SetClientId(_clients.Count);
+
+        if (clientAddress is not null)
+        {
+            clientBuilder = clientBuilder.SetClientAddress(clientAddress);
+        }
+
+        if (clientPassportId is not null)
+        {
+            clientBuilder = clientBuilder.SetClientPassportId(clientPassportId);
+        }
+
+        Client client = clientBuilder.GetClient();
 
         bank.AddClient(client);
         _clients.Add(client);
@@ -105,5 +114,13 @@ public class CentralBankService
         }
 
         client.Unsubscribe();
+    }
+
+    public void PushBanksToAddInterest()
+    {
+        foreach (var bank in _banks)
+        {
+            bank.AddInterestToBalance();
+        }
     }
 }

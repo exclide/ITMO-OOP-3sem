@@ -34,4 +34,11 @@ public class DepositAccountInterestRates
     public decimal FirstPercent { get; }
     public decimal SecondPercent { get; }
     public decimal ThirdPercent { get; }
+
+    public override string ToString()
+    {
+        return $"{nameof(FirstRange)}: {FirstRange}, {nameof(SecondRange)}: {SecondRange}, " +
+               $"{nameof(FirstPercent)}: {FirstPercent}, {nameof(SecondPercent)}: {SecondPercent}, " +
+               $"{nameof(ThirdPercent)}: {ThirdPercent}";
+    }
 }
