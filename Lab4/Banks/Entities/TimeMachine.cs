@@ -7,7 +7,7 @@ public class TimeMachine : IObservable<DateOnly>
 
     public TimeMachine()
     {
-        Date = DateOnly.FromDateTime(DateTime.Now);
+        _date = DateOnly.FromDateTime(DateTime.Now);
         _observers = new List<IObserver<DateOnly>>();
     }
 

@@ -8,28 +8,33 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        var cb = new CentralBankService();
-        var bank = cb.RegisterNewBank(
-            "Sber",
-            new BankConfig(
-                100,
-                100,
-                5,
-                new DepositAccountInterestRates(50, 100, 2, 3, 4)));
-        var client = cb.RegisterNewClient(bank, new ClientName("Lol", "Kek"));
-        cb.SubscribeClientToBankLimitChanges(bank, client);
-        bank.BankConfig = new BankConfig(
-            40,
-            50,
-            1,
-            new DepositAccountInterestRates(40, 50, 1, 2, 3));
+        var centralBank = new CentralBankService();
 
-        var acc = new DebitAccount(client, bank, 0, 5000);
+        BankConfig sberConfig = new BankConfigBuilder()
+            .SetCreditAccountComission(100)
+            .SetUnverifiedTransactionLimit(5)
+            .SetDebitAccountRate(5)
+            .SetDepositAccountRanges(500, 1000)
+            .SetDepositAccountRates(3, 4, 5)
+            .GetBankConfig();
+        var sberBank = centralBank.RegisterNewBank("Sber", sberConfig);
 
-        DateOnly date = DateOnly.FromDateTime(DateTime.Now);
+        BankConfig tinkConfig = new BankConfigBuilder()
+            .SetCreditAccountComission(200)
+            .SetUnverifiedTransactionLimit(10)
+            .SetDebitAccountRate(10)
+            .SetDepositAccountRanges(5000, 10000)
+            .SetDepositAccountRates(6, 8, 10)
+            .GetBankConfig();
+        var tinkBank = centralBank.RegisterNewBank("Tink", sberConfig);
 
-        date = date.AddYears(5);
-
-        System.Console.WriteLine(date);
+        BankConfig alphaConfig = new BankConfigBuilder()
+            .SetCreditAccountComission(1000)
+            .SetUnverifiedTransactionLimit(5000)
+            .SetDebitAccountRate(50)
+            .SetDepositAccountRanges(500, 1000)
+            .SetDepositAccountRates(30, 40, 50)
+            .GetBankConfig();
+        var alphaBank = centralBank.RegisterNewBank("Alpha", sberConfig);
     }
 }

@@ -16,6 +16,7 @@ public abstract class BaseAccount : IAccount
         Bank = bank;
         AccountId = accountId;
         CreatedOn = DateOnly.FromDateTime(DateTime.Now);
+        LastInterest = CreatedOn;
         _transactionHistory = new List<ITransaction>();
     }
 
@@ -34,6 +35,7 @@ public abstract class BaseAccount : IAccount
     public abstract AccountType AccountType { get; }
     public AccountLimits AccountLimits { get; set; }
     public DateOnly CreatedOn { get; }
+    public DateOnly LastInterest { get; set; }
 
     public bool IsExpired =>
         (DateOnly.FromDateTime(DateTime.Now).DayNumber - CreatedOn.DayNumber) > 365 * YearsTillValid;
@@ -54,13 +56,44 @@ public abstract class BaseAccount : IAccount
         transaction.Revert();
     }
 
-    public void AddInterestToBalance()
+    public void AddMonthlyInterestToBalance()
     {
         Balance += InterestAmount;
         InterestAmount = 0;
     }
 
-    public void AddCurrentInterest(DateOnly time)
+    public void AddDailyInterest()
+    {
+        decimal dailyInterestRate = AccountLimits.AnnualInterestRate / 365;
+        InterestAmount += Balance * dailyInterestRate;
+    }
+
+    public void OnNext(DateOnly value)
+    {
+        if (value < LastInterest)
+        {
+            throw new BankException("Can't time travel to the past");
+        }
+
+        while (LastInterest != value)
+        {
+            AddDailyInterest();
+
+            DateOnly nextDay = LastInterest.AddDays(1);
+            if (LastInterest.Month != nextDay.Month)
+            {
+                AddMonthlyInterestToBalance();
+            }
+
+            LastInterest = nextDay;
+        }
+    }
+
+    public void OnCompleted()
+    {
+    }
+
+    public void OnError(Exception error)
     {
     }
 }

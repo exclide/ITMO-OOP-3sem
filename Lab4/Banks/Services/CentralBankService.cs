@@ -11,12 +11,14 @@ public class CentralBankService
     private readonly ICollection<Bank> _banks;
     private readonly ICollection<Client> _clients;
     private readonly ICollection<IAccount> _accounts;
+    private readonly TimeMachine _timeMachine;
 
     public CentralBankService()
     {
         _banks = new List<Bank>();
         _clients = new List<Client>();
         _accounts = new List<IAccount>();
+        _timeMachine = new TimeMachine();
     }
 
     public Bank RegisterNewBank(string bankName, BankConfig bankConfig)
@@ -79,6 +81,8 @@ public class CentralBankService
 
         bank.AddAccount(account, client);
         _accounts.Add(account);
+
+        _timeMachine.Subscribe(account);
         return account;
     }
 
@@ -114,13 +118,5 @@ public class CentralBankService
         }
 
         client.Unsubscribe();
-    }
-
-    public void PushBanksToAddInterest()
-    {
-        foreach (var bank in _banks)
-        {
-            bank.AddInterestToBalance();
-        }
     }
 }

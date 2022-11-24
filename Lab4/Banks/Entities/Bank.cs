@@ -79,14 +79,6 @@ public class Bank : IEquatable<Bank>, IObservable<BankConfig>
         return new Unsubscriber(_observers, observer);
     }
 
-    public void AddInterestToBalance()
-    {
-        foreach (var account in _accounts)
-        {
-            account.AddInterestToBalance();
-        }
-    }
-
     private class Unsubscriber : IDisposable
     {
         private ICollection<IObserver<BankConfig>> _observers;

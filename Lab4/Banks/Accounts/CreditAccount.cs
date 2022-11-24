@@ -2,12 +2,6 @@
 
 namespace Banks.Accounts;
 
-/*
-деньги можно всегда снимать,
-можно в минус,
-фиксированная комиссия на каждую транзу, если в минусе
-*/
-
 public class CreditAccount : BaseAccount
 {
     public CreditAccount(Client client, Bank bank, int accountId, decimal depositAmount)
