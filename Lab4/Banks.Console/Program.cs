@@ -14,7 +14,7 @@ public class Program
         BankConfig sberConfig = new BankConfigBuilder()
             .SetCreditAccountComission(100)
             .SetUnverifiedTransactionLimit(5)
-            .SetDebitAccountRate(5)
+            .SetDebitAccountRate(365)
             .SetDepositAccountRanges(500, 1000)
             .SetDepositAccountRates(3, 4, 5)
             .GetBankConfig();

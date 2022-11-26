@@ -322,9 +322,9 @@ public class ConsoleCommands
                 var choosenClient = _cb.Clients.First(x => x.Id == clientId);
 
                 Console.Clear();
-                Console.WriteLine("1. Credit\n" +
-                                  "2. Debit\n" +
-                                  "3. Deposit\n" +
+                Console.WriteLine("1. Debit\n" +
+                                  "2. Deposit\n" +
+                                  "3. Credit\n" +
                                   "Choose account type...");
                 var accountType = (AccountType)(Convert.ToInt32(Console.ReadLine()) - 1);
 
