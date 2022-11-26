@@ -8,6 +8,10 @@ public class Client : IEquatable<Client>, IObserver<BankConfig>
     private readonly int _id;
     private readonly ICollection<IAccount> _accounts;
     private IDisposable _unsubscriber;
+    private ClientName _clientName;
+    private ClientAddress _clientAddress;
+    private ClientPassportId _clientPassportId;
+
     public Client(ClientName clientName, ClientAddress clientAddress, ClientPassportId clientPassportId, int id)
     {
         ArgumentNullException.ThrowIfNull(clientName);
@@ -19,9 +23,36 @@ public class Client : IEquatable<Client>, IObserver<BankConfig>
         _accounts = new List<IAccount>();
     }
 
-    public ClientName ClientName { get; set; }
-    public ClientAddress ClientAddress { get; set; }
-    public ClientPassportId ClientPassportId { get; set; }
+    public ClientName ClientName
+    {
+        get => _clientName;
+        set
+        {
+            ArgumentNullException.ThrowIfNull(value);
+            _clientName = value;
+        }
+    }
+
+    public ClientAddress ClientAddress
+    {
+        get => _clientAddress;
+        set
+        {
+            ArgumentNullException.ThrowIfNull(value);
+            _clientAddress = value;
+        }
+    }
+
+    public ClientPassportId ClientPassportId
+    {
+        get => _clientPassportId;
+        set
+        {
+            ArgumentNullException.ThrowIfNull(value);
+            _clientPassportId = value;
+        }
+    }
+
     public int Id => _id;
     public IEnumerable<IAccount> Accounts => _accounts;
 
