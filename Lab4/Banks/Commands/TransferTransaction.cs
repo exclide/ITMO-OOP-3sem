@@ -86,4 +86,10 @@ public class TransferTransaction : ITransaction
         _accountTo.Balance = newBalanceTo;
         _hasRun = false;
     }
+
+    public override string ToString()
+    {
+        return $"{TransactionId}. Type: Transfer, Balance before: {_beforeBalanceFrom}, " +
+               $"Transfer amount: {_transferAmount}, Acc ID: {_accountFrom.AccountId}";
+    }
 }

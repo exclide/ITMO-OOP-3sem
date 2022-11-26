@@ -22,7 +22,7 @@ public class Client : IEquatable<Client>, IObserver<BankConfig>
     public ClientName ClientName { get; set; }
     public ClientAddress ClientAddress { get; set; }
     public ClientPassportId ClientPassportId { get; set; }
-    public int Id { get; }
+    public int Id => _id;
     public IEnumerable<IAccount> Accounts => _accounts;
 
     public bool IsVerified => ClientAddress is not null && ClientPassportId is not null;

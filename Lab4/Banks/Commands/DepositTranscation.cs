@@ -55,4 +55,9 @@ public class DepositTranscation : ITransaction
         _account.Balance = newBalance;
         _hasRun = false;
     }
+
+    public override string ToString()
+    {
+        return $"{TransactionId}. Type: Deposit, Balance before: {_beforeBalance}, Deposit amount: {_depositAmount}, Acc ID: {_account.AccountId}";
+    }
 }

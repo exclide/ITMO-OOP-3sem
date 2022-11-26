@@ -39,6 +39,8 @@ public class Program
         var alphaBank = centralBank.RegisterNewBank("Alpha", alphaConfig);
 
         Client client1 = centralBank.RegisterNewClient(alphaBank, new ClientName("Ivan", "Govnov"));
+        Client client2 = centralBank.RegisterNewClient(sberBank, new ClientName("Max", "Payne"));
+        Client client3 = centralBank.RegisterNewClient(tinkBank, new ClientName("Oleg", "Tinkoff"));
 
         var cc = new ConsoleCommands(centralBank);
     }

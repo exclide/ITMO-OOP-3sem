@@ -8,8 +8,6 @@ public class ClientBuilder
     private ClientName _clientName;
     private ClientAddress _clientAddress;
     private ClientPassportId _clientPassportId;
-    private int _clientId;
-    private bool _clientIdSet;
 
     public ClientBuilder SetClientName(ClientName clientName)
     {
@@ -32,30 +30,13 @@ public class ClientBuilder
         return this;
     }
 
-    public ClientBuilder SetClientId(int clientId)
+    public Client GetClient(int clientId)
     {
-        if (clientId < 0)
-        {
-            throw new BankException("client id was negative");
-        }
-
-        _clientId = clientId;
-        _clientIdSet = true;
-        return this;
-    }
-
-    public Client GetClient()
-    {
-        if (_clientIdSet is false)
-        {
-            throw new BankException("Client ID wasn't set");
-        }
-
         if (_clientName is null)
         {
             throw new BankException("Client name was null");
         }
 
-        return new Client(_clientName, _clientAddress, _clientPassportId, _clientId);
+        return new Client(_clientName, _clientAddress, _clientPassportId, clientId);
     }
 }

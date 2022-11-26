@@ -73,4 +73,9 @@ public class WithdrawTranscation : ITransaction
         _account.Balance = newBalance;
         _hasRun = false;
     }
+
+    public override string ToString()
+    {
+        return $"{TransactionId}. Type: Withdraw, Balance before: {_beforeBalance}, Withdraw amount: {_withdrawAmount}, Acc ID: {_account.AccountId}";
+    }
 }

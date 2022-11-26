@@ -10,6 +10,7 @@ public interface IAccount : IObserver<DateOnly>
     int AccountId { get; }
     decimal Balance { get; set; }
     bool IsExpired { get; }
+    IEnumerable<ITransaction> TransactionHistory { get; }
     DateOnly CreatedOn { get; }
     DateOnly LastInterest { get; set; }
     decimal InterestAmount { get; set; }
@@ -17,6 +18,7 @@ public interface IAccount : IObserver<DateOnly>
     AccountLimits AccountLimits { get; set; }
     void MakeTransaction(ITransaction transaction);
     void RevertTransaction(ITransaction transaction);
+    void RevertTransaction(int transactionId);
     void AddDailyInterest();
     void AddMonthlyInterestToBalance();
 }

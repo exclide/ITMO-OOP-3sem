@@ -56,6 +56,17 @@ public abstract class BaseAccount : IAccount
         transaction.Revert();
     }
 
+    public void RevertTransaction(int transactionId)
+    {
+        var transaction = TransactionHistory.FirstOrDefault(x => x.TransactionId == transactionId);
+        if (transaction is null)
+        {
+            throw new BankException("Transcation not found in history");
+        }
+
+        transaction.Revert();
+    }
+
     public void AddMonthlyInterestToBalance()
     {
         var depositTranscation = new DepositTranscation(this, InterestAmount);
@@ -96,5 +107,12 @@ public abstract class BaseAccount : IAccount
 
     public void OnError(Exception error)
     {
+    }
+
+    public override string ToString()
+    {
+        return
+            $"{AccountId}. Type: {AccountType}, Balance: {Balance}, InterestBalance {InterestAmount}, Created on: {CreatedOn}, " +
+            $"Bank: {Bank.BankName}, Client: {Client.ClientName}";
     }
 }

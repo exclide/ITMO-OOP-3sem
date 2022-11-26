@@ -43,8 +43,7 @@ public class CentralBankService
         }
 
         ClientBuilder clientBuilder = new ClientBuilder()
-            .SetClientName(clientName)
-            .SetClientId(_clients.Count);
+            .SetClientName(clientName);
 
         if (clientAddress is not null)
         {
@@ -56,13 +55,13 @@ public class CentralBankService
             clientBuilder = clientBuilder.SetClientPassportId(clientPassportId);
         }
 
-        Client client = clientBuilder.GetClient();
+        Client client = clientBuilder.GetClient(_clients.Count);
 
         bank.AddClient(client);
         _clients.Add(client);
         return client;
     }
-    
+
     public Client RegisterNewClient(Bank bank, ClientBuilder clientBuilder)
     {
         var targetBank = _banks.FirstOrDefault(b => b.Equals(bank));
@@ -71,13 +70,12 @@ public class CentralBankService
             throw new BankException("Bank isn't registered in the central bank");
         }
 
-        Client client = clientBuilder.GetClient();
+        Client client = clientBuilder.GetClient(_clients.Count);
 
         bank.AddClient(client);
         _clients.Add(client);
         return client;
     }
-    
 
     public IAccount RegisterNewAccount(Bank bank, Client client, AccountType accountType, decimal depositAmount = 0)
     {
