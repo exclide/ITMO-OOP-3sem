@@ -7,7 +7,7 @@ public class WithdrawTranscation : ITransaction
 {
     private readonly IAccount _account;
     private readonly decimal _withdrawAmount;
-    private readonly AccountLimits _accountLimits;
+    private readonly IAccountLimits _accountLimits;
     private readonly decimal _beforeBalance;
     private bool _hasRun;
 
@@ -42,9 +42,9 @@ public class WithdrawTranscation : ITransaction
         }
 
         decimal newBalance = _beforeBalance - _withdrawAmount;
-        if (_accountLimits.TransactionComission > 0 && _beforeBalance < 0)
+        if (_accountLimits.TransactionCommission > 0 && _beforeBalance < 0)
         {
-            newBalance -= _accountLimits.TransactionComission;
+            newBalance -= _accountLimits.TransactionCommission;
         }
 
         if (!_accountLimits.CanGoNegative && newBalance < 0)
@@ -65,9 +65,9 @@ public class WithdrawTranscation : ITransaction
 
         decimal currentBalance = _account.Balance;
         decimal newBalance = currentBalance + _withdrawAmount;
-        if (_accountLimits.TransactionComission > 0 && _beforeBalance < 0)
+        if (_accountLimits.TransactionCommission > 0 && _beforeBalance < 0)
         {
-            newBalance += _accountLimits.TransactionComission;
+            newBalance += _accountLimits.TransactionCommission;
         }
 
         _account.Balance = newBalance;

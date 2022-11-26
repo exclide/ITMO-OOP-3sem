@@ -77,7 +77,7 @@ public class CentralBankService
         return client;
     }
 
-    public IAccount RegisterNewAccount(Bank bank, Client client, AccountType accountType, decimal depositAmount = 0)
+    public IAccount RegisterNewAccount(Bank bank, Client client, string accountType, decimal depositAmount = 0)
     {
         var targetBank = _banks.FirstOrDefault(b => b.Equals(bank));
         if (targetBank is null)
@@ -93,9 +93,9 @@ public class CentralBankService
 
         IAccount account = accountType switch
         {
-            AccountType.Credit => new CreditAccount(client, bank, _accounts.Count, _timeMachine.Date, depositAmount),
-            AccountType.Debit => new DebitAccount(client, bank, _accounts.Count, _timeMachine.Date, depositAmount),
-            AccountType.Deposit => new DepositAccount(client, bank, _accounts.Count, _timeMachine.Date, depositAmount),
+            "credit" => new CreditAccount(client, bank, _accounts.Count, _timeMachine.Date, depositAmount),
+            "debit" => new DebitAccount(client, bank, _accounts.Count, _timeMachine.Date, depositAmount),
+            "deposit" => new DepositAccount(client, bank, _accounts.Count, _timeMachine.Date, depositAmount),
             _ => throw new BankException("Account type not implemented"),
         };
 

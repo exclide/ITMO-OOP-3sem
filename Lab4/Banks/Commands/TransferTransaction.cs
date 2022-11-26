@@ -8,8 +8,8 @@ public class TransferTransaction : ITransaction
     private readonly IAccount _accountFrom;
     private readonly IAccount _accountTo;
     private readonly decimal _transferAmount;
-    private readonly AccountLimits _accountLimitsFrom;
-    private readonly AccountLimits _accountLimitsTo;
+    private readonly IAccountLimits _accountLimitsFrom;
+    private readonly IAccountLimits _accountLimitsTo;
     private readonly decimal _beforeBalanceFrom;
     private readonly decimal _beforeBalanceTo;
     private bool _hasRun;
@@ -49,9 +49,9 @@ public class TransferTransaction : ITransaction
         }
 
         decimal newBalanceFrom = _beforeBalanceFrom - _transferAmount;
-        if (_accountLimitsFrom.TransactionComission > 0 && _beforeBalanceFrom < 0)
+        if (_accountLimitsFrom.TransactionCommission > 0 && _beforeBalanceFrom < 0)
         {
-            newBalanceFrom -= _accountLimitsFrom.TransactionComission;
+            newBalanceFrom -= _accountLimitsFrom.TransactionCommission;
         }
 
         if (!_accountLimitsFrom.CanGoNegative && newBalanceFrom < 0)
@@ -77,9 +77,9 @@ public class TransferTransaction : ITransaction
         decimal currentBalanceTo = _accountTo.Balance;
         decimal newBalanceFrom = currentBalanceFrom + _transferAmount;
         decimal newBalanceTo = currentBalanceTo - _transferAmount;
-        if (_accountLimitsFrom.TransactionComission > 0 && _beforeBalanceFrom < 0)
+        if (_accountLimitsFrom.TransactionCommission > 0 && _beforeBalanceFrom < 0)
         {
-            newBalanceFrom += _accountLimitsFrom.TransactionComission;
+            newBalanceFrom += _accountLimitsFrom.TransactionCommission;
         }
 
         _accountFrom.Balance = newBalanceFrom;

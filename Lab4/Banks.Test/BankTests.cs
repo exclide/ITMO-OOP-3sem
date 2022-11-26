@@ -56,7 +56,7 @@ public class BankTests
     public void CreateDebitAccount_CheckRates()
     {
         var client = _cb.RegisterNewClient(_sber, new ClientName("Ivan", "Govnov"));
-        var account = _cb.RegisterNewAccount(_sber, client, AccountType.Debit, 100M);
+        var account = _cb.RegisterNewAccount(_sber, client, "debit", 100M);
         _cb.TimeMachine.AddMonths(1);
         Assert.Equal(131M, account.Balance);
         _cb.TimeMachine.AddMonths(1);
@@ -67,11 +67,11 @@ public class BankTests
     public void CreateDepositAccount_Transfer_ChangeBankConfig_CheckRates()
     {
         var client = _cb.RegisterNewClient(_alpha, new ClientName("Ivan", "Govnov"));
-        var account = _cb.RegisterNewAccount(_alpha, client, AccountType.Deposit, 100M);
+        var account = _cb.RegisterNewAccount(_alpha, client, "deposit", 100M);
         _cb.TimeMachine.AddMonths(1);
         Assert.Equal(193M, account.Balance);
         var client2 = _cb.RegisterNewClient(_alpha, new ClientName("Oleg", "Govnov"));
-        var account2 = _cb.RegisterNewAccount(_alpha, client, AccountType.Debit, 100M);
+        var account2 = _cb.RegisterNewAccount(_alpha, client, "debit", 100M);
         _cb.TransferFromAccountTo(account2.AccountId, account.AccountId, 7M);
         Assert.Equal(200M, account.Balance);
         Assert.Equal(93M, account2.Balance);
@@ -93,7 +93,7 @@ public class BankTests
     public void CreateAccountController_TestAccountLimits()
     {
         var client = _cb.RegisterNewClient(_alpha, new ClientName("Ivan", "Govnov"));
-        var account = _cb.RegisterNewAccount(_alpha, client, AccountType.Deposit, 100M);
+        var account = _cb.RegisterNewAccount(_alpha, client, "deposit", 100M);
         var accountController = new ClientAccountController(account);
         Assert.Throws<BankException>(() => accountController.WithdrawFromAccount(50));
         _cb.TimeMachine.AddYears(3);

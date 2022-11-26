@@ -7,7 +7,7 @@ public class DepositTranscation : ITransaction
 {
     private readonly IAccount _account;
     private readonly decimal _depositAmount;
-    private readonly AccountLimits _accountLimits;
+    private readonly IAccountLimits _accountLimits;
     private readonly decimal _beforeBalance;
     private bool _hasRun;
 

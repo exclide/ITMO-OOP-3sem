@@ -326,7 +326,14 @@ public class ConsoleCommands
                                   "2. Deposit\n" +
                                   "3. Credit\n" +
                                   "Choose account type...");
-                var accountType = (AccountType)(Convert.ToInt32(Console.ReadLine()) - 1);
+                string ans = Console.ReadLine();
+                string accountType = ans switch
+                {
+                    "1" => "debit",
+                    "2" => "deposit",
+                    "3" => "credit",
+                    _ => " ",
+                };
 
                 Console.Clear();
                 Console.WriteLine("Type in deposit amount\n");

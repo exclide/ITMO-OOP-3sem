@@ -32,8 +32,7 @@ public abstract class BaseAccount : IAccount
 
     public int AccountId { get; }
     public IEnumerable<ITransaction> TransactionHistory => _transactionHistory;
-    public abstract AccountType AccountType { get; }
-    public AccountLimits AccountLimits { get; set; }
+    public IAccountLimits AccountLimits { get; set; }
     public DateOnly CreatedOn { get; }
     public DateOnly LastInterest { get; set; }
 
@@ -107,12 +106,5 @@ public abstract class BaseAccount : IAccount
 
     public void OnError(Exception error)
     {
-    }
-
-    public override string ToString()
-    {
-        return
-            $"{AccountId}. Type: {AccountType}, Balance: {Balance}, InterestBalance {InterestAmount}, Created on: {CreatedOn}, " +
-            $"Bank: {Bank.BankName}, Client: {Client.ClientName}";
     }
 }

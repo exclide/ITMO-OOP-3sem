@@ -14,8 +14,7 @@ public interface IAccount : IObserver<DateOnly>
     DateOnly CreatedOn { get; }
     DateOnly LastInterest { get; set; }
     decimal InterestAmount { get; set; }
-    AccountType AccountType { get; }
-    AccountLimits AccountLimits { get; set; }
+    IAccountLimits AccountLimits { get; set; }
     void MakeTransaction(ITransaction transaction);
     void RevertTransaction(ITransaction transaction);
     void RevertTransaction(int transactionId);

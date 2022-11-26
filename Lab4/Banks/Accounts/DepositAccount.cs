@@ -8,11 +8,16 @@ public class DepositAccount : BaseAccount
     public DepositAccount(Client client, Bank bank, int accountId, DateOnly date, decimal depositAmount)
         : base(client, bank, accountId, date)
     {
-        var accountLimits = new AccountLimits(this, depositAmount);
+        var accountLimits = new DepositAccountLimits(this, depositAmount);
 
         AccountLimits = accountLimits;
         Balance = depositAmount;
     }
 
-    public override AccountType AccountType => AccountType.Deposit;
+    public override string ToString()
+    {
+        return
+            $"{AccountId}. Type: Deposit, Balance: {Balance}, InterestBalance {InterestAmount}, Created on: {CreatedOn}, " +
+            $"Bank: {Bank.BankName}, Client: {Client.ClientName}";
+    }
 }
