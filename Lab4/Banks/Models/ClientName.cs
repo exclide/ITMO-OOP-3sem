@@ -20,6 +20,11 @@ public class ClientName
         LastName = lastName;
     }
 
+    public override string ToString()
+    {
+        return $"{nameof(FirstName)}: {FirstName}, {nameof(LastName)}: {LastName}";
+    }
+
     public string FirstName { get; }
     public string LastName { get; }
 }

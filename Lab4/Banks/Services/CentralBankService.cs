@@ -23,6 +23,9 @@ public class CentralBankService
     }
 
     public TimeMachine TimeMachine => _timeMachine;
+    public IEnumerable<Bank> Banks => _banks;
+    public IEnumerable<Client> Clients => _clients;
+    public IEnumerable<IAccount> Accounts => _accounts;
 
     public Bank RegisterNewBank(string bankName, BankConfig bankConfig)
     {
@@ -59,6 +62,22 @@ public class CentralBankService
         _clients.Add(client);
         return client;
     }
+    
+    public Client RegisterNewClient(Bank bank, ClientBuilder clientBuilder)
+    {
+        var targetBank = _banks.FirstOrDefault(b => b.Equals(bank));
+        if (targetBank is null)
+        {
+            throw new BankException("Bank isn't registered in the central bank");
+        }
+
+        Client client = clientBuilder.GetClient();
+
+        bank.AddClient(client);
+        _clients.Add(client);
+        return client;
+    }
+    
 
     public IAccount RegisterNewAccount(Bank bank, Client client, AccountType accountType, decimal depositAmount = 0)
     {

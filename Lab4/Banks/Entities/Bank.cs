@@ -6,6 +6,7 @@ namespace Banks.Entities;
 public class Bank : IEquatable<Bank>, IObservable<BankConfig>
 {
     private readonly int _id;
+
     private readonly ICollection<Client> _clients;
     private readonly ICollection<IAccount> _accounts;
     private readonly ICollection<IObserver<BankConfig>> _observers;
@@ -27,6 +28,7 @@ public class Bank : IEquatable<Bank>, IObservable<BankConfig>
     }
 
     public string BankName { get; }
+    public int Id => _id;
 
     public BankConfig BankConfig
     {
@@ -47,6 +49,11 @@ public class Bank : IEquatable<Bank>, IObservable<BankConfig>
     public override int GetHashCode() => _id.GetHashCode();
     public override bool Equals(object obj) => Equals(obj as Bank);
     public bool Equals(Bank other) => other?._id.Equals(_id) ?? false;
+
+    public override string ToString()
+    {
+        return $"{nameof(_id)}: {_id}, {nameof(BankName)}: {BankName}, {nameof(BankConfig)}: {BankConfig}";
+    }
 
     public void AddClient(Client client)
     {

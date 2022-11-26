@@ -1,4 +1,5 @@
 ﻿using Banks.Accounts;
+using Banks.Console.ConsoleInterface;
 using Banks.Entities;
 using Banks.Models;
 using Banks.Services;
@@ -8,7 +9,6 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        /*
         var centralBank = new CentralBankService();
 
         BankConfig sberConfig = new BankConfigBuilder()
@@ -38,6 +38,8 @@ public class Program
             .GetBankConfig();
         var alphaBank = centralBank.RegisterNewBank("Alpha", alphaConfig);
 
-        Client client1 = centralBank.RegisterNewClient(alphaBank, new ClientName("Ivan", "Govnov"));*/
+        Client client1 = centralBank.RegisterNewClient(alphaBank, new ClientName("Ivan", "Govnov"));
+
+        var cc = new ConsoleCommands(centralBank);
     }
 }

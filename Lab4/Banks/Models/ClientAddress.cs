@@ -16,4 +16,9 @@ public class ClientAddress
     public int PostalCode { get; }
     public int HouseNumber { get; }
     public int ApartmentNumber { get; }
+
+    public override string ToString()
+    {
+        return $"{nameof(City)}: {City}, {nameof(StreetName)}: {StreetName}, {nameof(PostalCode)}: {PostalCode}, {nameof(HouseNumber)}: {HouseNumber}, {nameof(ApartmentNumber)}: {ApartmentNumber}";
+    }
 }
