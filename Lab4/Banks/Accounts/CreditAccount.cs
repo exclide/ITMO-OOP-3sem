@@ -13,6 +13,8 @@ public class CreditAccount : BaseAccount
         Balance = depositAmount;
     }
 
+    public override IAccountLimits AccountLimits { get; }
+
     public override string ToString()
     {
         return

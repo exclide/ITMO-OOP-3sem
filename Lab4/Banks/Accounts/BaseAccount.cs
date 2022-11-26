@@ -9,9 +9,11 @@ public abstract class BaseAccount : IAccount
     private const int YearsTillValid = 2;
     private readonly ICollection<ITransaction> _transactionHistory;
     private decimal _balance;
+    private decimal _interestAmount;
     protected BaseAccount(Client client, Bank bank, int accountId, DateOnly date)
     {
-        Balance = 0;
+        _balance = 0;
+        _interestAmount = 0;
         Client = client;
         Bank = bank;
         AccountId = accountId;
@@ -22,7 +24,20 @@ public abstract class BaseAccount : IAccount
 
     public Client Client { get; }
     public Bank Bank { get; }
-    public decimal InterestAmount { get; set; }
+
+    public decimal InterestAmount
+    {
+        get => _interestAmount;
+        set
+        {
+            if (value < 0)
+            {
+                throw new BankException("Interest can't be negative");
+            }
+
+            _interestAmount = value;
+        }
+    }
 
     public decimal Balance
     {
@@ -32,7 +47,7 @@ public abstract class BaseAccount : IAccount
 
     public int AccountId { get; }
     public IEnumerable<ITransaction> TransactionHistory => _transactionHistory;
-    public IAccountLimits AccountLimits { get; set; }
+    public abstract IAccountLimits AccountLimits { get; }
     public DateOnly CreatedOn { get; }
     public DateOnly LastInterest { get; set; }
 

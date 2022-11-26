@@ -14,6 +14,8 @@ public class DepositAccount : BaseAccount
         Balance = depositAmount;
     }
 
+    public override IAccountLimits AccountLimits { get; }
+
     public override string ToString()
     {
         return
