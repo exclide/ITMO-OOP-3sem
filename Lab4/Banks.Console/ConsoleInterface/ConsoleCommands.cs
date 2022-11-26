@@ -156,6 +156,7 @@ public class ConsoleCommands
                 ManageClients();
                 break;
             }
+
             case "2":
             {
                 Console.Clear();
@@ -163,12 +164,13 @@ public class ConsoleCommands
                 {
                     Console.WriteLine($"{client.Id}. {client.ClientName}, {client.ClientAddress ?? null}");
                 }
-                
+
                 Console.WriteLine("\nPress any key to go back\n");
                 Console.ReadLine();
                 ManageClients();
                 break;
             }
+
             case "3":
             {
                 Console.Clear();
@@ -176,13 +178,14 @@ public class ConsoleCommands
                 {
                     Console.WriteLine($"{client.Id}. {client.ClientName}, {client.ClientAddress ?? null}");
                 }
-                
+
                 Console.WriteLine("\nType client ID to change name/adr/passport\n");
                 int clientId = Convert.ToInt32(Console.ReadLine());
                 var choosenClient = _cb.Clients.First(x => x.Id == clientId);
-                
+
                 break;
             }
+
             case "4":
                 MainMenu();
                 break;
