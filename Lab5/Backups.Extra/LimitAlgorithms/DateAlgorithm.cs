@@ -16,6 +16,6 @@ public class DateAlgorithm : ILimitAlgorithm
 
     public IEnumerable<RestorePoint> Run(IEnumerable<RestorePoint> restorePoints)
     {
-        return restorePoints.SkipWhile(r => r.TimeCreated < DateLimit);
+        return restorePoints.TakeWhile(r => r.TimeCreated < DateLimit);
     }
 }
