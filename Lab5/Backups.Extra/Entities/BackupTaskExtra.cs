@@ -68,7 +68,7 @@ public class BackupTaskExtra : IBackupTask
 
         Logger.Log($"Merging {listOfRestorePoints.Count} restore points");
 
-        string postFix = "tmp";
+        string postFix = "tmp_restore";
         string targetLocation = $"{_backupTask.Config.Repository.RootPath}/{postFix}";
         foreach (var point in listOfRestorePoints)
         {
@@ -90,12 +90,6 @@ public class BackupTaskExtra : IBackupTask
             _backupTask.TaskName).ToList();
 
         _backupTask.Config.Repository.DeleteDirectory(targetLocation, true);
-
-        var restorePoint = new RestorePoint(
-                backupObjects,
-                storages,
-                listOfRestorePoints.Last().TimeCreated,
-                _backupTask.Backup.RestorePoints.Count());
 
         foreach (var point in listOfRestorePoints)
         {
