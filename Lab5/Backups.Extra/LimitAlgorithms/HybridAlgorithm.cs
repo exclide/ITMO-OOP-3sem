@@ -1,4 +1,5 @@
 ﻿using Backups.Entities;
+using Backups.Exceptions;
 using Backups.Extra.Models;
 
 namespace Backups.Extra.LimitAlgorithms;
@@ -18,6 +19,18 @@ public class HybridAlgorithm : ILimitAlgorithm
 
     public IEnumerable<RestorePoint> Run(IEnumerable<RestorePoint> restorePoints)
     {
-        return restorePoints;
+        var listOfRestorePointsList = Algorithms
+            .Select(algo => algo.Run(restorePoints));
+
+        if (ApplyAll)
+        {
+            var pointsIntersect = listOfRestorePointsList
+                .Aggregate((a, b) => a.Intersect(b));
+            return pointsIntersect;
+        }
+
+        var pointsUnion = listOfRestorePointsList
+            .Aggregate((a, b) => a.Union(b));
+        return pointsUnion;
     }
 }

@@ -21,6 +21,14 @@ public class NumberAlgorithm : ILimitAlgorithm
 
     public IEnumerable<RestorePoint> Run(IEnumerable<RestorePoint> restorePoints)
     {
-        return restorePoints;
+        var restorePointList = restorePoints.ToList();
+        int skipCount = restorePointList.Count - PointLimit;
+
+        if (skipCount <= 0)
+        {
+            return restorePointList;
+        }
+
+        return restorePointList.Skip(skipCount);
     }
 }

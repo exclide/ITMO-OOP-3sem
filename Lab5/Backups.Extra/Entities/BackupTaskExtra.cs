@@ -1,4 +1,5 @@
 ﻿using Backups.Entities;
+using Backups.Extra.Extensions;
 using Backups.Extra.LimitAlgorithms;
 using Backups.Extra.Loggers;
 using Backups.Interfaces;
@@ -48,14 +49,36 @@ public class BackupTaskExtra : IBackupTask
 
     public void ApplyLimits()
     {
-        Logger.Log($"Applying limit algorithm");
+        Logger.Log($"Applying limit algorithm {LimitAlgorithm.LimitAlgorithmType} for {_backupTask.Backup}");
+        var restorePointsToMerge = LimitAlgorithm.Run(_backupTask.Backup.RestorePoints);
+        MergeRestorePoints(restorePointsToMerge);
     }
 
     public void MergeRestorePoints(IEnumerable<RestorePoint> restorePoints)
     {
+        Logger.Log($"Merging {restorePoints.Count()} restore points");
     }
 
     public void RestoreRestorePoint(RestorePoint restorePoint)
     {
+        Logger.Log($"Restore restore point number {restorePoint.RestorePointNumber} to " +
+                   $"original repository {_backupTask.Config.Repository.GetRepositoryType()}");
+
+        string targetLocation = _backupTask.Config.Repository.RootPath;
+
+        foreach (var zip in restorePoint.Storages)
+        {
+            _backupTask.Config.Repository.UnzipZipFile(zip.Path, targetLocation);
+        }
+    }
+
+    public void RestoreRestorePoint(RestorePoint restorePoint, IRepository repository)
+    {
+        Logger.Log($"Restore restore point number {restorePoint.RestorePointNumber} to " +
+                   $"repository {repository.GetRepositoryType()} at {repository.RootPath}");
+
+        var zipFiles = restorePoint.Storages.Select(s => s.Path);
+
+        _backupTask.Config.Repository.UnzipZipFilesToRepository(zipFiles, repository);
     }
 }
