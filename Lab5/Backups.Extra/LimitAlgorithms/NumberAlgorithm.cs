@@ -1,5 +1,6 @@
 ﻿using Backups.Entities;
 using Backups.Exceptions;
+using Backups.Extra.Models;
 
 namespace Backups.Extra.LimitAlgorithms;
 
@@ -16,6 +17,7 @@ public class NumberAlgorithm : ILimitAlgorithm
     }
 
     public int PointLimit { get; }
+    public LimitAlgorithmType LimitAlgorithmType => LimitAlgorithmType.NumberAlgorithm;
 
     public IEnumerable<RestorePoint> Run(IEnumerable<RestorePoint> restorePoints)
     {

@@ -1,4 +1,5 @@
 ﻿using Backups.Entities;
+using Backups.Extra.Models;
 
 namespace Backups.Extra.LimitAlgorithms;
 
@@ -11,6 +12,7 @@ public class DateAlgorithm : ILimitAlgorithm
     }
 
     public DateTime DateLimit { get; }
+    public LimitAlgorithmType LimitAlgorithmType => LimitAlgorithmType.DateAlgorithm;
 
     public IEnumerable<RestorePoint> Run(IEnumerable<RestorePoint> restorePoints)
     {

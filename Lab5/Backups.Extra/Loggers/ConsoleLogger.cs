@@ -1,4 +1,6 @@
-﻿namespace Backups.Extra.Loggers;
+﻿using Backups.Extra.Models;
+
+namespace Backups.Extra.Loggers;
 
 public class ConsoleLogger : ILogger
 {
@@ -8,6 +10,8 @@ public class ConsoleLogger : ILogger
     {
         _prefixEnabled = prefixEnabled;
     }
+
+    public LoggerType LoggerType => LoggerType.ConsoleLogger;
 
     public void Log(string message)
     {

@@ -1,4 +1,5 @@
 ﻿using Backups.Exceptions;
+using Backups.Extra.Models;
 
 namespace Backups.Extra.Loggers;
 
@@ -22,6 +23,8 @@ public class FileLogger : ILogger
         _prefixEnabled = prefixEnabled;
         _logFilePath = logFilePath;
     }
+
+    public LoggerType LoggerType => LoggerType.FileLogger;
 
     public void Log(string message)
     {
