@@ -33,7 +33,8 @@ public static class BaseRepositoryExtension
         foreach (string newZipPath in newZipPaths)
         {
             targetRepository.UnzipZipFile(newZipPath, targetPath);
-            targetRepository.DeleteFile(newZipPath);
         }
+
+        targetRepository.DeleteDirectory(tempZipFolder, true);
     }
 }

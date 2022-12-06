@@ -4,9 +4,6 @@ namespace Backups.Entities;
 
 public class RestorePoint : IEquatable<RestorePoint>
 {
-    private readonly ICollection<BackupObject> _backupObjects;
-    private readonly ICollection<Storage> _storages;
-
     public RestorePoint(
         IEnumerable<BackupObject> backupObjects,
         IEnumerable<Storage> storages,
@@ -17,20 +14,20 @@ public class RestorePoint : IEquatable<RestorePoint>
         ArgumentNullException.ThrowIfNull(storages);
         ArgumentNullException.ThrowIfNull(timeCreated);
 
-        _backupObjects = new List<BackupObject>(backupObjects);
-        _storages = new List<Storage>(storages);
+        BackupObjects = new List<BackupObject>(backupObjects);
+        Storages = new List<Storage>(storages);
         TimeCreated = timeCreated;
         RestorePointNumber = restorePointNumber;
     }
 
     public DateTime TimeCreated { get; }
     public int RestorePointNumber { get; }
-    public IEnumerable<BackupObject> BackupObjects => _backupObjects;
-    public IEnumerable<Storage> Storages => _storages;
+    public ICollection<BackupObject> BackupObjects { get; set; }
+    public ICollection<Storage> Storages { get; set; }
 
     public override string ToString()
     {
-        return $"{nameof(_backupObjects)}: {_backupObjects}, {nameof(_storages)}: {_storages}, " +
+        return $"{nameof(BackupObjects)}: {BackupObjects}, {nameof(Storages)}: {Storages}, " +
                $"{nameof(TimeCreated)}: {TimeCreated}, {nameof(RestorePointNumber)}: {RestorePointNumber}";
     }
 

@@ -26,7 +26,7 @@ public class NumberAlgorithm : ILimitAlgorithm
 
         if (takeCount <= 0)
         {
-            return restorePointList;
+            return new List<RestorePoint>();
         }
 
         return restorePointList.Take(takeCount);

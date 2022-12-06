@@ -13,6 +13,7 @@ public interface IRepository
     bool FileExists(string path);
     byte[] ReadAllBytes(string path);
     void DeleteFile(string path);
+    void DeleteDirectory(string path, bool recursive);
     Stream OpenFile(string path, FileMode fileMode, FileAccess fileAccess);
     void WriteAllBytes(string path, byte[] bytes);
     string PathCombine(string path1, string path2);
