@@ -28,6 +28,7 @@ public abstract class BaseRepository : IRepository
     }
 
     public string RootPath { get; }
+    public IFileSystem FileSystem => _fileSystem;
 
     public void CreateDirectory(string path) => _fileSystem.CreateDirectory(path);
     public Stream CreateFile(string path) => _fileSystem.CreateFile(path);

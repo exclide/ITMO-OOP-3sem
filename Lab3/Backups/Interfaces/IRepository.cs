@@ -7,6 +7,7 @@ namespace Backups.Interfaces;
 public interface IRepository
 {
     public string RootPath { get; }
+    public IFileSystem FileSystem { get; }
     void CreateDirectory(string path);
     Stream CreateFile(string path);
     bool DirectoryExists(string path);
