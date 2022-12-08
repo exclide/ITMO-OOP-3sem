@@ -122,7 +122,7 @@ public class BackupTaskExtraTests
         Assert.True(cfg.Repository.FileExists(filePath2));
         Assert.True(cfg.Repository.FileExists(filePath3));
 
-        var physicalRepo = new PhysicalRepository("/mnt/c/test");
+        var physicalRepo = new InMemoryRepository("/mnt/c/test");
         backupTask.RestoreRestorePoint(restorePoint, physicalRepo);
         var paths = physicalRepo.EnumeratePaths(physicalRepo.RootPath);
         var fileNames = paths.Select(x => x.FullName).Select(Path.GetFileName).ToList();
