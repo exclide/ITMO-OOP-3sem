@@ -1,5 +1,7 @@
 ﻿using Backups.Entities;
 using Backups.Interfaces;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Backups.Models;
 
@@ -16,10 +18,12 @@ public class Config
         Algorithm = algorithm;
     }
 
+    [JsonIgnore]
     public StorageAlgorithmType StorageAlgorithmType { get; }
+    [JsonIgnore]
     public RepositoryType RepositoryType { get; }
-    public IStorageAlgorithm Algorithm { get; }
     public IRepository Repository { get; }
+    public IStorageAlgorithm Algorithm { get; }
 
     public override string ToString()
     {

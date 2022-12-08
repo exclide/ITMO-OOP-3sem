@@ -2,11 +2,13 @@
 using Backups.Interfaces;
 using Backups.Models;
 using Backups.StorageAlgorithms;
+using Newtonsoft.Json;
 
 namespace Backups.Entities;
 
 public class BackupTask : IBackupTask, IEquatable<BackupTask>
 {
+    [JsonProperty]
     private readonly ICollection<BackupObject> _trackedObjects;
 
     public BackupTask(Config config, string taskName, int id)
@@ -24,7 +26,10 @@ public class BackupTask : IBackupTask, IEquatable<BackupTask>
         Id = id;
     }
 
-    public Backup Backup { get; }
+    [JsonIgnore]
+    public ICollection<BackupObject> TrackedObjects => _trackedObjects;
+
+    public Backup Backup { get; set; }
     public Config Config { get; }
     public string TaskName { get; }
     public int Id { get; }

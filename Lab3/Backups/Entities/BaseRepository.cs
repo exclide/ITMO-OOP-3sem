@@ -63,7 +63,6 @@ public abstract class BaseRepository : IRepository
             string filePath = $"{zipRoot}{Path.GetFileName(path)}";
             var file = zip.CreateEntry(filePath);
             using var entryStream = file.Open();
-            Console.WriteLine(file.FullName);
             entryStream.Write(ReadAllBytes(path));
         }
     }
