@@ -125,7 +125,7 @@ public class BackupTaskExtraTests
         var physicalRepo = new InMemoryRepository("/mnt/c/test");
         backupTask.RestoreRestorePoint(restorePoint, physicalRepo);
         var paths = physicalRepo.EnumeratePaths(physicalRepo.RootPath);
-        var fileNames = paths.Select(x => x.FullName).Select(Path.GetFileName).ToList();
+        var fileNames = paths.Select(x => Path.GetFileName(x.FullName)).ToList();
         Assert.Contains("file1", fileNames);
         Assert.Contains("file2", fileNames);
         Assert.Contains("file3", fileNames);
