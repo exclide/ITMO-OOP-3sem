@@ -45,6 +45,11 @@ public static class BaseRepositoryExtension
         IRepository targetRepository)
     {
         string tmpFolder = $"{baseRepository.RootPath}/tmpFolder";
+        if (!baseRepository.DirectoryExists(tmpFolder))
+        {
+            baseRepository.CreateDirectory(tmpFolder);
+        }
+
         foreach (var zipFile in files)
         {
             baseRepository.UnzipZipFile(zipFile, tmpFolder);
@@ -52,7 +57,8 @@ public static class BaseRepositoryExtension
 
         foreach (var file in baseRepository.EnumeratePaths(tmpFolder))
         {
-            baseRepository.CopyFileCrossRepository(file.FullName, targetRepository, tmpFolder, true);
+            string targetFilePath = $"{targetRepository.RootPath}/{Path.GetFileName(file.FullName)}";
+            baseRepository.CopyFileCrossRepository(file.FullName, targetRepository, targetFilePath, true);
         }
 
         baseRepository.DeleteDirectory(tmpFolder, true);
