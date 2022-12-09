@@ -42,7 +42,8 @@ public class BackupTask : IBackupTask, IEquatable<BackupTask>
 
     public void CreateRestorePoint()
     {
-        int restorePointNumber = Backup.RestorePoints.Count();
+        int restorePointNumber = Backup.RestorePoints.Any() ? Backup.RestorePoints.Last().RestorePointNumber : 0;
+        restorePointNumber++;
         IEnumerable<Storage> storages = Config.Algorithm.RunAlgo(
             Config.Repository, _trackedObjects, restorePointNumber, TaskName);
         var restorePoint = new RestorePoint(_trackedObjects, storages, DateTime.Now, restorePointNumber);

@@ -81,14 +81,13 @@ public class Program
     public static void CreateTasks()
     {
         AddTaskAndRestorePoints(new NumberAlgorithm(1));
-        /*
         AddTaskAndRestorePoints(new DateAlgorithm(DateTime.Now.AddDays(1)));
         AddTaskAndRestorePoints(new NumberAlgorithm(10));
         AddTaskAndRestorePoints(new DateAlgorithm(DateTime.Now.AddDays(-1)));
         AddTaskAndRestorePoints(new HybridAlgorithm(
             new List<ILimitAlgorithm>() {
             new NumberAlgorithm(5), new DateAlgorithm(DateTime.Now.AddMinutes(1)) }, 
-            true));*/
+            true));
     }
 
     public static void DeleteAllTasks()
