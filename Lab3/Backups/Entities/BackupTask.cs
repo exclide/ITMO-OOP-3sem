@@ -26,10 +26,7 @@ public class BackupTask : IBackupTask, IEquatable<BackupTask>
         Id = id;
     }
 
-    [JsonIgnore]
-    public ICollection<BackupObject> TrackedObjects => _trackedObjects;
-
-    public Backup Backup { get; set; }
+    public Backup Backup { get; }
     public Config Config { get; }
     public string TaskName { get; }
     public int Id { get; }
