@@ -43,6 +43,9 @@ public class BackupTaskExtra : IBackupTask
     {
         Logger.Log($"Deleting restore point number {restorePoint.RestorePointNumber}");
         _backupTask.DeleteRestorePoint(restorePoint);
+        string restorePointPath = $"{_backupTask.Config.Repository.RootPath}/" +
+                                  $"{_backupTask.TaskName}/{restorePoint.RestorePointNumber}";
+        _backupTask.Config.Repository.DeleteDirectory(restorePointPath, true);
     }
 
     public void TrackObject(BackupObject backupObject)
@@ -131,7 +134,7 @@ public class BackupTaskExtra : IBackupTask
         {
             if (!point.Equals(lastRestorePoint))
             {
-                _backupTask.Backup.DeleteRestorePoint(point);
+                DeleteRestorePoint(point);
             }
         }
 

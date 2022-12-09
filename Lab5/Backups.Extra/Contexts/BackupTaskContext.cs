@@ -79,4 +79,24 @@ public class BackupTaskContext
             serializer.Serialize(file, backupTask);
         }
     }
+
+    public void DeleteTask(BackupTaskExtra backupTaskExtra)
+    {
+        var backupTask = BackupTaskExtras.FirstOrDefault(t => t.Id == backupTaskExtra.Id);
+        if (backupTask is null)
+        {
+            throw new BackupException($"Delete failed, can't find backup task with the id {backupTaskExtra.Id}");
+        }
+
+        string filePath = $"{BackupTasksPath}\\{backupTask.Id}";
+        File.Delete(filePath);
+        BackupTaskExtras.Remove(backupTaskExtra);
+    }
+
+    public void DeleteAllTasks()
+    {
+        BackupTaskExtras.Clear();
+        Directory.Delete(BackupTasksPath, true);
+        Directory.CreateDirectory(BackupTasksPath);
+    }
 }
