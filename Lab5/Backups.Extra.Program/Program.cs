@@ -95,26 +95,28 @@ public class Program
         BackupController.DeleteAllBackupTasks();
     }
 
-    public static void CheckNumberOfRestorePointsForAllTasks()
+    public static void GetInfoForSavedTasks()
     {
         var tasks = BackupContext.BackupTaskExtras;
         foreach (var task in tasks)
         {
-            Console.WriteLine($"RPs for task {task.BackupTask.TaskName}: " +
-                              $"{task.BackupTask.Backup.RestorePoints.Count()}");
+            Console.WriteLine($"Task name: {task.BackupTask.TaskName}, ID: {task.Id}");
+            Console.WriteLine($"Task logger type: {task.Logger.LoggerType}, limit type: {task.LimitAlgorithm.LimitAlgorithmType}");
+            Console.WriteLine($"Task config: {task.BackupTask.Backup.Config} " +
+                              $"Task RPs count: {task.BackupTask.Backup.RestorePoints.Count()}");
+            Console.WriteLine();
         }
     }
 
     public static void Main(string[] args)
     {
-        /*
         while (true)
         {
             Console.WriteLine("1. CreateTasks\n" +
                               "2. ReadTasksAddTrackedCreateNewRestorePoints\n" +
                               "3. ReadTasksCreateRestorePointsCheckLimitAlgorithms\n" +
                               "4. DeleteAllTasks\n" +
-                              "5. CheckNumberOfRestorePointsForAllTasks\n" +
+                              "5. GetInfoForSavedTasks\n" +
                               "Type number");
             string input = Console.ReadLine();
             switch (input)
@@ -132,10 +134,9 @@ public class Program
                     DeleteAllTasks();
                     break;
                 case "5":
-                    CheckNumberOfRestorePointsForAllTasks();
+                    GetInfoForSavedTasks();
                     break;
             }
         }
-        */
     }
 }

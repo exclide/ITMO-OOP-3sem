@@ -11,6 +11,9 @@ public class BackupTask : IBackupTask, IEquatable<BackupTask>
     [JsonProperty]
     private readonly ICollection<BackupObject> _trackedObjects;
 
+    [JsonProperty]
+    private int _restorePointCount;
+
     public BackupTask(Config config, string taskName, int id)
     {
         ArgumentNullException.ThrowIfNull(config);
@@ -26,7 +29,7 @@ public class BackupTask : IBackupTask, IEquatable<BackupTask>
         Id = id;
     }
 
-    public Backup Backup { get; }
+    public Backup Backup { get; set; }
     public Config Config { get; }
     public string TaskName { get; }
     public int Id { get; }
@@ -39,8 +42,7 @@ public class BackupTask : IBackupTask, IEquatable<BackupTask>
 
     public void CreateRestorePoint()
     {
-        int restorePointNumber = Backup.RestorePoints.Any() ? Backup.RestorePoints.Last().RestorePointNumber : 0;
-        restorePointNumber++;
+        int restorePointNumber = _restorePointCount++;
         IEnumerable<Storage> storages = Config.Algorithm.RunAlgo(
             Config.Repository, _trackedObjects, restorePointNumber, TaskName);
         var restorePoint = new RestorePoint(_trackedObjects, storages, DateTime.Now, restorePointNumber);
