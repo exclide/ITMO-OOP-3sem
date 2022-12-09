@@ -107,6 +107,7 @@ public class Program
 
     public static void Main(string[] args)
     {
+        /*
         while (true)
         {
             Console.WriteLine("1. CreateTasks\n" +
@@ -135,5 +136,6 @@ public class Program
                     break;
             }
         }
+        */
     }
 }
