@@ -29,7 +29,7 @@ public class BackupTask : IBackupTask, IEquatable<BackupTask>
         Id = id;
     }
 
-    public Backup Backup { get; set; }
+    public Backup Backup { get; private set; }
     public Config Config { get; }
     public string TaskName { get; }
     public int Id { get; }

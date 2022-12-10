@@ -23,7 +23,7 @@ public class Program
             .SetPhysicalFileSystem()
             .GetConfig();
 
-        string taskName = $"Task{BackupContext.BackupTaskExtras.Count}";
+        string taskName = $"Task{BackupContext.BackupTaskExtras.Count()}";
 
         var back = BackupController.AddBackupTaskExtra(
             cfg,

@@ -6,6 +6,7 @@ namespace Backups.Extra.Contexts;
 
 public class BackupTaskContext
 {
+    private readonly List<BackupTaskExtra> _backupTaskExtras;
     public BackupTaskContext(string backupTasksPath)
     {
         if (string.IsNullOrEmpty(backupTasksPath))
@@ -13,7 +14,7 @@ public class BackupTaskContext
             throw new BackupException($"{nameof(backupTasksPath)} was null or empty");
         }
 
-        BackupTaskExtras = new List<BackupTaskExtra>();
+        _backupTaskExtras = new List<BackupTaskExtra>();
         BackupTasksPath = backupTasksPath;
 
         if (!Directory.Exists(backupTasksPath))
@@ -23,19 +24,17 @@ public class BackupTaskContext
 
         foreach (var backupTask in Directory.EnumerateFiles(backupTasksPath))
         {
-            using (StreamReader file = File.OpenText(backupTask))
-            {
-                var serializer = new JsonSerializer();
-                serializer.TypeNameHandling = TypeNameHandling.Auto;
-                serializer.NullValueHandling = NullValueHandling.Ignore;
-                serializer.Formatting = Formatting.Indented;
-                var task = (BackupTaskExtra)serializer.Deserialize(file, typeof(BackupTaskExtra));
-                BackupTaskExtras.Add(task);
-            }
+            using StreamReader file = File.OpenText(backupTask);
+            var serializer = new JsonSerializer();
+            serializer.TypeNameHandling = TypeNameHandling.Auto;
+            serializer.NullValueHandling = NullValueHandling.Ignore;
+            serializer.Formatting = Formatting.Indented;
+            var task = (BackupTaskExtra)serializer.Deserialize(file, typeof(BackupTaskExtra));
+            _backupTaskExtras.Add(task);
         }
     }
 
-    public List<BackupTaskExtra> BackupTaskExtras { get; }
+    public IEnumerable<BackupTaskExtra> BackupTaskExtras => _backupTaskExtras;
     public string BackupTasksPath { get; }
 
     public BackupTaskExtra GetTask(int taskId)
@@ -51,15 +50,13 @@ public class BackupTaskContext
 
     public void AddTask(BackupTaskExtra backupTaskExtra)
     {
-        BackupTaskExtras.Add(backupTaskExtra);
-        using (StreamWriter file = File.CreateText($"{BackupTasksPath}\\{backupTaskExtra.Id}"))
-        {
-            var serializer = new JsonSerializer();
-            serializer.TypeNameHandling = TypeNameHandling.Auto;
-            serializer.NullValueHandling = NullValueHandling.Ignore;
-            serializer.Formatting = Formatting.Indented;
-            serializer.Serialize(file, backupTaskExtra);
-        }
+        _backupTaskExtras.Add(backupTaskExtra);
+        using StreamWriter file = File.CreateText($"{BackupTasksPath}\\{backupTaskExtra.Id}");
+        var serializer = new JsonSerializer();
+        serializer.TypeNameHandling = TypeNameHandling.Auto;
+        serializer.NullValueHandling = NullValueHandling.Ignore;
+        serializer.Formatting = Formatting.Indented;
+        serializer.Serialize(file, backupTaskExtra);
     }
 
     public void UpdateTask(BackupTaskExtra backupTaskExtra)
@@ -70,14 +67,12 @@ public class BackupTaskContext
             throw new BackupException($"Update failed, can't find backup task with the id {backupTaskExtra.Id}");
         }
 
-        using (StreamWriter file = File.CreateText($"{BackupTasksPath}\\{backupTask.Id}"))
-        {
-            var serializer = new JsonSerializer();
-            serializer.TypeNameHandling = TypeNameHandling.Auto;
-            serializer.NullValueHandling = NullValueHandling.Ignore;
-            serializer.Formatting = Formatting.Indented;
-            serializer.Serialize(file, backupTask);
-        }
+        using StreamWriter file = File.CreateText($"{BackupTasksPath}\\{backupTask.Id}");
+        var serializer = new JsonSerializer();
+        serializer.TypeNameHandling = TypeNameHandling.Auto;
+        serializer.NullValueHandling = NullValueHandling.Ignore;
+        serializer.Formatting = Formatting.Indented;
+        serializer.Serialize(file, backupTask);
     }
 
     public void DeleteTask(BackupTaskExtra backupTaskExtra)
@@ -90,12 +85,12 @@ public class BackupTaskContext
 
         string filePath = $"{BackupTasksPath}\\{backupTask.Id}";
         File.Delete(filePath);
-        BackupTaskExtras.Remove(backupTaskExtra);
+        _backupTaskExtras.Remove(backupTaskExtra);
     }
 
     public void DeleteAllTasks()
     {
-        BackupTaskExtras.Clear();
+        _backupTaskExtras.Clear();
         Directory.Delete(BackupTasksPath, true);
         Directory.CreateDirectory(BackupTasksPath);
     }

@@ -21,7 +21,7 @@ public class BackupTasksExtraController
     public BackupTaskExtra AddBackupTaskExtra(Config config, ILogger logger, ILimitAlgorithm limitAlgorithm, string backupTaskName)
     {
         var backupTaskExtra = new BackupTaskExtra(
-            new BackupTask(config, backupTaskName, _backupTaskContext.BackupTaskExtras.Count),
+            new BackupTask(config, backupTaskName, _backupTaskContext.BackupTaskExtras.Count()),
             logger,
             limitAlgorithm);
 
