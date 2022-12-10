@@ -1,10 +1,12 @@
 ﻿using Backups.Exceptions;
 using Backups.Models;
+using Newtonsoft.Json;
 
 namespace Backups.Entities;
 
 public class Backup
 {
+    [JsonProperty]
     private readonly ICollection<RestorePoint> _restorePoints;
 
     public Backup(Config config)
@@ -14,6 +16,7 @@ public class Backup
         _restorePoints = new List<RestorePoint>();
     }
 
+    [JsonIgnore]
     public IEnumerable<RestorePoint> RestorePoints => _restorePoints;
     public Config Config { get; }
 
