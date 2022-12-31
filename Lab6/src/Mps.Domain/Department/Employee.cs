@@ -11,7 +11,21 @@ public class Employee
         FullName = fullName;
     }
 
-    public Guid Id { get; }
-    public Account Account { get; }
-    public FullName FullName { get; }
+    public Guid Id { get; protected set; }
+    public Account Account { get; protected set; }
+    public FullName FullName { get; protected set; }
+    public Department? Department { get; protected set; }
+    public Employee? BossEmployee { get; protected set; }
+
+    public void SetDepartment(Department department)
+    {
+        ArgumentNullException.ThrowIfNull(department);
+        Department = department;
+    }
+
+    public void SetBossEmployee(BossEmployee bossEmployee)
+    {
+        ArgumentNullException.ThrowIfNull(bossEmployee);
+        BossEmployee = bossEmployee;
+    }
 }

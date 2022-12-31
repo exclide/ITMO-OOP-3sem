@@ -1,18 +1,19 @@
-﻿using Mps.Domain.Primitives;
+﻿using System.Net.Mail;
+using Mps.Domain.Primitives;
 
 namespace Mps.Domain.ValueObjects;
 
 public class EmailAddress : ValueObject
 {
-    public EmailAddress(string email)
+    public EmailAddress(string mailAddress)
     {
-        Email = email;
+        MailAddress = new MailAddress(mailAddress);
     }
 
-    public string Email { get; }
+    public MailAddress MailAddress { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        yield return Email;
+        yield return MailAddress;
     }
 }

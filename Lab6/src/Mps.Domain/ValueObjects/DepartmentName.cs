@@ -1,12 +1,18 @@
-﻿using Mps.Domain.Primitives;
+﻿using Mps.Domain.Exceptions;
+using Mps.Domain.Primitives;
 
 namespace Mps.Domain.ValueObjects;
 
 public class DepartmentName : ValueObject
 {
-    public DepartmentName(string name)
+    public DepartmentName(string departmentName)
     {
-        Name = name;
+        if (string.IsNullOrWhiteSpace(departmentName))
+        {
+            throw new MpsDomainExcpetion($"{nameof(departmentName)} was null or empty");
+        }
+
+        Name = departmentName;
     }
 
     public string Name { get; }
