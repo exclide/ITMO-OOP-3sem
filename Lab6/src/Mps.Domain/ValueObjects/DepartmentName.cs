@@ -5,17 +5,17 @@ namespace Mps.Domain.ValueObjects;
 
 public class DepartmentName : ValueObject
 {
-    public DepartmentName(string departmentName)
+    public DepartmentName(string name)
     {
-        if (string.IsNullOrWhiteSpace(departmentName))
+        if (string.IsNullOrWhiteSpace(name))
         {
-            throw new MpsDomainExcpetion($"{nameof(departmentName)} was null or empty");
+            throw new MpsDomainException($"{nameof(name)} was null or empty");
         }
 
-        Name = departmentName;
+        Name = name;
     }
 
-    public string Name { get; }
+    public string Name { get; private set; }
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Name;

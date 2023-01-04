@@ -9,18 +9,18 @@ public class AccountLogin : ValueObject
     {
         if (string.IsNullOrWhiteSpace(login))
         {
-            throw new MpsDomainExcpetion($"{nameof(login)} was null or empty");
+            throw new MpsDomainException($"{nameof(login)} was null or empty");
         }
 
         if (login.Length is < 3 or > 20)
         {
-            throw new MpsDomainExcpetion($"Incorrect login length: {login.Length}");
+            throw new MpsDomainException($"Incorrect login length: {login.Length}");
         }
 
         Login = login;
     }
 
-    public string Login { get; }
+    public string Login { get; private set; }
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Login;

@@ -1,6 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using Mps.Application.Extensions;
+using Mps.Infrastructure.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddApplication();
+builder.Services.AddDataAccess(x => x
+    .UseLazyLoadingProxies()
+    .UseNpgsql("Host=localhost;Port=5433;Database=ex;Username=postgres;Password=123"));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

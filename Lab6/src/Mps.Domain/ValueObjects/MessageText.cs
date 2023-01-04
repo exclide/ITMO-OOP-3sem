@@ -9,18 +9,18 @@ public class MessageText : ValueObject
     {
         if (string.IsNullOrWhiteSpace(text))
         {
-            throw new MpsDomainExcpetion($"{nameof(text)} was null or empty");
+            throw new MpsDomainException($"{nameof(text)} was null or empty");
         }
 
         if (text.Length is < 3 or > 1000)
         {
-            throw new MpsDomainExcpetion($"Invalid text length: {text.Length}");
+            throw new MpsDomainException($"Invalid text length: {text.Length}");
         }
 
         Text = text;
     }
 
-    public string Text { get; }
+    public string Text { get; private set; }
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Text;

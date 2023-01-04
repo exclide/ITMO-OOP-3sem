@@ -11,11 +11,15 @@ public class Employee
         FullName = fullName;
     }
 
+    protected Employee()
+    {
+    }
+
     public Guid Id { get; protected set; }
-    public Account Account { get; protected set; }
-    public FullName FullName { get; protected set; }
-    public Department? Department { get; protected set; }
-    public Employee? BossEmployee { get; protected set; }
+    public virtual Account? Account { get; protected set; }
+    public FullName? FullName { get; protected set; }
+    public virtual Department? Department { get; protected set; }
+    public virtual Employee? BossEmployee { get; protected set; }
 
     public void SetDepartment(Department department)
     {

@@ -20,10 +20,14 @@ public class Report
         MessagesCountByDevice = new List<MessageCountByDevice>(messagesCountByDevice);
     }
 
-    public Guid Id { get; }
-    public DateTime DateCreated { get; }
-    public MessageCount MessagesTotal { get; }
-    public MessageCount MessagesRead { get; }
-    public MessageCount MessagesProcessed { get; }
-    public IReadOnlyCollection<MessageCountByDevice> MessagesCountByDevice { get; }
+    private Report()
+    {
+    }
+
+    public Guid Id { get; private set; }
+    public DateTime DateCreated { get; private set; }
+    public MessageCount? MessagesTotal { get; private set; }
+    public MessageCount? MessagesRead { get; private set; }
+    public MessageCount? MessagesProcessed { get; private set; }
+    public IReadOnlyCollection<MessageCountByDevice>? MessagesCountByDevice { get; private set; }
 }

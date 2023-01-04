@@ -11,8 +11,12 @@ public abstract class DeviceBase
         Id = id;
     }
 
-    public Guid Id { get; }
-    public IReadOnlyCollection<MessageBase> Messages => _messages;
+    protected DeviceBase()
+    {
+    }
+
+    public Guid Id { get; private set; }
+    public virtual IReadOnlyCollection<MessageBase> Messages => _messages;
 
     public IReadOnlyCollection<MessageBase> GetMessagesForDevice()
     {

@@ -9,13 +9,13 @@ public class AccountPassHash : ValueObject
     {
         if (string.IsNullOrWhiteSpace(passHash))
         {
-            throw new MpsDomainExcpetion($"{nameof(passHash)} was null or empty");
+            throw new MpsDomainException($"{nameof(passHash)} was null or empty");
         }
 
         PassHash = passHash;
     }
 
-    public string PassHash { get; }
+    public string PassHash { get; private set; }
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return PassHash;

@@ -4,8 +4,11 @@ namespace Mps.Domain.Message;
 
 public class PhoneMessage : MessageBase
 {
-    public PhoneMessage(Guid id, MessageText message, Guid targetDeviceId, MessageState messageState, DateTime dateReceived)
+    public PhoneMessage(Guid id, MessageText message, Guid targetDeviceId, MessageState messageState, DateTime dateReceived, PhoneNumber phoneNumber)
         : base(id, message, targetDeviceId, messageState, dateReceived)
     {
+        PhoneNumber = phoneNumber;
     }
+
+    public PhoneNumber PhoneNumber { get; }
 }

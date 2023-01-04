@@ -10,7 +10,11 @@ public class BossEmployee : Employee
     {
     }
 
-    public IReadOnlyCollection<Employee> PlebEmployees => _plebEmployees;
+    private BossEmployee()
+    {
+    }
+
+    public virtual IReadOnlyCollection<Employee> PlebEmployees => _plebEmployees;
 
     public void AddPlebEmployee(Employee plebEmployee)
     {

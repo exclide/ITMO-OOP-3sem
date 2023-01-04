@@ -10,7 +10,7 @@ public class EmailAddress : ValueObject
         MailAddress = new MailAddress(mailAddress);
     }
 
-    public MailAddress MailAddress { get; }
+    public MailAddress MailAddress { get; private set; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

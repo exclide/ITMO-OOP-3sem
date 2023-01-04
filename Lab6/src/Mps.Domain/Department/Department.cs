@@ -19,12 +19,16 @@ public class Department
         DepartmentName = departmentName;
     }
 
-    public Guid Id { get; }
-    public DepartmentName DepartmentName { get; private set; }
-    public BossEmployee? DepartmentBoss { get; private set; }
-    public IReadOnlyCollection<Employee> PlebEmployees => _plebEmployees;
-    public IReadOnlyCollection<Report> Reports => _reports;
-    public IReadOnlyCollection<DeviceBase> ControlledDevices => _controlledDevices;
+    private Department()
+    {
+    }
+
+    public Guid Id { get; private set; }
+    public DepartmentName? DepartmentName { get; private set; }
+    public virtual BossEmployee? DepartmentBoss { get; private set; }
+    public virtual IReadOnlyCollection<Employee> PlebEmployees => _plebEmployees;
+    public virtual IReadOnlyCollection<Report> Reports => _reports;
+    public virtual IReadOnlyCollection<DeviceBase> ControlledDevices => _controlledDevices;
 
     public void SetDepartmentBoss(BossEmployee departmentBoss)
     {
@@ -65,7 +69,7 @@ public class Department
         var report = _reports.FirstOrDefault(r => r.Id.Equals(reportId));
         if (report is null)
         {
-            throw new MpsDomainExcpetion($"Report with id {reportId} not found");
+            throw new MpsDomainException($"Report with id {reportId} not found");
         }
 
         return report;

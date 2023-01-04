@@ -9,18 +9,18 @@ public class TelegramName : ValueObject
     {
         if (string.IsNullOrWhiteSpace(telegramNick))
         {
-            throw new MpsDomainExcpetion($"{nameof(telegramNick)} was null or empty");
+            throw new MpsDomainException($"{nameof(telegramNick)} was null or empty");
         }
 
         if (telegramNick.Length is < 3 or > 20)
         {
-            throw new MpsDomainExcpetion($"Telegram name too long: {telegramNick.Length}");
+            throw new MpsDomainException($"Telegram name too long: {telegramNick.Length}");
         }
 
         TelegramNick = telegramNick;
     }
 
-    public string TelegramNick { get; }
+    public string TelegramNick { get; private set; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

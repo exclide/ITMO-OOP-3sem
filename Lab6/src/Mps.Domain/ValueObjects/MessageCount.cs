@@ -9,13 +9,13 @@ public class MessageCount : ValueObject
     {
         if (count < 0)
         {
-            throw new MpsDomainExcpetion($"{nameof(count)} was less than 0");
+            throw new MpsDomainException($"{nameof(count)} was less than 0");
         }
 
         Count = count;
     }
 
-    public int Count { get; }
+    public int Count { get; private set; }
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Count;

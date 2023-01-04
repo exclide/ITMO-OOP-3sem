@@ -11,7 +11,7 @@ public class PhoneNumber : ValueObject
     {
         if (string.IsNullOrWhiteSpace(phone))
         {
-            throw new MpsDomainExcpetion($"{nameof(phone)} was null or empty");
+            throw new MpsDomainException($"{nameof(phone)} was null or empty");
         }
 
         ValidatePhone(phone);
@@ -19,14 +19,14 @@ public class PhoneNumber : ValueObject
         Phone = phone;
     }
 
-    public string Phone { get; }
+    public string Phone { get; private set; }
 
     public void ValidatePhone(string phone)
     {
         string trimmed = TrimRegex.Replace(phone, string.Empty);
         if (trimmed.Length != 11)
         {
-            throw new MpsDomainExcpetion($"Invalid phone number format. " +
+            throw new MpsDomainException($"Invalid phone number format. " +
                                          $"Phone number should be 11 digits, but is {trimmed.Length}");
         }
     }
