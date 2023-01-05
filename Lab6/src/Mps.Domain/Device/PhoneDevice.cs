@@ -12,7 +12,8 @@ public class PhoneDevice : DeviceBase
 
     private PhoneDevice()
     {
+        PhoneNumber = null!;
     }
 
-    public PhoneNumber? PhoneNumber { get; }
+    public PhoneNumber PhoneNumber { get; private set; }
 }

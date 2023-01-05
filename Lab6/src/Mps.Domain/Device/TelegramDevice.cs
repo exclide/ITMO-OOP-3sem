@@ -12,7 +12,8 @@ public class TelegramDevice : DeviceBase
 
     private TelegramDevice()
     {
+        TelegramName = null!;
     }
 
-    public TelegramName? TelegramName { get; }
+    public TelegramName TelegramName { get; private set; }
 }

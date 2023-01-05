@@ -13,13 +13,16 @@ public class Employee
 
     protected Employee()
     {
+        Account = null!;
+        FullName = null!;
     }
 
     public Guid Id { get; protected set; }
-    public virtual Account? Account { get; protected set; }
-    public FullName? FullName { get; protected set; }
+    public Account Account { get; protected set; }
+    public FullName FullName { get; protected set; }
     public virtual Department? Department { get; protected set; }
-    public virtual Employee? BossEmployee { get; protected set; }
+    public virtual BossEmployee? BossEmployee { get; protected set; }
+    public virtual EmployeeRole EmployeeRole => EmployeeRole.Pleb;
 
     public void SetDepartment(Department department)
     {

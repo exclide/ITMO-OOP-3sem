@@ -22,12 +22,16 @@ public class Report
 
     private Report()
     {
+        MessagesTotal = null!;
+        MessagesRead = null!;
+        MessagesProcessed = null!;
+        MessagesCountByDevice = null!;
     }
 
     public Guid Id { get; private set; }
     public DateTime DateCreated { get; private set; }
-    public MessageCount? MessagesTotal { get; private set; }
-    public MessageCount? MessagesRead { get; private set; }
-    public MessageCount? MessagesProcessed { get; private set; }
-    public IReadOnlyCollection<MessageCountByDevice>? MessagesCountByDevice { get; private set; }
+    public MessageCount MessagesTotal { get; private set; }
+    public MessageCount MessagesRead { get; private set; }
+    public MessageCount MessagesProcessed { get; private set; }
+    public IReadOnlyCollection<MessageCountByDevice> MessagesCountByDevice { get; private set; }
 }

@@ -13,7 +13,8 @@ public class EmailDevice : DeviceBase
 
     private EmailDevice()
     {
+        EmailAddress = null!;
     }
 
-    public EmailAddress? EmailAddress { get; }
+    public EmailAddress EmailAddress { get; private set; }
 }

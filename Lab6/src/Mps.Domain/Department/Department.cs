@@ -21,10 +21,11 @@ public class Department
 
     private Department()
     {
+        DepartmentName = null!;
     }
 
     public Guid Id { get; private set; }
-    public DepartmentName? DepartmentName { get; private set; }
+    public DepartmentName DepartmentName { get; private set; }
     public virtual BossEmployee? DepartmentBoss { get; private set; }
     public virtual IReadOnlyCollection<Employee> PlebEmployees => _plebEmployees;
     public virtual IReadOnlyCollection<Report> Reports => _reports;

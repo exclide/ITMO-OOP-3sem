@@ -4,11 +4,22 @@ namespace Mps.Domain.Message;
 
 public class PhoneMessage : MessageBase
 {
-    public PhoneMessage(Guid id, MessageText message, Guid targetDeviceId, MessageState messageState, DateTime dateReceived, PhoneNumber phoneNumber)
-        : base(id, message, targetDeviceId, messageState, dateReceived)
+    public PhoneMessage(
+        Guid id,
+        MessageText messageText,
+        Guid targetDeviceId,
+        MessageState messageState,
+        DateTime dateReceived,
+        PhoneNumber phoneNumber)
+        : base(id, messageText, targetDeviceId, messageState, dateReceived)
     {
         PhoneNumber = phoneNumber;
     }
 
-    public PhoneNumber PhoneNumber { get; }
+    private PhoneMessage()
+    {
+        PhoneNumber = null!;
+    }
+
+    public PhoneNumber PhoneNumber { get; private set; }
 }

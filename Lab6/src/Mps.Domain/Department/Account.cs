@@ -1,8 +1,9 @@
-﻿using Mps.Domain.ValueObjects;
+﻿using Mps.Domain.Primitives;
+using Mps.Domain.ValueObjects;
 
 namespace Mps.Domain.Department;
 
-public class Account
+public class Account : ValueObject
 {
     public Account(AccountLogin accountLogin, AccountPassHash accountPassHash)
     {
@@ -12,8 +13,14 @@ public class Account
 
     private Account()
     {
+        AccountLogin = null!;
+        AccountPassHash = null!;
     }
 
-    public AccountLogin? AccountLogin { get; private set; }
-    public AccountPassHash? AccountPassHash { get; private set; }
+    public AccountLogin AccountLogin { get; private set; }
+    public AccountPassHash AccountPassHash { get; private set; }
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return AccountLogin!;
+    }
 }

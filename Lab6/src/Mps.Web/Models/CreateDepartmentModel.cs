@@ -2,4 +2,4 @@
 
 namespace Mps.Web.Models;
 
-public record CreateDepartmentModel(string DepartmentName);
+public record CreateDepartmentModel(DepartmentName DepartmentName);

@@ -4,11 +4,22 @@ namespace Mps.Domain.Message;
 
 public class TelegramMessage : MessageBase
 {
-    public TelegramMessage(Guid id, MessageText message, Guid targetDeviceId, MessageState messageState, DateTime dateReceived, TelegramName telegramName)
-        : base(id, message, targetDeviceId, messageState, dateReceived)
+    public TelegramMessage(
+        Guid id,
+        MessageText messageText,
+        Guid targetDeviceId,
+        MessageState messageState,
+        DateTime dateReceived,
+        TelegramName telegramName)
+        : base(id, messageText, targetDeviceId, messageState, dateReceived)
     {
         TelegramName = telegramName;
     }
 
-    public TelegramName TelegramName { get; }
+    private TelegramMessage()
+    {
+        TelegramName = null!;
+    }
+
+    public TelegramName TelegramName { get; private set; }
 }

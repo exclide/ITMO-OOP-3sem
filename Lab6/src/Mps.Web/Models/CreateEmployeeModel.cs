@@ -3,4 +3,4 @@ using Mps.Domain.ValueObjects;
 
 namespace Mps.Web.Models;
 
-public record CreateEmployeeModel(Account Account, FullName FullName);
+public record CreateEmployeeModel(string Login, string Password, FullName FullName);

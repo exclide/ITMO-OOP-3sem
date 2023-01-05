@@ -23,7 +23,7 @@ public class DepartmentController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<DepartmentDto>> CreateAsync([FromBody] CreateDepartmentModel model)
     {
-        var command = new CreateDepartmentCommand(new DepartmentName(model.DepartmentName));
+        var command = new CreateDepartmentCommand(model.DepartmentName);
         var response = await _mediator.Send(command, CancellationToken);
 
         return Ok(response);
