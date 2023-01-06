@@ -1,14 +1,17 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mps.Application.Dtos;
 using Mps.Application.EmployeeCQ;
 using Mps.Application.MessageCQ;
+using Mps.Web.Constants;
 using Mps.Web.Models;
 
 namespace Mps.Web.Controllers;
 
 [ApiController]
 [Route("api/message")]
+[Authorize(Policy = PolicyName.PlebPolicy)]
 public class ProcessMessageController : ControllerBase
 {
     private readonly IMediator _mediator;

@@ -1,10 +1,12 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mps.Application.DepartmentCQ;
 using Mps.Application.DeviceCQ;
 using Mps.Application.Dtos;
 using Mps.Application.ReportCQ;
 using Mps.Domain.ValueObjects;
+using Mps.Web.Constants;
 using Mps.Web.Models;
 
 namespace Mps.Web.Controllers;
@@ -40,6 +42,7 @@ public class DepartmentController : ControllerBase
         return Ok(response);
     }
     
+    [Authorize(Policy = PolicyName.BossPolicy)]
     [HttpPost("{departmentId:guid}/add-employee")]
     public async Task<ActionResult<DepartmentDto>> AddEmployee(Guid departmentId, Guid employeeId)
     {
@@ -49,6 +52,7 @@ public class DepartmentController : ControllerBase
         return Ok(response);
     }
     
+    [Authorize(Policy = PolicyName.BossPolicy)]
     [HttpPost("{departmentId:guid}/create-add-email-device")]
     public async Task<ActionResult<EmailDeviceDto>> CreateAddEmailDevice(Guid departmentId, EmailAddress emailAddress)
     {
@@ -58,6 +62,7 @@ public class DepartmentController : ControllerBase
         return Ok(response);
     }
     
+    [Authorize(Policy = PolicyName.BossPolicy)]
     [HttpPost("{departmentId:guid}/create-add-phone-device")]
     public async Task<ActionResult<PhoneDeviceDto>> CreateAddPhoneDevice(Guid departmentId, PhoneNumber phoneNumber)
     {
@@ -67,6 +72,7 @@ public class DepartmentController : ControllerBase
         return Ok(response);
     }
     
+    [Authorize(Policy = PolicyName.BossPolicy)]
     [HttpPost("{departmentId:guid}/create-add-telegram-device")]
     public async Task<ActionResult<TelegramDeviceDto>> CreateAddTelegramDevice(Guid departmentId, TelegramName telegramName)
     {
@@ -76,6 +82,7 @@ public class DepartmentController : ControllerBase
         return Ok(response);
     }
     
+    [Authorize(Policy = PolicyName.BossPolicy)]
     [HttpPost("{departmentId:guid}/get-reports-from-date")]
     public async Task<ActionResult<IReadOnlyCollection<ReportDto>>> GetReportsFromDate(Guid departmentId, DateTime fromDate)
     {
@@ -85,6 +92,7 @@ public class DepartmentController : ControllerBase
         return Ok(response);
     }
     
+    [Authorize(Policy = PolicyName.BossPolicy)]
     [HttpPost("{departmentId:guid}/get-report-by-id")]
     public async Task<ActionResult<ReportDto>> GetReportById(Guid departmentId, Guid reportId)
     {
@@ -94,6 +102,7 @@ public class DepartmentController : ControllerBase
         return Ok(response);
     }
     
+    [Authorize(Policy = PolicyName.BossPolicy)]
     [HttpPost("{departmentId:guid}/form-add-report")]
     public async Task<ActionResult<ReportDto>> FormAddReport(Guid departmentId, DateTime messageDate)
     {
