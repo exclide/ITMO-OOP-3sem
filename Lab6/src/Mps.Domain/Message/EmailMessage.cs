@@ -13,13 +13,16 @@ public class EmailMessage : MessageBase
         EmailAddress emailAddress)
         : base(id, messageText, targetDeviceId, messageState, dateReceived)
     {
+        ArgumentNullException.ThrowIfNull(messageText);
+        ArgumentNullException.ThrowIfNull(emailAddress);
         EmailAddress = emailAddress;
     }
 
-    private EmailMessage()
+    protected EmailMessage()
     {
         EmailAddress = null!;
     }
 
     public EmailAddress EmailAddress { get; private set; }
+    public override MessageType MessageType => MessageType.EmailMessage;
 }

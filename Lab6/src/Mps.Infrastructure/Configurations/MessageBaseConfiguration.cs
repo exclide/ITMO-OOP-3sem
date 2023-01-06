@@ -10,5 +10,11 @@ public class MessageBaseConfiguration : IEntityTypeConfiguration<MessageBase>
     public void Configure(EntityTypeBuilder<MessageBase> builder)
     {
         builder.OwnsOne(x => x.MessageText);
+        builder
+            .ToTable("Messages")
+            .HasDiscriminator(x => x.MessageType)
+            .HasValue<PhoneMessage>(MessageType.PhoneMessage)
+            .HasValue<EmailMessage>(MessageType.EmailMessage)
+            .HasValue<TelegramMessage>(MessageType.TelegramMessage);
     }
 }

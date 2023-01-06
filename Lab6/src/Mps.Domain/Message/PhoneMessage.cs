@@ -13,13 +13,16 @@ public class PhoneMessage : MessageBase
         PhoneNumber phoneNumber)
         : base(id, messageText, targetDeviceId, messageState, dateReceived)
     {
+        ArgumentNullException.ThrowIfNull(messageText);
+        ArgumentNullException.ThrowIfNull(phoneNumber);
         PhoneNumber = phoneNumber;
     }
 
-    private PhoneMessage()
+    protected PhoneMessage()
     {
         PhoneNumber = null!;
     }
 
     public PhoneNumber PhoneNumber { get; private set; }
+    public override MessageType MessageType => MessageType.PhoneMessage;
 }

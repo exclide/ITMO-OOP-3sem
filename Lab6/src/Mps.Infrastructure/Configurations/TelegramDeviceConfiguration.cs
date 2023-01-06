@@ -10,6 +10,8 @@ public class TelegramDeviceConfiguration : IEntityTypeConfiguration<TelegramDevi
 {
     public void Configure(EntityTypeBuilder<TelegramDevice> builder)
     {
+        builder.HasBaseType<DeviceBase>();
+        builder.Navigation(x => x.TelegramName).IsRequired();
         builder.OwnsOne(x => x.TelegramName);
     }
 }

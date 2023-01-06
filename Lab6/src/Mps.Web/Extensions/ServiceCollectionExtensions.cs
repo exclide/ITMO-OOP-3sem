@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Mps.Domain.Department;
+using Mps.Web.Constants;
 
 namespace Mps.Web.Extensions;
 
@@ -30,14 +31,14 @@ internal static class ServiceCollectionExtensions
         return serviceCollection.AddAuthorization(options =>
         {
             options.DefaultPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-            options.AddPolicy("Pleb", policyBuilder =>
+            options.AddPolicy(PolicyName.PlebPolicy, policyBuilder =>
             {
                 EmployeeRole[] allowedRoles = { EmployeeRole.Pleb };
                 policyBuilder
                     .RequireClaim(ClaimTypes.Role, allowedRoles.Select(x => x.ToString("G")))
                     .Build();
             });
-            options.AddPolicy("Boss", policyBuilder =>
+            options.AddPolicy(PolicyName.BossPolicy, policyBuilder =>
             {
                 EmployeeRole[] allowedRoles = { EmployeeRole.Boss };
                 policyBuilder

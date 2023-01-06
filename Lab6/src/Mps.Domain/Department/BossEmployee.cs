@@ -8,9 +8,11 @@ public class BossEmployee : Employee
     public BossEmployee(Guid id, Account account, FullName fullName)
         : base(id, account, fullName)
     {
+        ArgumentNullException.ThrowIfNull(account);
+        ArgumentNullException.ThrowIfNull(fullName);
     }
 
-    private BossEmployee()
+    protected BossEmployee()
     {
     }
 

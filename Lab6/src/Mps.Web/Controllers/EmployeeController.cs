@@ -7,7 +7,7 @@ using Mps.Web.Models;
 namespace Mps.Web.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/employee")]
 public class EmployeeController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -19,10 +19,28 @@ public class EmployeeController : ControllerBase
 
     public CancellationToken CancellationToken => HttpContext.RequestAborted;
 
-    [HttpPost]
+    [HttpPost("create-pleb")]
     public async Task<ActionResult<EmployeeDto>> CreatePlebAsync([FromBody] CreateEmployeeModel model)
     {
         var command = new CreateEmployeeCommand(model.Login, model.Password, model.FullName);
+        var response = await _mediator.Send(command, CancellationToken);
+
+        return Ok(response);
+    }
+    
+    [HttpPost("create-boss")]
+    public async Task<ActionResult<EmployeeDto>> CreateBossAsync([FromBody] CreateEmployeeModel model)
+    {
+        var command = new CreateBossEmployeeCommand(model.Login, model.Password, model.FullName);
+        var response = await _mediator.Send(command, CancellationToken);
+
+        return Ok(response);
+    }
+    
+    [HttpPost("{employeeId:guid}/get-controlled-devices")]
+    public async Task<ActionResult<IReadOnlyCollection<EmployeeDto>>> GetControlledDevicesAsync(Guid employeeId)
+    {
+        var command = new GetControlledDevicesQuery(employeeId);
         var response = await _mediator.Send(command, CancellationToken);
 
         return Ok(response);

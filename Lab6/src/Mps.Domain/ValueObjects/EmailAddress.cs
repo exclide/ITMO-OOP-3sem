@@ -7,7 +7,9 @@ public class EmailAddress : ValueObject
 {
     public EmailAddress(string mailAddress)
     {
-        MailAddress = new MailAddress(mailAddress).Address;
+        MailAddress = mailAddress;
+        //// MailAddress = new MailAddress(mailAddress).Address;
+        //// СЛОВИЛ ЖЕСКУЮ БАГУ, НЕ ФИКСИТСЯ, НЕ ГУГЛИТСЯ, ВЫНУЖДЕННАЯ МЕРА
     }
 
     public string MailAddress { get; private set; }

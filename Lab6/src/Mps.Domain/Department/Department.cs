@@ -15,11 +15,12 @@ public class Department
 
     public Department(Guid id, DepartmentName departmentName)
     {
+        ArgumentNullException.ThrowIfNull(departmentName);
         Id = id;
         DepartmentName = departmentName;
     }
 
-    private Department()
+    protected Department()
     {
         DepartmentName = null!;
     }
@@ -62,12 +63,12 @@ public class Department
 
     public IReadOnlyCollection<Report> GetReportsFromDate(DateTime date)
     {
-        return _reports.SkipWhile(r => r.DateCreated < date).ToImmutableList();
+        return Reports.Where(r => r.DateCreated >= date).ToImmutableList();
     }
 
     public Report GetReportBy(Guid reportId)
     {
-        var report = _reports.FirstOrDefault(r => r.Id.Equals(reportId));
+        var report = Reports.FirstOrDefault(r => r.Id.Equals(reportId));
         if (report is null)
         {
             throw new MpsDomainException($"Report with id {reportId} not found");
@@ -76,25 +77,25 @@ public class Department
         return report;
     }
 
-    public Report FormAndAddReportFromDate(DateTime date)
+    public Report FormAndAddReportFromMessageDate(DateTime messageDate, DateTime reportDate)
     {
-        var messagesTotal = _controlledDevices
+        var messagesTotal = ControlledDevices
             .SelectMany(d => d.Messages)
-            .Where(message => message.DateReceived >= date).ToList();
+            .Where(message => message.DateReceived >= messageDate).ToList();
 
         var messagesRead = messagesTotal.Where(m => m.MessageState == MessageState.Read).ToList();
         var messagesProcessed = messagesTotal.Where(m => m.MessageState == MessageState.Processed).ToList();
-        var messageCountByDevices = _controlledDevices
+        var messageCountByDevices = ControlledDevices
             .Select(device => new
                 {
                     deviceId = device.Id,
-                    messages = device.Messages.Where(m => m.DateReceived >= date).ToList(),
+                    messages = device.Messages.Where(m => m.DateReceived >= messageDate).ToList(),
                 })
             .Select(d => new MessageCountByDevice(d.deviceId, d.messages.Count));
 
         var report = new Report(
             Guid.NewGuid(),
-            DateTime.Now,
+            reportDate,
             new MessageCount(messagesTotal.Count),
             new MessageCount(messagesRead.Count),
             new MessageCount(messagesProcessed.Count),

@@ -29,7 +29,9 @@ public class CreateEmployeeHandler : IRequestHandler<CreateEmployeeCommand, Empl
 
     public async Task<EmployeeDto> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
     {
-        var tryFindEmployee = await _context.Employees.FirstOrDefaultAsync(e => e.Account.AccountLogin.Login.Equals(request.Login), cancellationToken: cancellationToken);
+        var tryFindEmployee = await _context.Employees.FirstOrDefaultAsync(
+            e => e.Account.AccountLogin.Login.Equals(request.Login),
+            cancellationToken);
         if (tryFindEmployee is not null)
         {
             throw new MpsAppException($"Employee with login {request.Login} already exists");

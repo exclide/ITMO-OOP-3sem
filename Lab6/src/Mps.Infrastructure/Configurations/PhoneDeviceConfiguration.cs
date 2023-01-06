@@ -10,6 +10,8 @@ public class PhoneDeviceConfiguration : IEntityTypeConfiguration<PhoneDevice>
 {
     public void Configure(EntityTypeBuilder<PhoneDevice> builder)
     {
+        builder.HasBaseType<DeviceBase>();
+        builder.Navigation(x => x.PhoneNumber).IsRequired();
         builder.OwnsOne(x => x.PhoneNumber);
     }
 }

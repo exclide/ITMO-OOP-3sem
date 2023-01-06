@@ -8,6 +8,8 @@ public class ReportConfiguration : IEntityTypeConfiguration<Report>
 {
     public void Configure(EntityTypeBuilder<Report> builder)
     {
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).IsRequired().ValueGeneratedNever();
         builder.OwnsOne(x => x.MessagesProcessed);
         builder.OwnsOne(x => x.MessagesRead);
         builder.OwnsOne(x => x.MessagesTotal);

@@ -6,6 +6,8 @@ public class Employee
 {
     public Employee(Guid id, Account account, FullName fullName)
     {
+        ArgumentNullException.ThrowIfNull(account);
+        ArgumentNullException.ThrowIfNull(fullName);
         Id = id;
         Account = account;
         FullName = fullName;

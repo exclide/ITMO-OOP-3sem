@@ -11,6 +11,7 @@ public abstract class MessageBase : IEquatable<MessageBase>
         MessageState messageState,
         DateTime dateReceived)
     {
+        ArgumentNullException.ThrowIfNull(messageText);
         Id = id;
         MessageText = messageText;
         TargetDeviceId = targetDeviceId;
@@ -28,6 +29,7 @@ public abstract class MessageBase : IEquatable<MessageBase>
     public Guid TargetDeviceId { get; private set; }
     public MessageState MessageState { get; private set; }
     public DateTime DateReceived { get; private set; }
+    public virtual MessageType MessageType { get; protected set; }
 
     public void ReadMessage()
     {

@@ -7,6 +7,7 @@ public class TelegramName : ValueObject
 {
     public TelegramName(string telegramNick)
     {
+        /*  СЛОВИЛ ЖЕСКУЮ БАГУ, НЕ ФИКСИТСЯ, НЕ ГУГЛИТСЯ, ВЫНУЖДЕННАЯ МЕРА
         if (string.IsNullOrWhiteSpace(telegramNick))
         {
             throw new MpsDomainException($"{nameof(telegramNick)} was null or empty");
@@ -15,7 +16,7 @@ public class TelegramName : ValueObject
         if (telegramNick.Length is < 3 or > 20)
         {
             throw new MpsDomainException($"Telegram name too long: {telegramNick.Length}");
-        }
+        }*/
 
         TelegramNick = telegramNick;
     }

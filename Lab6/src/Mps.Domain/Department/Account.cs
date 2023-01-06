@@ -7,11 +7,13 @@ public class Account : ValueObject
 {
     public Account(AccountLogin accountLogin, AccountPassHash accountPassHash)
     {
+        ArgumentNullException.ThrowIfNull(accountLogin);
+        ArgumentNullException.ThrowIfNull(accountPassHash);
         AccountLogin = accountLogin;
         AccountPassHash = accountPassHash;
     }
 
-    private Account()
+    protected Account()
     {
         AccountLogin = null!;
         AccountPassHash = null!;

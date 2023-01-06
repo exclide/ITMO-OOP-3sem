@@ -7,13 +7,15 @@ public class PhoneDevice : DeviceBase
     public PhoneDevice(Guid id, PhoneNumber phoneNumber)
         : base(id)
     {
+        ArgumentNullException.ThrowIfNull(phoneNumber);
         PhoneNumber = phoneNumber;
     }
 
-    private PhoneDevice()
+    protected PhoneDevice()
     {
         PhoneNumber = null!;
     }
 
-    public PhoneNumber PhoneNumber { get; private set; }
+    public PhoneNumber PhoneNumber { get; protected set; }
+    public override DeviceType DeviceType => DeviceType.PhoneDevice;
 }

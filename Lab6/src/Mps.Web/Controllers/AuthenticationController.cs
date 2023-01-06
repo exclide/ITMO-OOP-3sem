@@ -10,7 +10,7 @@ using Mps.Web.Models;
 namespace Mps.Web.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 public class AuthenticationController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -37,7 +37,7 @@ public class AuthenticationController : ControllerBase
         {
             new Claim(ClaimTypes.Name, response.FullName.FirstName + response.FullName.LastName),
             new Claim(ClaimTypes.Sid, response.Id.ToString()),
-            new Claim(ClaimTypes.Role, response.EmployeeRole.ToString()),
+            new Claim(ClaimTypes.Role, response.EmployeeRole.ToString("G")),
         };
 
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -58,7 +58,7 @@ public class AuthenticationController : ControllerBase
     {
         Claim? roleClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
         return roleClaim is not null
-            ? this.StatusCode((int)HttpStatusCode.Forbidden, $"User with role {roleClaim.Value} is not authorized to invoke this method")
-            : this.Unauthorized("User is not authenticated");
+            ? StatusCode((int)HttpStatusCode.Forbidden, $"User with role {roleClaim.Value} is not authorized to invoke this method")
+            : Unauthorized("User is not authenticated");
     }
 }

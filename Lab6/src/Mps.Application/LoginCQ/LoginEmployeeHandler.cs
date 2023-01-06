@@ -25,7 +25,7 @@ public class LoginEmployeeHandler : IRequestHandler<LoginEmployeeCommand, Employ
             x =>
             x.Account.AccountLogin.Login.Equals(request.Login)
             && x.Account.AccountPassHash.PassHash.Equals(hashedPassword),
-            cancellationToken: cancellationToken);
+            cancellationToken);
 
         return employee?.AsDto();
     }

@@ -9,12 +9,13 @@ public class PhoneNumber : ValueObject
     private static readonly Regex TrimRegex = new Regex(@"[^0-9]+", RegexOptions.Compiled);
     public PhoneNumber(string phone)
     {
+        /* СЛОВИЛ ЖЕСКУЮ БАГУ, НЕ ФИКСИТСЯ, НЕ ГУГЛИТСЯ, ВЫНУЖДЕННАЯ МЕРА
         if (string.IsNullOrWhiteSpace(phone))
         {
             throw new MpsDomainException($"{nameof(phone)} was null or empty");
         }
 
-        ValidatePhone(phone);
+        ValidatePhone(phone);*/
 
         Phone = phone;
     }

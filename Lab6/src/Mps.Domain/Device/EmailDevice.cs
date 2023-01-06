@@ -8,13 +8,15 @@ public class EmailDevice : DeviceBase
     public EmailDevice(Guid id, EmailAddress emailAddress)
         : base(id)
     {
+        ArgumentNullException.ThrowIfNull(emailAddress);
         EmailAddress = emailAddress;
     }
 
-    private EmailDevice()
+    protected EmailDevice()
     {
         EmailAddress = null!;
     }
 
-    public EmailAddress EmailAddress { get; private set; }
+    public EmailAddress EmailAddress { get; protected set; }
+    public override DeviceType DeviceType => DeviceType.EmailDevice;
 }

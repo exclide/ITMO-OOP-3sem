@@ -12,6 +12,10 @@ public class Report
         MessageCount messagesProcessed,
         IReadOnlyCollection<MessageCountByDevice> messagesCountByDevice)
     {
+        ArgumentNullException.ThrowIfNull(messagesTotal);
+        ArgumentNullException.ThrowIfNull(messagesRead);
+        ArgumentNullException.ThrowIfNull(messagesProcessed);
+        ArgumentNullException.ThrowIfNull(messagesCountByDevice);
         Id = id;
         DateCreated = dateCreated;
         MessagesTotal = messagesTotal;
@@ -20,7 +24,7 @@ public class Report
         MessagesCountByDevice = new List<MessageCountByDevice>(messagesCountByDevice);
     }
 
-    private Report()
+    protected Report()
     {
         MessagesTotal = null!;
         MessagesRead = null!;
