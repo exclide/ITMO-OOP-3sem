@@ -3,6 +3,7 @@ using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mps.Application.LoginCQ;
 using Mps.Web.Models;
@@ -49,6 +50,14 @@ public class AuthenticationController : ControllerBase
             new AuthenticationProperties() { IsPersistent = true});
 
         return Ok(response);
+    }
+    
+    [Authorize]
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return Ok();
     }
     
     [Route("error")]

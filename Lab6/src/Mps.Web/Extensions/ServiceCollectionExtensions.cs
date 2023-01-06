@@ -33,7 +33,7 @@ internal static class ServiceCollectionExtensions
             options.DefaultPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
             options.AddPolicy(PolicyName.PlebPolicy, policyBuilder =>
             {
-                EmployeeRole[] allowedRoles = { EmployeeRole.Pleb };
+                EmployeeRole[] allowedRoles = { EmployeeRole.Pleb, EmployeeRole.Boss };
                 policyBuilder
                     .RequireClaim(ClaimTypes.Role, allowedRoles.Select(x => x.ToString("G")))
                     .Build();
