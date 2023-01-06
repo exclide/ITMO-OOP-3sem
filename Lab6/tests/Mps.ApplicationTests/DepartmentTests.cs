@@ -13,7 +13,7 @@ public class DepartmentTests : IDisposable
     public DepartmentTests()
     {
         var dbContextOptions = new DbContextOptionsBuilder<DatabaseContext>()
-            .UseInMemoryDatabase("zalupa_slonika");
+            .UseInMemoryDatabase(Guid.NewGuid().ToString());
 
         _context = new DatabaseContext(dbContextOptions.Options);
     }

@@ -16,7 +16,7 @@ public class MessageTests : IDisposable
     public MessageTests()
     {
         var dbContextOptions = new DbContextOptionsBuilder<DatabaseContext>()
-            .UseInMemoryDatabase("zalupa_slonika");
+            .UseInMemoryDatabase(Guid.NewGuid().ToString());
 
         _context = new DatabaseContext(dbContextOptions.Options);
     }
